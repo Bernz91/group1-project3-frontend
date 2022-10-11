@@ -1,7 +1,8 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Home from "./Component/Home";
 import "./App.css";
+import Home from "./Component/Home";
+import Fabrics from "./Component/Fabrics";
 
 const App = () => {
   console.log("test");
@@ -10,8 +11,8 @@ const App = () => {
     <div>
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path=":index" element={<Child />} />
-        <Route path="/new" element={<New />} /> */}
+        {/* <Route path=":index" element={<Child />} /> */}
+        <Route path="/fabrics" element={<Fabrics />} />
       </Routes>
     </div>
   );
