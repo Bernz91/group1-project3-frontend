@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import Home from "./Page/Home";
+import Home from "./Page/HomePage";
 import Fabrics from "./Component/Fabrics";
 import LoginPage from "./Page/LoginPage";
 import RegisterPage from "./Page/Register";
@@ -13,8 +13,9 @@ const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Home />}>
+        <Route path="/" element={<Header />}>
           {/* <Route path=":index" element={<Child />} /> */}
+          <Route path="/home" element={<Home />} />
           <Route path="/fabrics" element={<Fabrics />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
