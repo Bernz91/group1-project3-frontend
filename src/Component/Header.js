@@ -1,4 +1,5 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -22,6 +23,7 @@ const Header = () => {
           <ShoppingBagOutlinedIcon />
         </Grid2>
       </Grid2>
+      <Outlet />
     </div>
   );
 };
