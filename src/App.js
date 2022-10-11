@@ -5,7 +5,7 @@ import Home from "./Page/Home";
 import Fabrics from "./Component/Fabrics";
 import LoginPage from "./Page/LoginPage";
 import RegisterPage from "./Page/Register";
-import NavBar from "./Component/NavBar";
+import Header from "./Component/Header";
 
 const App = () => {
   console.log("test");
@@ -18,7 +18,7 @@ const App = () => {
         <Route path="/register" element={<RegisterPage />} />
         {/* <Route path=":index" element={<Child />} /> */}
         <Route path="/fabrics" element={<Fabrics />} />
-        <Route path="/header" element={<NavBar />} />
+        <Route path="/header" element={<Header />} />
       </Routes>
     </div>
   );
