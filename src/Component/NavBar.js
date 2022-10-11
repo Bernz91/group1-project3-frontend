@@ -1,18 +1,17 @@
-import * as React from "react";
+import React, { useState, Fragment } from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Link } from "react-router-dom";
 
-export default function TemporaryDrawer() {
-  const [state, setState] = React.useState(false);
+const NavBar = () => {
+  const [state, setState] = useState(false);
 
   const toggleDrawer = () => {
     state ? setState(false) : setState(true);
@@ -20,8 +19,8 @@ export default function TemporaryDrawer() {
 
   return (
     <div>
-      <React.Fragment>
-        <Button onClick={toggleDrawer}>this is the button</Button>
+      <Fragment>
+        <MenuIcon onClick={toggleDrawer}></MenuIcon>
         <Drawer anchor="left" open={state} onClose={toggleDrawer}>
           <Box
             role="presentation"
@@ -29,35 +28,23 @@ export default function TemporaryDrawer() {
             onKeyDown={toggleDrawer}
           >
             <List>
-              {["Inbox", "Starred", "Send email", "Drafts"].map(
-                (text, index) => (
-                  <ListItem key={text} disablePadding>
-                    <ListItemButton>
-                      <ListItemIcon>
-                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                      </ListItemIcon>
-                      <ListItemText primary={text} />
-                    </ListItemButton>
-                  </ListItem>
-                )
-              )}
-            </List>
-            <Divider />
-            <List>
-              {["All mail", "Trash", "Spam"].map((text, index) => (
+              {["Home", "How-it-works", "Shirts"].map((text, index) => (
                 <ListItem key={text} disablePadding>
                   <ListItemButton>
-                    <ListItemIcon>
-                      {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
+                    <Link to={`/${text}`}>
+                      <ListItemText primary={text} />
+                    </Link>
                   </ListItemButton>
                 </ListItem>
               ))}
             </List>
+            <Divider />
+            <Link to="/logout">Logout</Link>
           </Box>
         </Drawer>
-      </React.Fragment>
+      </Fragment>
     </div>
   );
-}
+};
+
+export default NavBar;
