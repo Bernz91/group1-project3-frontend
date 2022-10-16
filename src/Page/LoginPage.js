@@ -3,21 +3,19 @@ import { useForm } from "react-hook-form";
 import Grid2 from "@mui/material/Unstable_Grid2"; // Grid version 2
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-import { useUserContext } from "../Context/UserContext";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const LoginPage = () => {
-  const { setUser } = useUserContext();
+  // const { loginWithRedirect } = useAuth0();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isDirty, isValid },
-    reset,
   } = useForm({ mode: "onTouched" });
 
   const onSubmit = (data) => {
     // to put the authO here
-    setUser(data);
   };
 
   return (

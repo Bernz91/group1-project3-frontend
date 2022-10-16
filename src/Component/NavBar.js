@@ -9,6 +9,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
+import Logout from "./Logout";
 
 const NavBar = () => {
   const [state, setState] = useState(false);
@@ -39,7 +40,7 @@ const NavBar = () => {
               ))}
             </List>
             <Divider />
-            <Link to="/logout">Logout</Link>
+            <Logout />
           </Box>
         </Drawer>
       </Fragment>
