@@ -14,16 +14,20 @@ const UserAccountPage = () => {
 
   const [userDetails, setUserDetails] = useState([]);
 
+  console.log(user);
+  console.log(userDetails);
+
   useEffect(() => {
     const [connection, userId] = user.sub.split("|");
 
     try {
-      axios
-        .get(`${BACKEND_URL}/users/${userId}`)
-        .then((res) => res.data)
-        .then((res) => {
-          setUserDetails(res);
-        });
+      user &&
+        axios
+          .get(`${BACKEND_URL}/users/${userId}`)
+          .then((res) => res.data)
+          .then((res) => {
+            setUserDetails(res);
+          });
     } catch (error) {
       !userDetails &&
         axios
@@ -38,7 +42,7 @@ const UserAccountPage = () => {
             console.log(error);
           });
     }
-  }, [user?.sub]);
+  }, [user]);
 
   if (isLoading) {
     return <div>Loading ...</div>;
@@ -57,7 +61,7 @@ const UserAccountPage = () => {
           <Grid2 xs={5}>
             <Button variant="contained">Order Details</Button>
           </Grid2>
-          <UserProfileForm user={user} userDetails={userDetails} />
+          <UserProfileForm userDetails={userDetails} />
         </Grid2>
       )}
     </div>
