@@ -14,35 +14,35 @@ const UserAccountPage = () => {
 
   const [userDetails, setUserDetails] = useState([]);
 
-  console.log(user);
-  console.log(userDetails);
-
   useEffect(() => {
-    const [connection, userId] = user.sub.split("|");
+    if (user) {
+      const [connection, userId] = user.sub.split("|");
 
-    try {
-      user &&
+      try {
         axios
           .get(`${BACKEND_URL}/users/${userId}`)
           .then((res) => res.data)
           .then((res) => {
+            if (!res) {
+              axios
+                .post(`${BACKEND_URL}/users`, {
+                  id: userId,
+                  email: user.email,
+                })
+                .then((response) => {
+                  console.log(response);
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+            }
             setUserDetails(res);
           });
-    } catch (error) {
-      !userDetails &&
-        axios
-          .post(`${BACKEND_URL}/users`, {
-            id: userId,
-            email: user.email,
-          })
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }, [user]);
+  }, [user, userDetails]);
 
   if (isLoading) {
     return <div>Loading ...</div>;
@@ -55,10 +55,10 @@ const UserAccountPage = () => {
         loginWithRedirect()
       ) : (
         <Grid2 container columnSpacing={2} rowSpacing={2}>
-          <Grid2 xs={5}>
+          <Grid2 xs={6}>
             <Button variant="contained">Size Profiles</Button>
           </Grid2>
-          <Grid2 xs={5}>
+          <Grid2 xs={6}>
             <Button variant="contained">Order Details</Button>
           </Grid2>
           <UserProfileForm userDetails={userDetails} />

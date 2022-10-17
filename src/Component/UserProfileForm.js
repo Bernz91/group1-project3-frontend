@@ -1,7 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Grid2 from "@mui/material/Unstable_Grid2"; // Grid version 2
 import Button from "@mui/material/Button";
+import axios from "axios";
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const UserProfileForm = ({ userDetails }) => {
   const {
@@ -11,14 +14,33 @@ const UserProfileForm = ({ userDetails }) => {
     setValue,
   } = useForm({ mode: "onTouched" });
 
+  const [email, setEmail] = useState();
+
   useEffect(() => {
-    userDetails.firstName && setValue([{ firstName: userDetails.first_name }]);
-    userDetails.last_name && setValue([{ lastname: userDetails.last_name }]);
-    userDetails.phone && setValue([{ phone: userDetails.phone }]);
+    if (userDetails) {
+      userDetails.first_name && setValue("firstName", userDetails.first_name);
+      userDetails.last_name && setValue("lastName", userDetails.last_name);
+      userDetails.phone && setValue("phone", userDetails.phone);
+      userDetails.shipping_address &&
+        setValue("shippingAddress", userDetails.shipping_address);
+      userDetails.email && setEmail(userDetails.email);
+    }
   }, [userDetails]);
 
   const onSubmit = (data) => {
-    // to put the authO here
+    axios
+      .put(`${BACKEND_URL}/users/${userDetails.id}`, {
+        first_name: data.firstName,
+        last_name: data.lastName,
+        phone: data.phone,
+        shipping_address: data.shippingAddress,
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   return (
@@ -29,6 +51,7 @@ const UserProfileForm = ({ userDetails }) => {
         <label>First Name</label>
         <input
           {...register("firstName", {
+            required: true,
             pattern: {
               value: /^[-a-zA-Z@.+_]+$/i,
               message: "⚠ Please enter a valid first name",
@@ -43,6 +66,7 @@ const UserProfileForm = ({ userDetails }) => {
         <label>Last Name</label>
         <input
           {...register("lastName", {
+            required: true,
             pattern: {
               value: /^[-a-zA-Z@.+_]+$/i,
               message: "⚠ Please enter a valid last name",
@@ -55,7 +79,7 @@ const UserProfileForm = ({ userDetails }) => {
       {/* Email row */}
       <Grid2 xs={12}>
         <label>Email</label>
-        <div>{userDetails.email}</div>
+        <div>{email}</div>
       </Grid2>
 
       {/* Phone row */}
@@ -69,11 +93,16 @@ const UserProfileForm = ({ userDetails }) => {
             },
           })}
         />
-        <div className="validation-error">{errors.lastName?.message}</div>
+        <div className="validation-error">{errors.phone?.message}</div>
+      </Grid2>
+
+      {/* Phone row */}
+      <Grid2 xs={12}>
+        <label>Default Shipping Address</label>
+        <input {...register("shippingAddress")} />
       </Grid2>
 
       {/* Save row */}
-
       <Grid2 xs={12}>
         <Button
           variant="contained"
