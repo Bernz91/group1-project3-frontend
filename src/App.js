@@ -5,6 +5,7 @@ import Home from "./Page/HomePage";
 import Fabrics from "./Component/Fabrics";
 import LoginPage from "./Page/LoginPage";
 import RegisterPage from "./Page/Register";
+import ShoppingCartPage from "./Page/ShoppingCartPage";
 import Header from "./Component/Header";
 import UserAccountPage from "./Page/UserAccountPage";
 
@@ -22,6 +23,7 @@ const App = () => {
             path="Fabrics/:index"
             element={"to add page for individual fabric"}
           />
+          <Route path="shoppingcart" element={<ShoppingCartPage />} />
         </Route>
         <Route path="Login" element={<LoginPage />} />
         <Route path="Register" element={<RegisterPage />} />

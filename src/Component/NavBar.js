@@ -28,15 +28,17 @@ const NavBar = () => {
             onKeyDown={toggleDrawer}
           >
             <List>
-              {["Home", "How-it-works", "Shirts"].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton>
-                    <Link to={`/${text}`}>
-                      <ListItemText primary={text} />
-                    </Link>
-                  </ListItemButton>
-                </ListItem>
-              ))}
+              {["Home", "How-it-works", "Shirts", "Order summary", ""].map(
+                (text, index) => (
+                  <ListItem key={text} disablePadding>
+                    <ListItemButton>
+                      <Link to={`/${text}`}>
+                        <ListItemText primary={text} />
+                      </Link>
+                    </ListItemButton>
+                  </ListItem>
+                )
+              )}
             </List>
             <Divider />
             <Link to="/logout">Logout</Link>
