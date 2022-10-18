@@ -18,8 +18,15 @@ const Fabrics = () => {
 
   return (
     <div>
+      This is fabrics
       {fabrics.map((fabric, index) => {
-        return <div key={index}>{fabric.fabric_name}</div>;
+        return (
+          <div key={index}>
+            {fabric.fabric_name}
+            {fabric.image_one}
+            <img src={fabric.image_one} alt="shirt" width="500" />
+          </div>
+        );
       })}
     </div>
   );
