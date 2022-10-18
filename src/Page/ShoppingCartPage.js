@@ -256,6 +256,11 @@ const ShoppingCartPage = () => {
                         <ButtonGroup>
                           {/* <Typography>Quantity: {itemCount}</Typography> */}
                           <Button
+                            style={{
+                              backgroundColor: "red",
+                            }}
+                            variant="contained"
+                            sx={{ color: "white" }}
                             onClick={() => {
                               setItemCount(Math.max(itemCount - 1, 0));
                             }}
@@ -264,6 +269,10 @@ const ShoppingCartPage = () => {
                           </Button>
                           <Input value={itemCount} sx={{ p: 0 }} />
                           <Button
+                            style={{
+                              backgroundColor: "green",
+                            }}
+                            sx={{ color: "white" }}
                             onClick={() => {
                               setItemCount(itemCount + 1);
                             }}
