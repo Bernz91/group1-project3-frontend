@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import LoginPage from "./LoginPage";
 import Button from "@mui/material/Button";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import UserProfileForm from "../Component/UserProfileForm";
-import Popover from "@mui/material/Popover";
 import Login from "../Component/Login";
+import { useNavigate } from "react-router";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const UserAccountPage = () => {
   const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
-
+  let navigate = useNavigate();
   const [userDetails, setUserDetails] = useState([]);
 
   useEffect(() => {
@@ -62,7 +60,12 @@ const UserAccountPage = () => {
       ) : (
         <Grid2 container columnSpacing={2} rowSpacing={2}>
           <Grid2 xs={6}>
-            <Button variant="contained">Size Profiles</Button>
+            <Button
+              variant="contained"
+              onClick={() => navigate("/SizeProfile")}
+            >
+              Size Profiles
+            </Button>
           </Grid2>
           <Grid2 xs={6}>
             <Button variant="contained">Order Details</Button>
