@@ -6,6 +6,8 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { useAuth0 } from "@auth0/auth0-react";
 import axios from "axios";
 import UserProfileForm from "../Component/UserProfileForm";
+import Popover from "@mui/material/Popover";
+import Login from "../Component/Login";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -50,9 +52,13 @@ const UserAccountPage = () => {
 
   return (
     <div>
-      {/* !!! to be changed to when there's no user then go to login page !!!!!*/}
       {!isAuthenticated ? (
-        loginWithRedirect()
+        <div>
+          Please login to continue.
+          <button>
+            <Login />
+          </button>
+        </div>
       ) : (
         <Grid2 container columnSpacing={2} rowSpacing={2}>
           <Grid2 xs={6}>
