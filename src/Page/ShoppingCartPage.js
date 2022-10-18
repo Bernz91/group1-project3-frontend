@@ -1,16 +1,13 @@
-
 import React, { useState, useEffect } from "react";
-
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-
-import Avatar from "@mui/material/Avatar";
+import Input from "@mui/material/Input";
 import Box from "@mui/material/Box";
-import Badge from "@mui/material/Badge";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Card from "@mui/material/Card";
-import CardMedia from '@mui/material/CardMedia';
+import CardMedia from "@mui/material/CardMedia";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
 import Grid from "@mui/material/Grid";
 import CssBaseline from "@mui/material/CssBaseline";
 import Button from "@mui/material/Button";
@@ -18,19 +15,9 @@ import { drawerClasses } from "@mui/material/Drawer";
 import Typography from "@mui/material/Typography";
 import FilledInput from "@mui/material/FilledInput";
 import { inputBaseClasses } from "@mui/material/InputBase";
-import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Paper from "@mui/material/Paper";
-import Skeleton from "@mui/material/Skeleton";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import TextField from "@mui/material/TextField";
-
-import Home from "@mui/icons-material/Home";
-import Person from "@mui/icons-material/Person";
-import Comment from "@mui/icons-material/Comment";
-import Settings from "@mui/icons-material/Settings";
 import Search from "@mui/icons-material/Search";
-import Notifications from "@mui/icons-material/Notifications";
 
 import {
   Root,
@@ -59,8 +46,8 @@ const coolGray = {
 };
 
 const ShoppingCartPage = () => {
-
-const [itemCount, setItemCount] = useState(1);
+  const [itemCount, setItemCount] = useState(1);
+  const [subtotal, setTotal] = useState();
 
   return (
     <ThemeProvider
@@ -226,7 +213,6 @@ const [itemCount, setItemCount] = useState(1);
                   </InputAdornment>
                 }
               />
-  
             </Box>
           </Header>
           <EdgeSidebar anchor="left">
@@ -236,9 +222,7 @@ const [itemCount, setItemCount] = useState(1);
                 alignItems: "center",
                 gap: 3,
               }}
-            >
-      
-            </SidebarContent>
+            ></SidebarContent>
           </EdgeSidebar>
           <Content>
             <InsetContainer
@@ -253,43 +237,49 @@ const [itemCount, setItemCount] = useState(1);
             >
               <Box p={2}>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6} md={4}>
-                      <Card variant="outlined">
-                        <CardHeader
-                          title="Product name"
-                          subheader= "View details"
-                        />
-                        <CardMedia
-                          component="img"
-                          height="194"
-                          image="https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg"
-                          alt="Fila shirt"
-                        />
+                  <Grid item xs={12} sm={6} md={4}>
+                    <Card variant="outlined">
+                      <CardHeader
+                        title="Product name"
+                        subtitle="View details"
+                      />
+                      <CardActions>
+                        <Button size="small">View details</Button>
+                      </CardActions>
+                      <CardMedia
+                        component="img"
+                        height="194"
+                        image="https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg"
+                        alt="Fila shirt"
+                      />
+                      <CardContent>
                         <ButtonGroup>
-                        <Button
-                          onClick={() => {
-                            setItemCount(Math.max(itemCount - 1, 0));
-                          }}
-                        
-                        >+
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setItemCount(itemCount + 1);
-                          }}
-                        >-
-                        </Button>
-                      </ButtonGroup>
-                        <CardContent>
-                          <Skeleton
-                            animation="wave"
-                            height={10}
-                            style={{ marginBottom: 6 }}
-                          />
-                          <Skeleton animation="wave" height={10} width="80%" />
-                        </CardContent>
+                          {/* <Typography>Quantity: {itemCount}</Typography> */}
+                          <Button
+                            onClick={() => {
+                              setItemCount(Math.max(itemCount - 1, 0));
+                            }}
+                          >
+                            -
+                          </Button>
+                          <Input value={itemCount} sx={{ p: 0 }} />
+                          <Button
+                            onClick={() => {
+                              setItemCount(itemCount + 1);
+                            }}
+                          >
+                            +
+                          </Button>
+                        </ButtonGroup>
+                      </CardContent>
+                      <Typography>Subtotal: {subtotal}</Typography>
+
+                      <Card>
+                        <Button>Add to wish list</Button>
                       </Card>
-                    </Grid>
+                      <CardContent></CardContent>
+                    </Card>
+                  </Grid>
                 </Grid>
               </Box>
             </InsetContainer>
@@ -297,7 +287,7 @@ const [itemCount, setItemCount] = useState(1);
           <Footer>
             <Paper sx={{ mr: 2, borderRadius: "20px", p: 2 }}>
               <Typography variant="body2">
-                <b>XX Company. 2022 All rights reserved</b>
+                <b>The Shirt Company. 2022 All rights reserved</b>
               </Typography>
             </Paper>
           </Footer>
