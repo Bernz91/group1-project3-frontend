@@ -10,9 +10,13 @@ import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import Logout from "./Logout";
+import Login from "./Login";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const NavBar = () => {
   const [state, setState] = useState(false);
+
+  const { user } = useAuth0();
 
   const toggleDrawer = () => {
     state ? setState(false) : setState(true);
@@ -40,7 +44,7 @@ const NavBar = () => {
               ))}
             </List>
             <Divider />
-            <Logout />
+            {user ? <Logout /> : <Login />}
           </Box>
         </Drawer>
       </Fragment>
