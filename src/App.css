@@ -1,12 +1,16 @@
 .App {
   text-align: center;
+  height: 100vh;
+}
+body {
+  height: 100vh;
 }
 
 .header {
   background-color: black;
   color: white;
-  padding: 10px 10px;
-  margin: 0;
+  padding: 10px;
+  text-align: left;
 }
 
 .vertical-center {

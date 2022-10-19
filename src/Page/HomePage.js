@@ -12,9 +12,7 @@ const Home = () => {
       <Grid2 xs={12} className="logo-container">
         <Grid2 xs={12}>
           <div className="brand">Sew Sew Tailor</div>
-        </Grid2>
-        <br />
-        <Grid2 xs={12}>
+          <br />
           <Button variant="contained" onClick={() => navigate("/how-it-works")}>
             How it works
           </Button>
