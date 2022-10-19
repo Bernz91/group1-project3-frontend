@@ -18,15 +18,16 @@ import { inputBaseClasses } from "@mui/material/InputBase";
 import InputAdornment from "@mui/material/InputAdornment";
 import Paper from "@mui/material/Paper";
 import Search from "@mui/icons-material/Search";
+import OrderTable from "../Component/ShoppingCart/OrderTable";
+import EmptyCart from "../Component/ShoppingCart/EmptyCart";
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Divider from '@mui/material/Divider';
-
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Divider from "@mui/material/Divider";
 
 import {
   Root,
@@ -55,10 +56,37 @@ const coolGray = {
 };
 
 const ShoppingCartPage = () => {
-  const [itemCount, setItemCount] = useState(1);
-  const [subtotal, setTotal] = useState();
+  // const [itemCount, setItemCount] = useState(1);
 
-  const wishlistRow = [{id: 1, name:"Fila shirt", image:"https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg", price: 29, quantity:itemCount, subtotal: itemCount*subtotal }, {id: 2, name:"Fila shirt", image:"https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg", price: 39, quantity:itemCount, subtotal: itemCount*subtotal }]
+  const increaseCount = (index) => {
+    setOrders((prevState) => ({
+      ...prevState,
+      quantity: prevState.quantity + 1,
+    }));
+  };
+  const decreaseCount = () => {};
+
+  const [subtotal, setTotal] = useState();
+  const [orders, setOrders] = useState([
+    {
+      id: 1,
+      name: "Fila shirt",
+      image:
+        "https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg",
+      price: 29,
+      quantity: 3,
+      subtotal: 29,
+    },
+    {
+      id: 2,
+      name: "Fila shirt",
+      image:
+        "https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg",
+      price: 39,
+      quantity: 1,
+      subtotal: 19,
+    },
+  ]);
 
   return (
     <ThemeProvider
@@ -149,7 +177,6 @@ const ShoppingCartPage = () => {
       })}
     >
       <Fullscreen>
-      
         <Root
           scheme={{
             header: {
@@ -174,7 +201,6 @@ const ShoppingCartPage = () => {
             },
             rightEdgeSidebar: {
               config: {
-
                 md: {
                   variant: "permanent",
                   width: 80,
@@ -250,70 +276,85 @@ const ShoppingCartPage = () => {
                     <TableRow>
                       <TableCell>Product Name</TableCell>
                       <TableCell></TableCell>
-                      <TableCell align="right" sx ={{textAlign: 'center' }}>Price</TableCell>
-                      <TableCell align="right" sx ={{textAlign: 'center' }}>Quantity</TableCell>
-                      <TableCell align="right" sx ={{textAlign: 'center' }}>Subtotal</TableCell>
+                      <TableCell align="right" sx={{ textAlign: "center" }}>
+                        Price
+                      </TableCell>
+                      <TableCell align="right" sx={{ textAlign: "center" }}>
+                        Quantity
+                      </TableCell>
+                      <TableCell align="right" sx={{ textAlign: "center" }}>
+                        Subtotal
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                
-          {wishlistRow.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell component="th" scope="row">
-              <CardMedia
-                  component="img"
-                  sx={{ width: 151 }}
-                  image={row.image}
-                  alt="Fila shirt"
-                />
-                </TableCell>
-              <TableCell align="right">{row.price}</TableCell>
-              <TableCell align="right"> 
-                <ButtonGroup >
-                    <Button
-                      style={{
-                      backgroundColor: "red",
-                      }}
-                      variant="contained"
-                      sx={{ color: "white" }}
-                            onClick={() => {
-                              setItemCount(Math.max(itemCount - 1, 0));
-                            }}
-                          >
-                            -
-                    </Button>
-                    <Input value={itemCount} sx={{ p: 0, mr:0 }} />
-                    <Button
-                      style={{
-                        backgroundColor: "green",
-                      }}
-                      sx={{ color: "white" }}
-                      onClick={() => {
-                              setItemCount(itemCount + 1);
-                            }}
-                          >
-                            +
-                    </Button>
-                        </ButtonGroup>
-                        </TableCell>
-              <TableCell align="right">{row.total}</TableCell>
-            </TableRow>
-          ))}
-          </TableBody>
-          </Table>
-              </TableContainer>
-          
-              
-        
-              
+                    {orders.map((order, i) => (
+                      <OrderTable
+                        key={i}
+                        order={order}
+                        increaseCount={increaseCount}
+                        decreaseCount={decreaseCount}
+                      />
+                    ))}
+                  </TableBody>
+                </Table>
 
-              {/* <Box p={2}>
+                {/* <TableBody>
+                    {wishlistRow.map((row) => (
+                      <TableRow
+                        key={row.id}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {row.name}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          <CardMedia
+                            component="img"
+                            sx={{ width: 151 }}
+                            image={row.image}
+                            alt="Fila shirt"
+                          />
+                        </TableCell>
+                        <TableCell align="right">{row.price}</TableCell>
+                        <TableCell align="right">
+                          <ButtonGroup>
+                            <Button
+                              style={{
+                                backgroundColor: "red",
+                              }}
+                              variant="contained"
+                              sx={{ color: "white" }}
+                              onClick={() => {
+                                setItemCount(Math.max(itemCount - 1, 0));
+                              }}
+                            >
+                              -
+                            </Button>
+                            <Input value={itemCount} sx={{ p: 0, mr: 0 }} />
+                            <Button
+                              style={{
+                                backgroundColor: "green",
+                              }}
+                              sx={{ color: "white" }}
+                              onClick={() => {
+                                setItemCount(itemCount + 1);
+                              }}
+                            >
+                              +
+                            </Button>
+                          </ButtonGroup>
+                        </TableCell>
+                        <TableCell align="right">{row.total}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer> */}
+
+                {/* <Box p={2}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md={4}>
                     <Card variant="outlined">
@@ -333,7 +374,7 @@ const ShoppingCartPage = () => {
                       <CardContent>
                         <ButtonGroup >
                           {/* <Typography>Quantity: {itemCount}</Typography> */}
-                          {/* <Button
+                {/* <Button
                             style={{
                               backgroundColor: "red",
                             }}
@@ -369,8 +410,10 @@ const ShoppingCartPage = () => {
                   </Grid>
                 </Grid>
               </Box> */}
+              </TableContainer>
             </InsetContainer>
           </Content>
+
           <Footer>
             <Paper sx={{ mr: 2, borderRadius: "20px", p: 2 }}>
               <Typography variant="body2">
@@ -383,7 +426,5 @@ const ShoppingCartPage = () => {
     </ThemeProvider>
   );
 };
-
-
 
 export default ShoppingCartPage;
