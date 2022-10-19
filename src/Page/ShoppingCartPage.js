@@ -19,6 +19,15 @@ import InputAdornment from "@mui/material/InputAdornment";
 import Paper from "@mui/material/Paper";
 import Search from "@mui/icons-material/Search";
 
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Divider from '@mui/material/Divider';
+
+
 import {
   Root,
   Header,
@@ -49,6 +58,8 @@ const ShoppingCartPage = () => {
   const [itemCount, setItemCount] = useState(1);
   const [subtotal, setTotal] = useState();
 
+  const wishlistRow = [{id: 1, name:"Fila shirt", image:"https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg", price: 29, quantity:itemCount, subtotal: itemCount*subtotal }, {id: 2, name:"Fila shirt", image:"https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg", price: 39, quantity:itemCount, subtotal: itemCount*subtotal }]
+
   return (
     <ThemeProvider
       theme={createTheme({
@@ -66,16 +77,16 @@ const ShoppingCartPage = () => {
           grey: coolGray,
         },
         components: {
-          AppEdgeSidebar: {
-            styleOverrides: {
-              root: {
-                [`& .${drawerClasses.paper}`]: {
-                  backgroundColor: "rgba(0,0,0,0)",
-                  border: "none",
-                },
-              },
-            },
-          },
+          // AppEdgeSidebar: {
+          //   styleOverrides: {
+          //     root: {
+          //       [`& .${drawerClasses.paper}`]: {
+          //         backgroundColor: "rgba(0,0,0,0)",
+          //         border: "none",
+          //       },
+          //     },
+          //   },
+          // },
           AppContent: {
             styleOverrides: {
               root: {
@@ -138,6 +149,7 @@ const ShoppingCartPage = () => {
       })}
     >
       <Fullscreen>
+      
         <Root
           scheme={{
             header: {
@@ -162,10 +174,7 @@ const ShoppingCartPage = () => {
             },
             rightEdgeSidebar: {
               config: {
-                // xs: {
-                //     variant: "permanent",
-                //     width: 80,
-                // },
+
                 md: {
                   variant: "permanent",
                   width: 80,
@@ -215,7 +224,7 @@ const ShoppingCartPage = () => {
               />
             </Box>
           </Header>
-          <EdgeSidebar anchor="left">
+          {/* <EdgeSidebar anchor="left">
             <SidebarContent
               sx={{
                 justifyContent: "center",
@@ -223,7 +232,7 @@ const ShoppingCartPage = () => {
                 gap: 3,
               }}
             ></SidebarContent>
-          </EdgeSidebar>
+          </EdgeSidebar> */}
           <Content>
             <InsetContainer
               maxWidth={false}
@@ -235,7 +244,76 @@ const ShoppingCartPage = () => {
                 mr: 2,
               }}
             >
-              <Box p={2}>
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Product Name</TableCell>
+                      <TableCell></TableCell>
+                      <TableCell align="right" sx ={{textAlign: 'center' }}>Price</TableCell>
+                      <TableCell align="right" sx ={{textAlign: 'center' }}>Quantity</TableCell>
+                      <TableCell align="right" sx ={{textAlign: 'center' }}>Subtotal</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                
+          {wishlistRow.map((row) => (
+            <TableRow
+              key={row.id}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell component="th" scope="row">
+                {row.name}
+              </TableCell>
+              <TableCell component="th" scope="row">
+              <CardMedia
+                  component="img"
+                  sx={{ width: 151 }}
+                  image={row.image}
+                  alt="Fila shirt"
+                />
+                </TableCell>
+              <TableCell align="right">{row.price}</TableCell>
+              <TableCell align="right"> 
+                <ButtonGroup >
+                    <Button
+                      style={{
+                      backgroundColor: "red",
+                      }}
+                      variant="contained"
+                      sx={{ color: "white" }}
+                            onClick={() => {
+                              setItemCount(Math.max(itemCount - 1, 0));
+                            }}
+                          >
+                            -
+                    </Button>
+                    <Input value={itemCount} sx={{ p: 0, mr:0 }} />
+                    <Button
+                      style={{
+                        backgroundColor: "green",
+                      }}
+                      sx={{ color: "white" }}
+                      onClick={() => {
+                              setItemCount(itemCount + 1);
+                            }}
+                          >
+                            +
+                    </Button>
+                        </ButtonGroup>
+                        </TableCell>
+              <TableCell align="right">{row.total}</TableCell>
+            </TableRow>
+          ))}
+          </TableBody>
+          </Table>
+              </TableContainer>
+          
+              
+        
+              
+
+              {/* <Box p={2}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6} md={4}>
                     <Card variant="outlined">
@@ -253,9 +331,9 @@ const ShoppingCartPage = () => {
                         alt="Fila shirt"
                       />
                       <CardContent>
-                        <ButtonGroup>
+                        <ButtonGroup >
                           {/* <Typography>Quantity: {itemCount}</Typography> */}
-                          <Button
+                          {/* <Button
                             style={{
                               backgroundColor: "red",
                             }}
@@ -267,7 +345,7 @@ const ShoppingCartPage = () => {
                           >
                             -
                           </Button>
-                          <Input value={itemCount} sx={{ p: 0 }} />
+                          <Input value={itemCount} fullWidth="false" sx={{ p: 0, mr:0 }} />
                           <Button
                             style={{
                               backgroundColor: "green",
@@ -290,7 +368,7 @@ const ShoppingCartPage = () => {
                     </Card>
                   </Grid>
                 </Grid>
-              </Box>
+              </Box> */}
             </InsetContainer>
           </Content>
           <Footer>
@@ -305,5 +383,7 @@ const ShoppingCartPage = () => {
     </ThemeProvider>
   );
 };
+
+
 
 export default ShoppingCartPage;
