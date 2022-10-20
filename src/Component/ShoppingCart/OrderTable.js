@@ -56,9 +56,10 @@ const OrderTable = (props) => {
                 backgroundColor: "red",
               }}
               variant="contained"
+              id = {order.id}
               sx={{ color: "white" }}
-              onClick={() => {
-                props.decreaseCount();
+              onClick={(e) => {
+                props.decreaseCount(e);
               }}
             >
               -
@@ -68,9 +69,10 @@ const OrderTable = (props) => {
               style={{
                 backgroundColor: "green",
               }}
+              id = {order.id}
               sx={{ color: "white" }}
-              onClick={() => {
-                props.increaseCount();
+              onClick={(e) => {
+                props.increaseCount(e);
               }}
             >
               +
