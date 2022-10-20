@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Input from "@mui/material/Input";
 import Box from "@mui/material/Box";
@@ -20,7 +20,7 @@ import Paper from "@mui/material/Paper";
 import Search from "@mui/icons-material/Search";
 import OrderTable from "../Component/ShoppingCart/OrderTable";
 import EmptyCart from "../Component/ShoppingCart/EmptyCart";
-import AlertMessageDialog from "../Component/ShoppingCart/AlertMessageDialog"
+import AlertMessageDialog from "../Component/ShoppingCart/AlertMessageDialog";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -57,7 +57,6 @@ const coolGray = {
 };
 
 const ShoppingCartPage = () => {
-
   const [subtotal, setTotal] = useState();
   const [cart, setCart] = useState([
     {
@@ -85,68 +84,46 @@ const ShoppingCartPage = () => {
     setOpen(true);
   };
 
-  const handleClose = (e) => {
+  const handleClose = () => {
     setOpen(false);
   };
 
-  const handleIncreaseCount = (e, index) => {
-  const cartId = parseInt(e.target.id)
-  const newCartCopy = [...cart]
-
-    const newCartCopyIndex = newCartCopy.findIndex (obj => {
-      return obj.id === cartId
-    })
-
-    if (newCartCopyIndex !== -1) {
-      console.log("passed")
-      newCartCopy [newCartCopyIndex]. quantity += 1
-    }
-
-    // newCartCopy[cartId - 1].quantity += 1
-    setCart(newCartCopy)
+  const handleIncreaseCount = (cartItems, index) => {
+    const newCartCopy = [...cartItems];
+    newCartCopy[index].quantity += 1;
+    setCart(newCartCopy);
   };
 
-  const handleDecreaseCount = (e, index) => {
-    const cartId = parseInt(e.target.id)
-     const newCartCopy = [...cart]
+  const handleDecreaseCount = (cartItems, index) => {
+    const newCartCopy = [...cartItems];
 
-     const newCartCopyIndex = newCartCopy.findIndex (obj => {
-      return obj.id === cartId
-    })
-
-    if (newCartCopyIndex !== -1) {
-      console.log("passed")
-      newCartCopy [newCartCopyIndex].quantity -= 1
-
-      if (newCartCopyIndex === 0) {
-        console.log("passed")
-        handleClickOpen ()
-      }
+    if (newCartCopy[index].quantity > 1) {
+      newCartCopy[index].quantity -= 1;
+    } else {
+      //minimum order is 1
+      newCartCopy[index].quantity = 1;
     }
 
-    //  newCartCopy[cartId - 1].quantity -= 1
-    // if (newCartCopy[cartId - 1].quantity === 0) {
-    //   console.log("passed")
-    //   handleClickOpen ()
-    //   // setOpenDialog (true)
-    // }
+    setCart(newCartCopy);
+  };
 
-     setCart(newCartCopy)
-   };
+  // const handleRemoveCartId = (cartItems, index) => {
+  //   const newCartCopy = [...cartItems];
+  //   console.log("tried deleting");
+  //   // console.log(newCartCopy[index]);
+  //   // console.log(index);
+  //   // const newCartCopy = [...cartItems].slice();
+
+  //   // //find the correct id here and remove it accordingly
+  //   // newCartCopy.splice(index, 1);
+  //   // return setCart(newCartCopy);
+  // };
 
   const handleRemoveCartId = (e) => {
-    console.log("tried deleting")
-    const cartId = parseInt(e.target.id)
-    const newCartCopy = [...cart].slice()
-
-    //find the correct id here and remove it accordingly
-
-    newCartCopy.splice (cartId-1, 1)
-    return setCart (newCartCopy)
-  }
-
-  console.log(cart)
-
+    console.log("tried deleting");
+    console.log(e);
+    console.log(e.target.id);
+  };
 
   return (
     <ThemeProvider
@@ -310,15 +287,6 @@ const ShoppingCartPage = () => {
               />
             </Box>
           </Header>
-          {/* <EdgeSidebar anchor="left">
-            <SidebarContent
-              sx={{
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 3,
-              }}
-            ></SidebarContent>
-          </EdgeSidebar> */}
           <Content>
             <InsetContainer
               maxWidth={false}
@@ -345,135 +313,39 @@ const ShoppingCartPage = () => {
                       <TableCell align="right" sx={{ textAlign: "center" }}>
                         Subtotal
                       </TableCell>
+                      <TableCell align="right" sx={{ textAlign: "center" }}>
+                        Cancel
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {cart.map((order, index) => {
+                      console.log(index);
                       return (
-                      <OrderTable
-                        key={index}
-                        order={order}
-                        increaseCount={(e) => handleIncreaseCount(e, index)}
-                        decreaseCount={(e) => handleDecreaseCount(e, index)}
-                      />
-                    )})}
-                  </TableBody>
-                </Table>
-                {/* {openDialog ? <AlertMessageDialog open = {open} handleClose = {(e) => handleClose} handleRemoveCartId = {(e) => handleRemoveCartId(e)} />:null} */}
-
-                <AlertMessageDialog open = {open} handleClose = {(e) => handleClose(e)} handleRemoveCartId = {(e) => handleRemoveCartId (e)}  />
-                
-                {/* <TableBody>
-                    {wishlistRow.map((row) => (
-                      <TableRow
-                        key={row.id}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell component="th" scope="row">
-                          {row.name}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          <CardMedia
-                            component="img"
-                            sx={{ width: 151 }}
-                            image={row.image}
-                            alt="Fila shirt"
+                        <>
+                          <OrderTable
+                            key={index}
+                            index={index}
+                            order={order}
+                            increaseCount={() =>
+                              handleIncreaseCount(cart, index)
+                            }
+                            decreaseCount={() =>
+                              handleDecreaseCount(cart, index)
+                            }
+                            handleClickOpen={() => handleClickOpen()}
                           />
-                        </TableCell>
-                        <TableCell align="right">{row.price}</TableCell>
-                        <TableCell align="right">
-                          <ButtonGroup>
-                            <Button
-                              style={{
-                                backgroundColor: "red",
-                              }}
-                              variant="contained"
-                              sx={{ color: "white" }}
-                              onClick={() => {
-                                setItemCount(Math.max(itemCount - 1, 0));
-                              }}
-                            >
-                              -
-                            </Button>
-                            <Input value={itemCount} sx={{ p: 0, mr: 0 }} />
-                            <Button
-                              style={{
-                                backgroundColor: "green",
-                              }}
-                              sx={{ color: "white" }}
-                              onClick={() => {
-                                setItemCount(itemCount + 1);
-                              }}
-                            >
-                              +
-                            </Button>
-                          </ButtonGroup>
-                        </TableCell>
-                        <TableCell align="right">{row.total}</TableCell>
-                      </TableRow>
-                    ))}
+                        </>
+                      );
+                    })}
                   </TableBody>
                 </Table>
-              </TableContainer> */}
-
-                {/* <Box p={2}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <Card variant="outlined">
-                      <CardHeader
-                        title="Product name"
-                        subtitle="View details"
-                      />
-                      <CardActions>
-                        <Button size="small">View details</Button>
-                      </CardActions>
-                      <CardMedia
-                        component="img"
-                        height="194"
-                        image="https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg"
-                        alt="Fila shirt"
-                      />
-                      <CardContent>
-                        <ButtonGroup >
-                          {/* <Typography>Quantity: {itemCount}</Typography> */}
-                {/* <Button
-                            style={{
-                              backgroundColor: "red",
-                            }}
-                            variant="contained"
-                            sx={{ color: "white" }}
-                            onClick={() => {
-                              setItemCount(Math.max(itemCount - 1, 0));
-                            }}
-                          >
-                            -
-                          </Button>
-                          <Input value={itemCount} fullWidth="false" sx={{ p: 0, mr:0 }} />
-                          <Button
-                            style={{
-                              backgroundColor: "green",
-                            }}
-                            sx={{ color: "white" }}
-                            onClick={() => {
-                              setItemCount(itemCount + 1);
-                            }}
-                          >
-                            +
-                          </Button>
-                        </ButtonGroup>
-                      </CardContent>
-                      <Typography>Subtotal: {subtotal}</Typography>
-
-                      <Card>
-                        <Button>Add to wish list</Button>
-                      </Card>
-                      <CardContent></CardContent>
-                    </Card>
-                  </Grid>
-                </Grid>
-              </Box> */}
+                <AlertMessageDialog
+                  id={cart.id}
+                  open={open}
+                  handleClose={(e) => handleClose(e)}
+                  handleRemoveCartId={(e) => handleRemoveCartId(e)}
+                />
               </TableContainer>
             </InsetContainer>
           </Content>

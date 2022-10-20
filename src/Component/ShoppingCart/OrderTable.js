@@ -10,14 +10,25 @@ import Input from "@mui/material/Input";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 import Paper from "@mui/material/Paper";
+import AlertMessageDialog from "./AlertMessageDialog";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const OrderTable = (props) => {
-  const order = props.order;
-  const itemCount = props.itemCount;
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
+  const order = props.order;
   // to be used when backend is ready
   // useEffect(() => {
   //   axios
@@ -28,7 +39,6 @@ const OrderTable = (props) => {
   //       setOrders(res);
   //     });
   // }, []);
-
   return (
     <>
       <TableRow
@@ -56,10 +66,9 @@ const OrderTable = (props) => {
                 backgroundColor: "red",
               }}
               variant="contained"
-              id = {order.id}
               sx={{ color: "white" }}
-              onClick={(e) => {
-                props.decreaseCount(e);
+              onClick={() => {
+                props.decreaseCount();
               }}
             >
               -
@@ -69,10 +78,9 @@ const OrderTable = (props) => {
               style={{
                 backgroundColor: "green",
               }}
-              id = {order.id}
               sx={{ color: "white" }}
-              onClick={(e) => {
-                props.increaseCount(e);
+              onClick={() => {
+                props.increaseCount();
               }}
             >
               +
@@ -80,6 +88,11 @@ const OrderTable = (props) => {
           </ButtonGroup>
         </TableCell>
         <TableCell align="right">{order.total}</TableCell>
+        <TableCell align="right">
+          <IconButton aria-label="delete" size="large">
+            <DeleteIcon onClick={(e) => props.handleClickOpen(e)} />
+          </IconButton>
+        </TableCell>
       </TableRow>
     </>
   );

@@ -1,20 +1,21 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 const AlertMessageDialog = (props) => {
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <div>
       <Dialog
+        id={props.id}
         fullScreen={fullScreen}
         open={props.open}
         onClose={props.handleClose}
@@ -25,11 +26,12 @@ const AlertMessageDialog = (props) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            You are about to delete this order. Once it is deleted, it will be removed permanently
+            You are about to delete this order. Once deleted, it will be removed
+            permanently
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={(e) => props.handleRemoveCartId (e)}>
+          <Button autoFocus onClick={(e) => props.handleRemoveCartId(e)}>
             Delete
           </Button>
           <Button onClick={props.handleClose} autoFocus>
@@ -39,6 +41,6 @@ const AlertMessageDialog = (props) => {
       </Dialog>
     </div>
   );
-}
+};
 
-export default AlertMessageDialog
+export default AlertMessageDialog;
