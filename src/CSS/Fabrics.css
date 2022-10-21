@@ -1,0 +1,148 @@
+body {
+  color: white;
+  background-image: url("https://images.unsplash.com/photo-1603251579431-8041402bdeda?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80");
+  background-position-x: -110px;
+  background-position-y: top;
+  background-size: 68vh;
+  height: 100vh;
+  color: white;
+  font-family: "Roboto";
+}
+img {
+  border-radius: 10%;
+  height: 300px;
+}
+/* 
+.TitleCard {
+  display: flex;
+  flex-flow: row-reverse;
+  list-style: none;
+  padding-inline-start: 10%;
+}
+.Banner {
+  position: relative;
+  font: "sans-serif";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 34px;
+  color: brown;
+  margin: 0px;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.Banner2 {
+  font: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 34px;
+  color: grey;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin: 0px;
+}
+.smallpp {
+  display: flex;
+  margin: 5px 20px 5px 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border-color: aliceblue;
+  border-style: solid;
+  border-width: 2px;
+  align-items: center;
+  justify-content: center;
+} */
+.InstaCard {
+  list-style: none;
+  width: 380px;
+  height: 450px;
+  border-style: solid;
+  border-color: grey;
+  border-width: 1px;
+  background: black;
+  border-radius: 35px;
+  padding-inline-start: 0%;
+  margin-left: 10px;
+  text-align: left;
+  font-family: "Roboto";
+  top: 70vh;
+  display: inline-block;
+}
+/* .ItemTitleBanner {
+  list-style: none;
+  display: flex;
+  position: relative;
+  flex-flow: row;
+  padding-inline-start: 0%;
+  padding-top: 5px;
+  font-family: "Roboto";
+}
+.smallerpp {
+  display: flex;
+  margin: 5px 20px 5px 20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border-color: aliceblue;
+  border-style: solid;
+  border-width: 2px;
+  align-items: center;
+  justify-content: center;
+}
+*/
+.likebtn {
+  position: sticky;
+  z-index: 0;
+  margin-left: -30px;
+  margin-top: -20px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  /* background: #ffffff6e; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* .productpic {
+  margin-left: 15px;
+  width: 320px;
+  height: 320px;
+} */
+/* .pic {
+  max-width: 320px;
+  max-height: 320px;
+  border-radius: 35px;
+} */
+/* .CartAdd {
+  width: 102px;
+  height: 30px;
+  background: linear-gradient(0deg, #f8ba2b, #f8ba2b), #26c41b;
+  border-radius: 35px;
+}
+.pricetable {
+  display: flex;
+  flex-flow: row-reverse;
+  margin: 10px;
+  list-style: none;
+}
+.ItemTitle {
+  display: flex;
+  align-items: flex-start;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 20px;
+  margin-left: 20px;
+  color: #f9ec00;
+}
+.ItemDescrip {
+  display: flex;
+  align-items: flex-start;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 15px;
+  margin-left: 20px;
+} */
