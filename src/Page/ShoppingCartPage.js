@@ -19,8 +19,7 @@ import TableRow from "@mui/material/TableRow";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import CheckOutComponent from "../Component/ShoppingCart/CheckOutComponent";
-
-
+import CheckOutModal from "../Component/ShoppingCart/CheckOutComponent/CheckOutModal";
 
 import {
   Root,
@@ -57,7 +56,7 @@ const ShoppingCartPage = () => {
         "https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg",
       price: 29,
       quantity: 1,
-      subtotal:29,
+      subtotal: 29,
     },
     {
       id: 2,
@@ -66,17 +65,29 @@ const ShoppingCartPage = () => {
         "https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg",
       price: 39,
       quantity: 1,
-      subtotal:39,
+      subtotal: 39,
     },
   ]);
 
+  const [total, setTotal] = useState();
+
+  useEffect(() => {
+    const handleCalculateTotal = (cart) => {
+      const sum = cart.reduce((prev, curr) => prev + curr.subtotal, 0);
+      const shippingFees = 7;
+      console.log(sum);
+      return sum + shippingFees;
+    };
+    console.log(cart);
+    setTotal(handleCalculateTotal(cart));
+  }, [cart]);
+
   const handleCalculateSubtotal = (cartItems, index) => {
     const newCartCopy = [...cartItems];
-    newCartCopy[index].subtotal = newCartCopy[index].price * newCartCopy[index].quantity;
-    setCart(newCartCopy)
-  }
-
-  const handleCalculateTotal = () => {}
+    newCartCopy[index].subtotal =
+      newCartCopy[index].price * newCartCopy[index].quantity;
+    setCart(newCartCopy);
+  };
 
   const handleIncreaseCount = (cartItems, index) => {
     const newCartCopy = [...cartItems];
@@ -102,15 +113,14 @@ const ShoppingCartPage = () => {
   const handleRemoveCartId = (index) => {
     console.log("tried deleting");
     console.log(index);
-    const newCartCopy = [...cart].slice()
+    const newCartCopy = [...cart].slice();
 
     // find the correct id here and remove it accordingly
     newCartCopy.splice(index, 1);
-    return setCart(newCartCopy)
-
+    return setCart(newCartCopy);
   };
 
-  console.log(cart)
+  console.log(cart);
 
   return (
     <ThemeProvider
@@ -285,9 +295,8 @@ const ShoppingCartPage = () => {
                 mr: 2,
               }}
             >
-             
               <TableContainer component={Paper}>
-                <Table  aria-label="simple table">
+                <Table aria-label="simple table">
                   <TableHead>
                     <TableRow>
                       <TableCell>Product Name</TableCell>
@@ -298,41 +307,49 @@ const ShoppingCartPage = () => {
                       <TableCell align="right" sx={{ textAlign: "center" }}>
                         Quantity
                       </TableCell>
-                      <TableCell align="right" sx={{ textAlign: "center" }}>
-                        
-                      </TableCell>
+                      <TableCell
+                        align="right"
+                        sx={{ textAlign: "center" }}
+                      ></TableCell>
                       <TableCell align="right" sx={{ textAlign: "center" }}>
                         Total
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  {cart.length !== 0 ?
-                  <TableBody>
-
-                    {cart.map((item, index) => {
-                      return (
-                        <>
-                          <CartTable
-                            key={index}
-                            index={index}
-                            item={item}
-                            increaseCount={() =>
-                              handleIncreaseCount(cart, index)
-                            }
-                            decreaseCount={() =>
-                              handleDecreaseCount(cart, index)
-                            }
-                            handleRemoveCartId = {() => handleRemoveCartId(index)}
-                            handleCalculateSubtotal = {() => handleCalculateSubtotal(cart, index)}
-                          />
-                        </>
-                      );
-                    })}
-                  </TableBody>  : <EmptyCart/>}
+                  {cart.length !== 0 ? (
+                    <TableBody>
+                      {cart.map((item, index) => {
+                        return (
+                          <>
+                            <CartTable
+                              key={index}
+                              index={index}
+                              item={item}
+                              increaseCount={() =>
+                                handleIncreaseCount(cart, index)
+                              }
+                              decreaseCount={() =>
+                                handleDecreaseCount(cart, index)
+                              }
+                              handleRemoveCartId={() =>
+                                handleRemoveCartId(index)
+                              }
+                              handleCalculateSubtotal={() =>
+                                handleCalculateSubtotal(cart, index)
+                              }
+                            />
+                          </>
+                        );
+                      })}
+                    </TableBody>
+                  ) : (
+                    <EmptyCart />
+                  )}
                 </Table>
-                <Divider/> 
-                <CheckOutComponent/>
-              </TableContainer> 
+                <Divider />
+                <CheckOutComponent total={total} />
+                <CheckOutModal orders={cart} total={total} />
+              </TableContainer>
             </InsetContainer>
           </Content>
 
