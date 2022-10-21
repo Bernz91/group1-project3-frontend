@@ -31,7 +31,7 @@ const AlertMessageDialog = (props) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={(e) => props.handleRemoveCartId(e)}>
+          <Button autoFocus onClick={()=> {props.handleRemoveCartId();props.handleClose()}} color = "error">
             Delete
           </Button>
           <Button onClick={props.handleClose} autoFocus>
