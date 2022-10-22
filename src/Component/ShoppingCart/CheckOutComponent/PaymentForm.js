@@ -4,10 +4,18 @@ import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
+import { Form } from "react-router-dom";
+import Box from "@mui/material/Box";
 
 const PaymentForm = (props) => {
   return (
-    <>
+    <Box
+      component="form"
+      onSubmit={() => {
+        props.handleCardSubmit();
+        // props.handleNext();
+      }}
+    >
       <Typography variant="h6" gutterBottom>
         Payment method
       </Typography>
@@ -26,6 +34,7 @@ const PaymentForm = (props) => {
         <Grid item xs={12} md={6}>
           <TextField
             required
+            // inputProps={{ pattern="\d{3,4}" }}
             id="cardNumber"
             label="Card number"
             fullWidth
@@ -42,6 +51,7 @@ const PaymentForm = (props) => {
             fullWidth
             autoComplete="cc-exp"
             variant="standard"
+            // inputProps={{ pattern: "dd/dd" }}
             onChange={props.handleCardChange}
           />
         </Grid>
@@ -50,6 +60,7 @@ const PaymentForm = (props) => {
             required
             id="cvv"
             label="CVV"
+            // inputProps={{ pattern: "d{3,4}" }}
             helperText="Last three digits on signature strip"
             fullWidth
             autoComplete="cc-csc"
@@ -75,18 +86,11 @@ const PaymentForm = (props) => {
         <Button onClick={props.handleBack} sx={{ mt: 3, ml: 1 }}>
           Back
         </Button>
-        <Button
-          variant="contained"
-          sx={{ mt: 3, ml: 1 }}
-          onClick={() => {
-            props.handleNext();
-            props.handleCardSubmit();
-          }}
-        >
+        <Button variant="contained" sx={{ mt: 3, ml: 1 }} type="submit">
           Next
         </Button>
       </Grid>
-    </>
+    </Box>
   );
 };
 

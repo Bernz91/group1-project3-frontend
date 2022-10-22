@@ -74,7 +74,7 @@ const ShoppingCartPage = () => {
   useEffect(() => {
     const handleCalculateTotal = (cart) => {
       const sum = cart.reduce((prev, curr) => prev + curr.subtotal, 0);
-      const shippingFees = 7;
+      const shippingFees = 0;
       console.log(sum);
       return sum + shippingFees;
     };
@@ -119,8 +119,6 @@ const ShoppingCartPage = () => {
     newCartCopy.splice(index, 1);
     return setCart(newCartCopy);
   };
-
-  console.log(cart);
 
   return (
     <ThemeProvider
@@ -348,7 +346,9 @@ const ShoppingCartPage = () => {
                 </Table>
                 <Divider />
                 <CheckOutComponent total={total} />
-                <CheckOutModal orders={cart} total={total} />
+                <Box align="center " mt={2}>
+                  <CheckOutModal orders={cart} total={total} />
+                </Box>
               </TableContainer>
             </InsetContainer>
           </Content>

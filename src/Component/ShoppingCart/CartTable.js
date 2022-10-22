@@ -12,6 +12,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AlertMessageDialog from "./AlertMessageDialog";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -29,7 +31,7 @@ const CartTable = (props) => {
   };
 
   const item = props.item;
-  
+
   return (
     <>
       <TableRow
@@ -64,7 +66,12 @@ const CartTable = (props) => {
             >
               -
             </Button>
-            <Input value={item.quantity} sx={{ p: 0, mr: 0 }} />
+            <Box sx={{ p: 0, mr: 0 }}>
+              <TextField
+                value={item.quantity}
+                sx={{ p: 0, mr: 0, textAlign: "middle" }}
+              ></TextField>
+            </Box>
             <Button
               style={{
                 backgroundColor: "green",
@@ -84,9 +91,12 @@ const CartTable = (props) => {
           </IconButton>
         </TableCell>
         <TableCell align="right">{item.subtotal}</TableCell>
-        
       </TableRow>
-      <AlertMessageDialog open = {open} handleClose = {handleClose} handleRemoveCartId={props.handleRemoveCartId}/>
+      <AlertMessageDialog
+        open={open}
+        handleClose={handleClose}
+        handleRemoveCartId={props.handleRemoveCartId}
+      />
     </>
   );
 };

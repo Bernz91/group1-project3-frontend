@@ -16,20 +16,30 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import ReviewForm from "./ReviewForm";
+import { Card } from "@mui/material";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+// const style = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: 400,
+//   bgcolor: "background.paper",
+//   border: "2px solid #000",
+//   boxShadow: 24,
+//   p: 4,
+// };
 
-const CheckOutModal = () => {
+const CheckOutModal = (props) => {
+  // console.log(props.orders);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const steps = ["Shipping address", "Payment details", "Review your order"];
+  const theme = createTheme();
+
   const [open, setOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [card, setCard] = useState({
@@ -50,12 +60,7 @@ const CheckOutModal = () => {
     country: "",
     saveAddress: "",
   });
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const steps = ["Shipping address", "Payment details", "Review your order"];
-  const theme = createTheme();
+  const [finalOrder, setFinalOrder] = useState();
 
   const getStepContent = (step) => {
     switch (step) {
@@ -65,7 +70,6 @@ const CheckOutModal = () => {
             shipmentDetails={shipmentDetails}
             handleShipmentChange={(e) => handleShipmentChange(e)}
             handleShipmentSubmit={(e) => handleShipmentSubmit(e)}
-            handleNext={() => handleNext()}
           />
         );
       // return "this is address form";
@@ -74,22 +78,38 @@ const CheckOutModal = () => {
           <PaymentForm
             handleCardChange={(e) => handleCardChange(e)}
             handleCardSubmit={(e) => handleCardSubmit(e)}
-            handleNext={() => handleNext()}
             handleBack={() => handleBack()}
           />
         );
       // return "this is payment form";
 
       case 2:
-        return <ReviewForm />;
+        return (
+          <ReviewForm
+            shipmentDetails={shipmentDetails}
+            orders={props.orders}
+            total={props.total}
+            card={card}
+            handleSubmitOrder={() => handleSubmitOrder()}
+            handleBack={() => handleBack()}
+          />
+        );
       // return "this is review form";
       default:
         throw new Error("Unknown step");
     }
   };
 
+  const handleNext = () => {
+    // console.log(activeStep);
+    setActiveStep(activeStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep(activeStep - 1);
+  };
+
   const handleShipmentChange = (e) => {
-    e.preventDefault();
     let value = e.target.value;
     let name = e.target.name;
     setShipmentDetails((prev) => {
@@ -104,12 +124,14 @@ const CheckOutModal = () => {
     // e.preventDefault();
     console.log("passed");
     setShipmentDetails(shipmentDetails);
+    console.log(shipmentDetails);
+    handleNext();
   };
 
   // console.log(shipmentDetails);
 
   const handleCardChange = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     let value = e.target.value;
     let id = e.target.id;
     setCard((prev) => {
@@ -123,19 +145,31 @@ const CheckOutModal = () => {
   const handleCardSubmit = (e) => {
     // e.preventDefault();
     setCard(card);
+    handleNext();
   };
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
+  const handleSubmitOrder = () => {
+    const order = Object.assign(shipmentDetails, card);
+    setFinalOrder(order);
+    console.log(finalOrder);
+    // do axios.post to db here
+    //then get response from db ...
+    // set it to the state to be rendered to the order confirmation page
+    handleNext();
   };
 
   return (
-    <div>
-      <Button variant="soft" onClick={handleOpen}>
+    <Box>
+      <Button
+        variant="contained"
+        color="error"
+        onClick={handleOpen}
+        disableElevation
+        size="large"
+        startIcon={<AddShoppingCartIcon />}
+        align="center"
+        sx={{ align: "center" }}
+      >
         Proceed to checkout
       </Button>
       <Modal
@@ -208,7 +242,7 @@ const CheckOutModal = () => {
           </Typography>
         </Box> */}
       </Modal>
-    </div>
+    </Box>
   );
 };
 

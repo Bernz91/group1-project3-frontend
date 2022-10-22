@@ -27,7 +27,7 @@ const CheckOutComponent = (props) => {
           <Typography variant="overline">XX</Typography>
         </TableCell>
       </TableRow> */}
-      <TableRow>
+      {/* <TableRow>
         <TableCell component="th" scope="row" align="right">
           <Typography>Shipping fees</Typography>
         </TableCell>
@@ -37,12 +37,12 @@ const CheckOutComponent = (props) => {
           align="right"
           sx={{ textAlign: "right" }}
         >
-          <Typography variant="overlineh6">7</Typography>
+          <Typography variant="overlineh6">FREE</Typography>
         </TableCell>
-      </TableRow>
+      </TableRow> */}
       <TableRow>
         <TableCell component="th" scope="row" align="right">
-          <Typography>Total</Typography>
+          <Typography variant="h6">Total</Typography>
         </TableCell>
         <TableCell
           component="th"
@@ -50,7 +50,7 @@ const CheckOutComponent = (props) => {
           align="right"
           sx={{ textAlign: "right" }}
         >
-          <Typography variant="overline">{props.total}</Typography>
+          <Typography variant="h6">SGD {props.total}</Typography>
         </TableCell>
       </TableRow>
     </Table>
