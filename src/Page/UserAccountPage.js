@@ -1,67 +1,76 @@
-import React from "react";
-import { useUserContext } from "../Context/UserContext";
-import { useForm } from "react-hook-form";
-import LoginPage from "./LoginPage";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { useAuth0 } from "@auth0/auth0-react";
+import axios from "axios";
+import UserProfileForm from "../Component/UserProfileForm";
+import Login from "../Component/Login";
+import { useNavigate } from "react-router";
 
-const EditProfileDetails = (input) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({});
-
-  const onSubmit = (data) => {
-    console.log(data);
-  };
-
-  return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register(input, { required: true })} />
-        <div className="validation-error">{errors.input?.message}</div>
-      </form>
-    </div>
-  );
-};
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const UserAccountPage = () => {
-  const { user, setUser } = useUserContext;
+  const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+  let navigate = useNavigate();
+  const [userDetails, setUserDetails] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      const [connection, userId] = user.sub.split("|");
+
+      try {
+        axios
+          .get(`${BACKEND_URL}/users/${userId}`)
+          .then((res) => res.data)
+          .then((res) => {
+            if (!res) {
+              axios
+                .post(`${BACKEND_URL}/users`, {
+                  id: userId,
+                  email: user.email,
+                })
+                .then((response) => {
+                  console.log(response);
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
+            }
+            setUserDetails(res);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [user, userDetails]);
+
+  if (isLoading) {
+    return <div>Loading ...</div>;
+  }
 
   return (
     <div>
-      {/* !!! to be changed to when there's no user then go to login page !!!!!*/}
-      {user ? (
-        <LoginPage />
+      {!isAuthenticated ? (
+        <div>
+          Please login to continue.
+          <button>
+            <Login />
+          </button>
+        </div>
       ) : (
         <Grid2 container columnSpacing={2} rowSpacing={2}>
-          <Grid2 xs={5}>
-            <Button variant="contained">Size Profiles</Button>
+          <Grid2 xs={6}>
+            <Button
+              variant="contained"
+              onClick={() => navigate("/SizeProfile")}
+            >
+              Size Profiles
+            </Button>
           </Grid2>
-          <Grid2 xs={5}>
+          <Grid2 xs={6}>
             <Button variant="contained">Order Details</Button>
           </Grid2>
-          <Grid2 xs={12}>
-            <label>First Name</label>
-            {/* <div>{user.first_name}</div> */}
-          </Grid2>
-          <Grid2 xs={12}>
-            <label>Last Name</label>
-            {/* <div>{user.last_name}</div> */}
-          </Grid2>
-          <Grid2 xs={12}>
-            <label>Email</label>
-            {/* <div>{user.email}</div> */}
-          </Grid2>
-          <Grid2 xs={12}>
-            <label>Phone</label>
-            {/* <div>{user.phone}</div> */}
-          </Grid2>
-          <Grid2 xs={12}>
-            <label>Password</label>
-            {/* <div>{user.password}</div> */}
-          </Grid2>
+          <UserProfileForm userDetails={userDetails} />
         </Grid2>
       )}
     </div>
