@@ -6,6 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import "../CSS/Fabrics.css";
+
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const Fabrics = () => {
   const [fabrics, setFabrics] = useState([]);
