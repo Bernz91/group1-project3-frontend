@@ -3,6 +3,9 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./Page/HomePage";
 import Fabrics from "./Component/Fabrics";
+import LoginPage from "./Page/LoginPage";
+import RegisterPage from "./Page/Register";
+import ShoppingCartPage from "./Page/ShoppingCartPage";
 import Header from "./Component/Header";
 import UserAccountPage from "./Page/UserAccountPage";
 import SizeProfilePage from "./Page/SizeProfilePage";
@@ -20,6 +23,7 @@ const App = () => {
             path="Fabrics/:index"
             element={"to add page for individual fabric"}
           />
+          <Route path="shoppingcart" element={<ShoppingCartPage />} />
           <Route path="SizeProfile" element={<SizeProfilePage />} />
           <Route path="*" element={"Nothing here!"} />
         </Route>
