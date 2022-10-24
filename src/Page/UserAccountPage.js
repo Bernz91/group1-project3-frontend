@@ -16,17 +16,15 @@ const UserAccountPage = () => {
 
   useEffect(() => {
     if (user) {
-      const [connection, userId] = user.sub.split("|");
-
       try {
         axios
-          .get(`${BACKEND_URL}/users/${userId}`)
+          .get(`${BACKEND_URL}/users/${user.sub}`)
           .then((res) => res.data)
           .then((res) => {
             if (!res) {
               axios
                 .post(`${BACKEND_URL}/users`, {
-                  id: userId,
+                  id: user.sub,
                   email: user.email,
                 })
                 .then((response) => {
