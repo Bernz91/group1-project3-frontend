@@ -9,37 +9,61 @@ import NewSizeForm from "../Component/NewSizeForm";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const SizeProfilePage = () => {
-  const { user } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const [sizeProfiles, setSizeProfiles] = useState([]);
   const [isLoading, setLoading] = useState(true);
-  const [isEdit, setEdit] = useState(false);
   const [isAdd, setAdd] = useState(false);
 
+  //for loading the page and adding new size profile
   useEffect(() => {
-    if (user) {
-      try {
-        axios
-          .get(`${BACKEND_URL}/users/${user.sub}/measurements`)
-          .then((res) => res.data)
-          .then((res) => {
-            setSizeProfiles(res);
-            setLoading(false);
+    const getMeasurement = async () => {
+      if (user) {
+        try {
+          const accessToken = await getAccessTokenSilently({
+            audience: "https://group1-project3/api",
+            scope: "read:current_user",
           });
-      } catch (e) {
-        console.log(e);
+          await axios
+            .get(`${BACKEND_URL}/users/${user.sub}/measurements`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            })
+            .then((res) => res.data)
+            .then((res) => {
+              setSizeProfiles(res);
+              setLoading(false);
+            });
+        } catch (e) {
+          console.log(e);
+        }
       }
-    }
+    };
+    getMeasurement();
   }, [user, isAdd]);
 
   const handleDelete = async (size) => {
     setLoading(true);
     try {
+      const accessToken = await getAccessTokenSilently({
+        audience: "https://group1-project3/api",
+        scope: "read:current_user",
+      });
       await axios.delete(
-        `${BACKEND_URL}/users/${user.sub}/measurements/${size.id}`
+        `${BACKEND_URL}/users/${user.sub}/measurements/${size.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
       );
 
-      const allMeasurement = await axios
-        .get(`${BACKEND_URL}/users/${user.sub}/measurements`)
+      await axios
+        .get(`${BACKEND_URL}/users/${user.sub}/measurements`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
         .then((res) => res.data)
         .then((res) => {
           setSizeProfiles(res);
@@ -48,32 +72,6 @@ const SizeProfilePage = () => {
     } catch (e) {
       console.log(e);
     }
-  };
-
-  const handleSaveEdit = async (size, index) => {
-    setLoading(true);
-    try {
-      await axios
-        .put(`${BACKEND_URL}/users/${user.sub}/measurements/${size.id}`, {
-          first_name: "data.firstName",
-          last_name: "data.lastName",
-          phone: "data.phone",
-          shipping_address: "data.shippingAddress",
-        })
-        .then((res) => {
-          let copySizeProfiles = sizeProfiles;
-          copySizeProfiles.splice(index, 1, res);
-          setSizeProfiles(copySizeProfiles);
-          setLoading(false);
-          setEdit(false);
-        });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const handleEdit = () => {
-    setEdit(true);
   };
 
   const handleAdd = (remark) => {
@@ -141,9 +139,6 @@ const SizeProfilePage = () => {
                       handleDelete(size);
                     }}
                   />
-                  <Button variant="contained" onClick={() => handleEdit()}>
-                    Edit
-                  </Button>
                 </Grid2>
                 <Grid2></Grid2>
               </Grid2>

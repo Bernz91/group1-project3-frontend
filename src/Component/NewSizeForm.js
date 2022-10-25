@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import Grid2 from "@mui/material/Unstable_Grid2"; // Grid version 2
 import Button from "@mui/material/Button";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -13,23 +14,37 @@ const NewSizeForm = (props) => {
     formState: { errors, isDirty, isValid },
   } = useForm({ mode: "onTouched" });
 
+  const { getAccessTokenSilently } = useAuth0();
+
   const onSubmit = async (data) => {
     try {
+      const accessToken = await getAccessTokenSilently({
+        audience: "https://group1-project3/api",
+        scope: "read:current_user",
+      });
       await axios
-        .post(`${BACKEND_URL}/users/${props.user.sub}/measurements`, {
-          categoryByUser: data.categoryByUser,
-          measurementType: data.measurementType,
-          collar: data.collar,
-          shoulders: data.shoulders,
-          chest: data.chest,
-          waist: data.waist,
-          sleevesLength: data.sleevesLength,
-          sleevesWidth: data.sleevesWidth,
-          elbow: data.elbow,
-          leftCuff: data.leftCuff,
-          rightCuff: data.rightCuff,
-          shirtLength: data.shirtLength,
-        })
+        .post(
+          `${BACKEND_URL}/users/${props.user.sub}/measurements`,
+          {
+            categoryByUser: data.categoryByUser,
+            measurementType: data.measurementType,
+            collar: data.collar,
+            shoulders: data.shoulders,
+            chest: data.chest,
+            waist: data.waist,
+            sleevesLength: data.sleevesLength,
+            sleevesWidth: data.sleevesWidth,
+            elbow: data.elbow,
+            leftCuff: data.leftCuff,
+            rightCuff: data.rightCuff,
+            shirtLength: data.shirtLength,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
         .then(function (res) {
           console.log(res);
           props.handleAdd("added new size");
