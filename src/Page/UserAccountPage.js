@@ -10,36 +10,58 @@ import { useNavigate } from "react-router";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const UserAccountPage = () => {
-  const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
+    useAuth0();
   let navigate = useNavigate();
   const [userDetails, setUserDetails] = useState([]);
 
   useEffect(() => {
-    if (user) {
-      try {
-        axios
-          .get(`${BACKEND_URL}/users/${user.sub}`)
-          .then((res) => res.data)
-          .then((res) => {
-            if (!res) {
-              axios
-                .post(`${BACKEND_URL}/users`, {
-                  id: user.sub,
-                  email: user.email,
-                })
-                .then((response) => {
-                  console.log(response);
-                })
-                .catch(function(error) {
-                  console.log(error);
-                });
-            }
-            setUserDetails(res);
+    const getUser = async () => {
+      if (user) {
+        try {
+          // Retrieve access token
+          const accessToken = await getAccessTokenSilently({
+            audience: "https://group1-project3/api",
+            scope: "read:current_user",
           });
-      } catch (error) {
-        console.log(error);
+          await axios
+            .get(`${BACKEND_URL}/users/${user.sub}`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            })
+            .then((res) => res.data)
+            .then((res) => {
+              console.log(res);
+              if (!res) {
+                axios
+                  .post(
+                    `${BACKEND_URL}/users`,
+                    {
+                      id: user.sub,
+                      email: user.email,
+                    },
+                    {
+                      headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                      },
+                    }
+                  )
+                  .then((response) => {
+                    console.log(response);
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+              }
+              setUserDetails(res);
+            });
+        } catch (error) {
+          console.log(error);
+        }
       }
-    }
+    };
+    getUser();
   }, [user, userDetails]);
 
   if (isLoading) {

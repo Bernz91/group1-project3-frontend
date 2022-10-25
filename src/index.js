@@ -12,7 +12,7 @@ root.render(
     domain="dev-asswfkic.us.auth0.com"
     clientId="rk5yAjthXiWtp1L147pNvMZgy06UVRQY"
     redirectUri={window.location.origin}
-    audience="https://dev-asswfkic.us.auth0.com/api/v2/"
+    audience="https://group1-project3/api"
     scope="read:current_user update:current_user_metadata"
   >
     <BrowserRouter>
