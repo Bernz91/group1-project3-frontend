@@ -11,7 +11,6 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Customisation = () => {
   const [fabrics, setFabrics] = useState([]);
-
   const [chosenFabric, setChosenFabric] = useState([]);
 
   useEffect(() => {
@@ -58,8 +57,8 @@ const Customisation = () => {
                   </Typography>
                   <Typography>
                     <CardActions>
-                      <Button size="small">Learn More</Button>
                       <Button
+                        variant="contained"
                         size="small"
                         fabricID={fabric.id}
                         onClick={(event) => {
