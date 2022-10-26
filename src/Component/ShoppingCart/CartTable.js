@@ -14,6 +14,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -41,17 +42,29 @@ const CartTable = (props) => {
         }}
       >
         <TableCell component="th" scope="row">
-          {item.name}
-        </TableCell>
-        <TableCell component="th" scope="row">
           <CardMedia
             component="img"
             sx={{ width: 151 }}
-            image={item.image}
-            alt="Fila shirt"
+            image={item["fabric"].imageOne}
+            alt={item["fabric"].description}
           />
         </TableCell>
-        <TableCell align="right">{item.price}</TableCell>
+        <TableCell component="th" scope="row">
+          <Box>Fabric type: {item["fabric"].fabricName}</Box>
+          <Box>Collar type: {item["collar"].collarName}</Box>
+          <Box>Front type: {item["front"].frontName}</Box>
+          <Box>Back type: {item["back"].backName}</Box>
+          <Box>Cuff type: {item["cuff"].cuffName}</Box>
+          <Box>Pocket type: {item["pocket"].pocketName}</Box>
+          <Box>
+            <Link href="#">Edit shirt design</Link>
+          </Box>
+        </TableCell>
+
+        <TableCell component="th" scope="row" align="center">
+          <Box>{item["fabric"].cost}</Box>
+          <Box>View breakdown</Box>
+        </TableCell>
         <TableCell align="right">
           <ButtonGroup>
             <Button

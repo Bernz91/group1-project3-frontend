@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -20,6 +21,7 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import CheckOutComponent from "../Component/ShoppingCart/CheckOutComponent";
 import CheckOutModal from "../Component/ShoppingCart/CheckOutComponent/CheckOutModal";
+import { extractObj, extractArr } from "../Component/utils";
 
 import {
   Root,
@@ -48,38 +50,85 @@ const coolGray = {
 };
 
 const ShoppingCartPage = () => {
-  const [cart, setCart] = useState([
-    {
-      id: 1,
-      name: "Fila shirt",
-      image:
-        "https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg",
-      price: 29,
-      quantity: 1,
-      subtotal: 29,
-    },
-    {
-      id: 2,
-      name: "Another shirt",
-      image:
-        "https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg",
-      price: 39,
-      quantity: 1,
-      subtotal: 39,
-    },
-  ]);
+  // const [cart, setCart] = useState([
+  //   {
+  //     id: 1,
+  //     name: "Fila shirt",
+  //     image:
+  //       "https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg",
+  //     price: 29,
+  //     quantity: 1,
+  //     subtotal: 29,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Another shirt",
+  //     image:
+  //       "https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg",
+  //     price: 39,
+  //     quantity: 1,
+  //     subtotal: 39,
+  //   },
+  // ]);
+
+  const [cart, setCart] = useState([]);
+  const [order, setOrder] = useState([]);
+
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+  const USERID = "c7a3ae50-d040-44e3-86fa-c225cd9fd63a";
+  useEffect(() => {
+    axios
+      .get(`${BACKEND_URL}/users/${USERID}/wishlists`)
+      .then((res) => res.data)
+      .then((res) => {
+        // console.log(res);
+        // extract the keys to display
+        const arr = [];
+        res.forEach((row) => {
+          const newRow = extractObj(row, [
+            "fabric",
+            "cuff",
+            "back",
+            "pocket",
+            "front",
+            "collar",
+          ]);
+          arr.push(newRow);
+        });
+        console.log(arr);
+        setCart(arr);
+        // console.log(Object.keys(res[0]));
+        // console.log(extractArr(res, "cuff"));
+        // const result = extractObj(res[0], [
+        //   "fabric",
+        //   "cuff",
+        //   "back",
+        //   "pocket",
+        //   "front",
+        //   "collar",
+        // ]);
+        // console.log(result);
+        // setCart(res);
+      });
+  }, []);
 
   const [total, setTotal] = useState();
 
   useEffect(() => {
     const handleCalculateTotal = (cart) => {
-      const sum = cart.reduce((prev, curr) => prev + curr.subtotal, 0);
+      const test = Object.keys(cart[0]).reduce(
+        (prev, curr) => prev + cart[0][curr].cost,
+        0
+      );
+      console.log(test);
+      // // console.log(cart[0].backName)
+      const sum = cart.reduce((prev, curr) => prev + curr.cost, 0);
       const shippingFees = 0;
       console.log(sum);
       return sum + shippingFees;
     };
-    console.log(cart);
-    setTotal(handleCalculateTotal(cart));
+    console.log(handleCalculateTotal(cart));
+    // setTotal(handleCalculateTotal(cart));
   }, [cart]);
 
   const handleCalculateSubtotal = (cartItems, index) => {
@@ -317,6 +366,7 @@ const ShoppingCartPage = () => {
                   {cart.length !== 0 ? (
                     <TableBody>
                       {cart.map((item, index) => {
+                        console.log(item);
                         return (
                           <>
                             <CartTable
