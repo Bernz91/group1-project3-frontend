@@ -7,25 +7,12 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import "../CSS/Fabrics.css";
 
-// make an array consisting of each step (strings)
-// click next to step two then it moves the array to the collars;
-// pass that array to the Typography step one page; and all the
-// useState will have 7 states; states will const [collars, setCollars] = useState([]);
-//----
-//saving user selections in useContext? or another database?
-///// pass props into one (higher level)* page ----> when you hit submit you push all 7 into checkout;
-///// at checkout you can choose whether to pass to "save for later" by hitting relevant button at cart stage
-////////// save for later / cart is one table
-////////// user saves a selection of 7
-///// quantity saved in the shopping cart state;
-///// when the user orders remove from wishlist;
-
-/////* create  a shirt customisation page;
-///// parent is the page; child is the component (fabrics/collars etc)
-
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const Fabrics = () => {
+
+const Customisation = () => {
   const [fabrics, setFabrics] = useState([]);
+
+  const [chosenFabric, setChosenFabric] = useState([]);
 
   useEffect(() => {
     axios
@@ -36,9 +23,18 @@ const Fabrics = () => {
         setFabrics(res);
       });
   }, []);
+
   return (
     <div>
-      <Typography variant="h4">Step One: Fabrics</Typography>
+      <Typography variant="h3">
+        <div>Customise your shirt</div>
+      </Typography>
+      <Typography>
+        <div>You have chosen fabric {chosenFabric}.</div>
+      </Typography>
+      <Typography variant="h4">
+        <div>Step One: Fabrics</div>
+      </Typography>
       {fabrics.map((fabric, index) => {
         return (
           <card sx={{ maxWidth: 250 }}>
@@ -51,25 +47,29 @@ const Fabrics = () => {
                   image={fabric.imageOne}
                 />
                 <CardContent>
-                  <Typography variant="h6" component="div">
+                  <Typography variant="body1" component="div">
                     {fabric.fabricName}
                   </Typography>
-                  <Typography variant="body1" component="div">
+                  <Typography variant="body2" component="div">
                     Price: ${fabric.sellingPrice}
                   </Typography>
-                  <Typography variant="body2" color="">
+                  <Typography variant="body6" color="">
                     {fabric.description}
                   </Typography>
                   <Typography>
                     <CardActions>
-                      <Button size="small">
-                        <img
-                          className="likebtn"
-                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Heart_coraz%C3%B3n.svg/1920px-Heart_coraz%C3%B3n.svg.png"
-                          alt="Like Button"
-                        />
-                      </Button>
                       <Button size="small">Learn More</Button>
+                      <Button
+                        size="small"
+                        fabricID={fabric.id}
+                        onClick={(event) => {
+                          var getFabricID =
+                            event.target.getAttribute("fabricID");
+                          setChosenFabric(getFabricID);
+                        }}
+                      >
+                        Select me
+                      </Button>
                     </CardActions>
                   </Typography>
                 </CardContent>
@@ -81,4 +81,4 @@ const Fabrics = () => {
     </div>
   );
 };
-export default Fabrics;
+export default Customisation;

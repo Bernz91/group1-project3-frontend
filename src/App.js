@@ -9,6 +9,7 @@ import ShoppingCartPage from "./Page/ShoppingCartPage";
 import Header from "./Component/Header";
 import UserAccountPage from "./Page/UserAccountPage";
 import SizeProfilePage from "./Page/SizeProfilePage";
+import Customisation from "./Component/Customisation";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="" element={<Home />} />
           <Route path="Home" element={<Home />} />
           <Route path="UserProfile" element={<UserAccountPage />} />
+          <Route path="Customisation" element={<Customisation />} />
           <Route path="Fabrics" element={<Fabrics />} />
           <Route
             path="Fabrics/:index"
