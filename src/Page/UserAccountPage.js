@@ -14,8 +14,10 @@ const UserAccountPage = () => {
     useAuth0();
   let navigate = useNavigate();
   const [userDetails, setUserDetails] = useState([]);
+  const [isRegisteringUserDetail, setRegistering] = useState(false);
 
   useEffect(() => {
+    console.log(userDetails);
     const getUser = async () => {
       if (user) {
         try {
@@ -24,6 +26,7 @@ const UserAccountPage = () => {
             audience: "https://group1-project3/api",
             scope: "read:current_user",
           });
+
           await axios
             .get(`${BACKEND_URL}/users/${user.sub}`, {
               headers: {
@@ -32,29 +35,32 @@ const UserAccountPage = () => {
             })
             .then((res) => res.data)
             .then((res) => {
-              console.log(res);
               if (!res) {
-                axios
-                  .post(
-                    `${BACKEND_URL}/users`,
-                    {
-                      id: user.sub,
-                      email: user.email,
-                    },
-                    {
-                      headers: {
-                        Authorization: `Bearer ${accessToken}`,
+                try {
+                  axios
+                    .post(
+                      `${BACKEND_URL}/users`,
+                      {
+                        id: user.sub,
+                        email: user.email,
                       },
-                    }
-                  )
-                  .then((response) => {
-                    console.log(response);
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                  });
+                      {
+                        headers: {
+                          Authorization: `Bearer ${accessToken}`,
+                        },
+                      }
+                    )
+                    .then((response) => {
+                      console.log(response);
+                      setRegistering(true);
+                    });
+                } catch (e) {
+                  console.log(e);
+                }
+              } else {
+                setUserDetails(res);
+                setRegistering(false);
               }
-              setUserDetails(res);
             });
         } catch (error) {
           console.log(error);
@@ -62,7 +68,7 @@ const UserAccountPage = () => {
       }
     };
     getUser();
-  }, [user, userDetails]);
+  }, [user, isRegisteringUserDetail]);
 
   if (isLoading) {
     return <div>Loading ...</div>;

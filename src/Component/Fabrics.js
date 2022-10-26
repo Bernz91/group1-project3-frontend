@@ -37,7 +37,7 @@ const Fabrics = () => {
       });
   }, []);
   return (
-    <div>
+    <div className="fabric">
       <Typography variant="h4">Step One: Fabrics</Typography>
       {fabrics.map((fabric, index) => {
         return (

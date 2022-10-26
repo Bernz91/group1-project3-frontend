@@ -89,12 +89,12 @@ const SizeProfilePage = () => {
 
   return (
     <div>
-      <div hidden={isAdd ? "true" : ""}>
+      <div hidden={isAdd ? true : false}>
         <Button variant="contained" onClick={() => handleAdd()}>
           +
         </Button>
       </div>
-      <div hidden={isAdd ? "" : "true"}>
+      <div hidden={isAdd ? false : true}>
         <CloseIcon onClick={() => handleAdd()} />
         <NewSizeForm user={user} handleAdd={handleAdd} />
       </div>
