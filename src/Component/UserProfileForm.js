@@ -21,11 +21,11 @@ const UserProfileForm = ({ userDetails }) => {
 
   useEffect(() => {
     if (userDetails) {
-      userDetails.first_name && setValue("firstName", userDetails.first_name);
-      userDetails.last_name && setValue("lastName", userDetails.last_name);
+      userDetails.firstName && setValue("firstName", userDetails.firstName);
+      userDetails.lastName && setValue("lastName", userDetails.lastName);
       userDetails.phone && setValue("phone", userDetails.phone);
-      userDetails.shipping_address &&
-        setValue("shippingAddress", userDetails.shipping_address);
+      userDetails.shippingAddress &&
+        setValue("shippingAddress", userDetails.shippingAddress);
       userDetails.email && setEmail(userDetails.email);
     }
   }, [userDetails]);
@@ -41,10 +41,10 @@ const UserProfileForm = ({ userDetails }) => {
         .put(
           `${BACKEND_URL}/users/${userDetails.id}`,
           {
-            first_name: data.firstName,
-            last_name: data.lastName,
+            firstName: data.firstName,
+            lastName: data.lastName,
             phone: data.phone,
-            shipping_address: data.shippingAddress,
+            shippingAddress: data.shippingAddress,
           },
           {
             headers: {
