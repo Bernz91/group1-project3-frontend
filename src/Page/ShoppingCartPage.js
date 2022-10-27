@@ -78,7 +78,7 @@ const ShoppingCartPage = () => {
   // {userId:"", fabricId: "", cuffId: "", backId:"", pocketId:"", frontId:"", collarId:"", quantity: "", singlePrice:"", totalPrice:""}
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-  const USERID = "d4761e06-a282-4463-8202-7abc24b5a092";
+  const USERID = "c7a3ae50-d040-44e3-86fa-c225cd9fd63a";
   useEffect(() => {
     axios
       .get(`${BACKEND_URL}/users/${USERID}/wishlists`)
@@ -86,18 +86,23 @@ const ShoppingCartPage = () => {
       .then((res) => {
         // console.log(res);
         // extract the keys to display
-        const items = extractArr (res, [
+        const items = extractArr(res, [
           "fabric",
           "cuff",
           "back",
           "pocket",
           "front",
           "collar",
-        ])
+        ]);
         // add in new fields
-        const newItems = items.map(item => {
-          return {...item, quantity: 1, price: calcSum(item), subtotal: calcSum(item)}
-        })
+        const newItems = items.map((item) => {
+          return {
+            ...item,
+            quantity: 1,
+            price: calcSum(item),
+            subtotal: calcSum(item),
+          };
+        });
         // console.log(newItems)
         setCart(newItems);
       });
@@ -106,7 +111,7 @@ const ShoppingCartPage = () => {
   useEffect(() => {
     const handleCalculateTotal = (cart) => {
       const shippingFees = 0;
-      console.log(cart)
+      console.log(cart);
       const sum = cart.reduce((prev, curr) => prev + curr.subtotal, 0);
       console.log(sum);
       return sum + shippingFees;

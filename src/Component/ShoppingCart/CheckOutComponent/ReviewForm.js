@@ -14,18 +14,22 @@ const ReviewForm = (props) => {
   const cardNum = card.cardNumber;
   const cardFourNum = cardNum.substr(-4);
 
+  console.log(orders);
+
   return (
     <Box component="form" onSubmit={() => props.handleSubmitOrder()}>
       <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>
       <List disablePadding>
-        {orders.map((order) => (
-          <ListItem key={order.name} sx={{ py: 1, px: 0 }}>
-            <ListItemText primary={order.name} secondary={order.quantity} />
-            <Typography variant="body2">{order.subtotal}</Typography>
-          </ListItem>
-        ))}
+        {orders.map((order, i) => {
+          return (
+            <ListItem key={i} sx={{ py: 1, px: 0 }}>
+              <ListItemText primary={order["fabric"].fabricName} secondary={order.quantity} />
+              <Typography variant="body2">{order.subtotal}</Typography>
+            </ListItem>
+          );
+        })}
 
         <ListItem sx={{ py: 1, px: 0 }}>
           <ListItemText primary="Total" />

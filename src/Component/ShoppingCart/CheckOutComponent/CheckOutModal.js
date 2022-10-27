@@ -19,18 +19,6 @@ import ReviewForm from "./ReviewForm";
 import { Card } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
-// const style = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-//   width: 400,
-//   bgcolor: "background.paper",
-//   border: "2px solid #000",
-//   boxShadow: 24,
-//   p: 4,
-// };
-
 const CheckOutModal = (props) => {
   // console.log(props.orders);
 
@@ -149,14 +137,17 @@ const CheckOutModal = (props) => {
   };
 
   const handleSubmitOrder = () => {
+    console.log("attempt submission");
+    console.log(shipmentDetails, card);
     const order = Object.assign(shipmentDetails, card);
+    console.log(order);
     setFinalOrder(order);
-    console.log(finalOrder);
     // do axios.post to db here
     //then get response from db ...
     // set it to the state to be rendered to the order confirmation page
     handleNext();
   };
+  console.log(finalOrder);
 
   return (
     <Box>
