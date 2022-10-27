@@ -21,7 +21,7 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import CheckOutComponent from "../Component/ShoppingCart/CheckOutComponent";
 import CheckOutModal from "../Component/ShoppingCart/CheckOutComponent/CheckOutModal";
-import { extractObj, extractArr } from "../Component/utils";
+import { extractObj, extractArr, calcSum, calcSum2 } from "../Component/utils";
 
 import {
   Root,
@@ -72,10 +72,13 @@ const ShoppingCartPage = () => {
   // ]);
 
   const [cart, setCart] = useState([]);
-  const [order, setOrder] = useState([]);
+  const [order, setOrder] = useState();
+  const [total, setTotal] = useState();
+
+  // {userId:"", fabricId: "", cuffId: "", backId:"", pocketId:"", frontId:"", collarId:"", quantity: "", singlePrice:"", totalPrice:""}
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-  const USERID = "c7a3ae50-d040-44e3-86fa-c225cd9fd63a";
+  const USERID = "d4761e06-a282-4463-8202-7abc24b5a092";
   useEffect(() => {
     axios
       .get(`${BACKEND_URL}/users/${USERID}/wishlists`)
@@ -83,53 +86,34 @@ const ShoppingCartPage = () => {
       .then((res) => {
         // console.log(res);
         // extract the keys to display
-        const arr = [];
-        res.forEach((row) => {
-          const newRow = extractObj(row, [
-            "fabric",
-            "cuff",
-            "back",
-            "pocket",
-            "front",
-            "collar",
-          ]);
-          arr.push(newRow);
-        });
-        console.log(arr);
-        setCart(arr);
-        // console.log(Object.keys(res[0]));
-        // console.log(extractArr(res, "cuff"));
-        // const result = extractObj(res[0], [
-        //   "fabric",
-        //   "cuff",
-        //   "back",
-        //   "pocket",
-        //   "front",
-        //   "collar",
-        // ]);
-        // console.log(result);
-        // setCart(res);
+        const items = extractArr (res, [
+          "fabric",
+          "cuff",
+          "back",
+          "pocket",
+          "front",
+          "collar",
+        ])
+        // add in new fields
+        const newItems = items.map(item => {
+          return {...item, quantity: 1, price: calcSum(item), subtotal: calcSum(item)}
+        })
+        // console.log(newItems)
+        setCart(newItems);
       });
   }, []);
 
-  const [total, setTotal] = useState();
-
   useEffect(() => {
     const handleCalculateTotal = (cart) => {
-      const test = Object.keys(cart[0]).reduce(
-        (prev, curr) => prev + cart[0][curr].cost,
-        0
-      );
-      console.log(test);
-      // // console.log(cart[0].backName)
-      const sum = cart.reduce((prev, curr) => prev + curr.cost, 0);
       const shippingFees = 0;
+      console.log(cart)
+      const sum = cart.reduce((prev, curr) => prev + curr.subtotal, 0);
       console.log(sum);
       return sum + shippingFees;
     };
     console.log(handleCalculateTotal(cart));
-    // setTotal(handleCalculateTotal(cart));
-  }, [cart]);
+    setTotal(handleCalculateTotal(cart));
+  }, [cart, setCart]);
 
   const handleCalculateSubtotal = (cartItems, index) => {
     const newCartCopy = [...cartItems];
@@ -366,7 +350,7 @@ const ShoppingCartPage = () => {
                   {cart.length !== 0 ? (
                     <TableBody>
                       {cart.map((item, index) => {
-                        console.log(item);
+                        // console.log(item);
                         return (
                           <>
                             <CartTable
