@@ -16,16 +16,31 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import ReviewForm from "./ReviewForm";
+import OrderSuccess from "./OrderSuccess";
+import CircularIndeterminate from "./CircularProgress";
 import { Card } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import axios from "axios";
+import { postOrderDetails } from "../../utils";
 
 const CheckOutModal = (props) => {
   // console.log(props.orders);
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+  const USERID = "3b898f23-1f1a-492f-8481-860c9982ef3b";
+  const orders = props.orders;
+  console.log(orders);
+  const totalCost = props.totalCost;
+  const totalQuantity = props.totalQuantity;
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const steps = ["Shipping address", "Payment details", "Review your order"];
+  const steps = [
+    "Shipping address",
+    "Payment details",
+    "Review your order",
+    "Order Success",
+  ];
   const theme = createTheme();
 
   const [open, setOpen] = useState(false);
@@ -48,7 +63,7 @@ const CheckOutModal = (props) => {
     country: "",
     saveAddress: "",
   });
-  const [finalOrder, setFinalOrder] = useState();
+  const [orderId, setOrderId] = useState();
 
   const getStepContent = (step) => {
     switch (step) {
@@ -76,13 +91,16 @@ const CheckOutModal = (props) => {
           <ReviewForm
             shipmentDetails={shipmentDetails}
             orders={props.orders}
-            total={props.total}
+            totalCost={props.totalCost}
             card={card}
             handleSubmitOrder={() => handleSubmitOrder()}
             handleBack={() => handleBack()}
           />
         );
-      // return "this is review form";
+
+      case 3:
+        return <OrderSuccess orderId={orderId} />;
+
       default:
         throw new Error("Unknown step");
     }
@@ -138,16 +156,35 @@ const CheckOutModal = (props) => {
 
   const handleSubmitOrder = () => {
     console.log("attempt submission");
-    console.log(shipmentDetails, card);
-    const order = Object.assign(shipmentDetails, card);
-    console.log(order);
-    setFinalOrder(order);
-    // do axios.post to db here
-    //then get response from db ...
-    // set it to the state to be rendered to the order confirmation page
+    console.log(shipmentDetails);
+    // const order = Object.assign(shipmentDetails, card);
+    // console.log(order);
+    // setFinalOrder(order);
+    // submitting orders to db
+    axios
+      .post(`${BACKEND_URL}/orders/`, {
+        paymentId: 1,
+        userId: USERID,
+        quantity: totalQuantity,
+        subtotal: totalCost,
+        shippingFee: 0,
+        total: totalCost,
+        status: "Preparing",
+        shippingAddress: JSON.stringify(shipmentDetails),
+      })
+      .then((res) => res.data)
+      .then((res) => {
+        console.log(res.id);
+        postOrderDetails(res.id, orders);
+        setOrderId(res.id);
+        console.log("passed");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     handleNext();
   };
-  console.log(finalOrder);
 
   return (
     <Box>
@@ -160,6 +197,7 @@ const CheckOutModal = (props) => {
         startIcon={<AddShoppingCartIcon />}
         align="center"
         sx={{ align: "center" }}
+        disabled={orders.length === 0}
       >
         Proceed to checkout
       </Button>
@@ -187,16 +225,7 @@ const CheckOutModal = (props) => {
               </Stepper>
               <React.Fragment>
                 {activeStep === steps.length ? (
-                  <React.Fragment>
-                    <Typography variant="h5" gutterBottom>
-                      Thank you for your order.
-                    </Typography>
-                    <Typography variant="subtitle1">
-                      Your order number is #2001539. We have emailed your order
-                      confirmation, and will send you an update when your order
-                      has shipped.
-                    </Typography>
-                  </React.Fragment>
+                  <React.Fragment></React.Fragment>
                 ) : (
                   <React.Fragment>
                     {getStepContent(activeStep)}

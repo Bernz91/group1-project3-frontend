@@ -9,12 +9,10 @@ import Box from "@mui/material/Box";
 const ReviewForm = (props) => {
   const shipmentDetails = props.shipmentDetails;
   const orders = props.orders;
-  const total = props.total;
+  const totalCost = props.totalCost;
   const card = props.card;
   const cardNum = card.cardNumber;
   const cardFourNum = cardNum.substr(-4);
-
-  console.log(orders);
 
   return (
     <Box component="form" onSubmit={() => props.handleSubmitOrder()}>
@@ -32,9 +30,9 @@ const ReviewForm = (props) => {
         })}
 
         <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Total" />
+          <ListItemText primary="TotalCost" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {total}
+            {totalCost}
           </Typography>
         </ListItem>
       </List>

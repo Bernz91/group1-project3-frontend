@@ -21,7 +21,13 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import CheckOutComponent from "../Component/ShoppingCart/CheckOutComponent";
 import CheckOutModal from "../Component/ShoppingCart/CheckOutComponent/CheckOutModal";
-import { extractObj, extractArr, calcSum, calcSum2 } from "../Component/utils";
+import {
+  extractObj,
+  extractArr,
+  calcTotalCost,
+  calcQuantity,
+  deleteWishlist,
+} from "../Component/utils";
 
 import {
   Root,
@@ -34,6 +40,7 @@ import {
   InsetSidebar,
   Footer,
 } from "@mui-treasury/layout";
+import { CarRentalTwoTone } from "@mui/icons-material";
 
 // https://github.com/tailwindlabs/tailwindcss/blob/master/colors.js#L244
 const coolGray = {
@@ -50,75 +57,67 @@ const coolGray = {
 };
 
 const ShoppingCartPage = () => {
-  // const [cart, setCart] = useState([
-  //   {
-  //     id: 1,
-  //     name: "Fila shirt",
-  //     image:
-  //       "https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg",
-  //     price: 29,
-  //     quantity: 1,
-  //     subtotal: 29,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Another shirt",
-  //     image:
-  //       "https://dynamic.zacdn.com/TIqU0jk90hPxnuO44NnNXO4B1AU=/fit-in/346x500/filters:quality(95):fill(ffffff)/http://static.sg.zalora.net/p/fila-4662-609589-1.jpg",
-  //     price: 39,
-  //     quantity: 1,
-  //     subtotal: 39,
-  //   },
-  // ]);
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+  const USERID = "3b898f23-1f1a-492f-8481-860c9982ef3b";
 
   const [cart, setCart] = useState([]);
-  const [order, setOrder] = useState();
-  const [total, setTotal] = useState();
+  const [totalCost, setTotalCost] = useState();
+  const [totalQuantity, setTotalQuantity] = useState();
+  const [change, setChange] = useState(true);
 
-  // {userId:"", fabricId: "", cuffId: "", backId:"", pocketId:"", frontId:"", collarId:"", quantity: "", singlePrice:"", totalPrice:""}
-
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-  const USERID = "c7a3ae50-d040-44e3-86fa-c225cd9fd63a";
   useEffect(() => {
-    axios
-      .get(`${BACKEND_URL}/users/${USERID}/wishlists`)
-      .then((res) => res.data)
-      .then((res) => {
-        // console.log(res);
-        // extract the keys to display
-        const items = extractArr(res, [
-          "fabric",
-          "cuff",
-          "back",
-          "pocket",
-          "front",
-          "collar",
-        ]);
-        // add in new fields
-        const newItems = items.map((item) => {
-          return {
-            ...item,
-            quantity: 1,
-            price: calcSum(item),
-            subtotal: calcSum(item),
-          };
+    if (change) {
+      axios
+        .get(`${BACKEND_URL}/users/${USERID}/wishlists`)
+        .then((res) => res.data)
+        .then((res) => {
+          console.log(res);
+          // extract the keys to display
+          const items = extractArr(res, [
+            "fabric",
+            "cuff",
+            "back",
+            "pocket",
+            "front",
+            "collar",
+          ]);
+          // add in new fields
+          const newItems = items.map((item, i) => {
+            // console.log(item);
+            return {
+              ...item,
+              wishlistId: res[i].id,
+              userId: USERID,
+              quantity: 1,
+              price: calcTotalCost(item),
+              subtotal: calcTotalCost(item),
+            };
+          });
+          // console.log(newItems)
+          setCart(newItems);
         });
-        // console.log(newItems)
-        setCart(newItems);
-      });
-  }, []);
+      setChange(false);
+    }
+  }, [change]);
 
   useEffect(() => {
-    const handleCalculateTotal = (cart) => {
+    const handleCalculateTotalCost = (cart) => {
       const shippingFees = 0;
       console.log(cart);
       const sum = cart.reduce((prev, curr) => prev + curr.subtotal, 0);
-      console.log(sum);
       return sum + shippingFees;
     };
-    console.log(handleCalculateTotal(cart));
-    setTotal(handleCalculateTotal(cart));
-  }, [cart, setCart]);
+
+    const handleCalcTotalQuantity = (cart) => {
+      const quantities = calcQuantity(extractArr(cart, ["quantity"]));
+      return quantities;
+    };
+
+    console.log("totalcost", handleCalculateTotalCost(cart));
+    console.log("totalquantities", handleCalcTotalQuantity(cart));
+    setTotalQuantity(handleCalcTotalQuantity(cart));
+    setTotalCost(handleCalculateTotalCost(cart));
+  }, [cart]);
 
   const handleCalculateSubtotal = (cartItems, index) => {
     const newCartCopy = [...cartItems];
@@ -148,14 +147,11 @@ const ShoppingCartPage = () => {
     handleCalculateSubtotal(cartItems, index);
   };
 
-  const handleRemoveCartId = (index) => {
+  const handleRemoveCartId = (wishlistId) => {
+    console.log(wishlistId);
     console.log("tried deleting");
-    console.log(index);
-    const newCartCopy = [...cart].slice();
-
-    // find the correct id here and remove it accordingly
-    newCartCopy.splice(index, 1);
-    return setCart(newCartCopy);
+    deleteWishlist(USERID, wishlistId);
+    setChange(true);
   };
 
   return (
@@ -360,7 +356,7 @@ const ShoppingCartPage = () => {
                           <>
                             <CartTable
                               key={index}
-                              index={index}
+                              wishlistId={item.wishlistId}
                               item={item}
                               increaseCount={() =>
                                 handleIncreaseCount(cart, index)
@@ -369,7 +365,7 @@ const ShoppingCartPage = () => {
                                 handleDecreaseCount(cart, index)
                               }
                               handleRemoveCartId={() =>
-                                handleRemoveCartId(index)
+                                handleRemoveCartId(item.wishlistId)
                               }
                               handleCalculateSubtotal={() =>
                                 handleCalculateSubtotal(cart, index)
@@ -384,9 +380,13 @@ const ShoppingCartPage = () => {
                   )}
                 </Table>
                 <Divider />
-                <CheckOutComponent total={total} />
+                <CheckOutComponent totalCost={totalCost} />
                 <Box align="center " mt={2}>
-                  <CheckOutModal orders={cart} total={total} />
+                  <CheckOutModal
+                    orders={cart}
+                    totalCost={totalCost}
+                    totalQuantity={totalQuantity}
+                  />
                 </Box>
               </TableContainer>
             </InsetContainer>

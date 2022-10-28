@@ -32,10 +32,12 @@ const CartTable = (props) => {
   };
 
   const item = props.item;
+  console.log(item.wishlistId);
 
   return (
     <>
       <TableRow
+        index={item.wishlistId}
         key={item.id}
         sx={{
           "&:last-child td, &:last-child th": { border: 0 },
