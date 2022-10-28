@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import Grid2 from "@mui/material/Unstable_Grid2"; // Grid version 2
 import Button from "@mui/material/Button";
 import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -16,31 +17,47 @@ const UserProfileForm = ({ userDetails }) => {
 
   const [email, setEmail] = useState();
 
+  const { getAccessTokenSilently } = useAuth0();
+
   useEffect(() => {
     if (userDetails) {
-      userDetails.first_name && setValue("firstName", userDetails.first_name);
-      userDetails.last_name && setValue("lastName", userDetails.last_name);
+      userDetails.firstName && setValue("firstName", userDetails.firstName);
+      userDetails.lastName && setValue("lastName", userDetails.lastName);
       userDetails.phone && setValue("phone", userDetails.phone);
-      userDetails.shipping_address &&
-        setValue("shippingAddress", userDetails.shipping_address);
+      userDetails.shippingAddress &&
+        setValue("shippingAddress", userDetails.shippingAddress);
       userDetails.email && setEmail(userDetails.email);
     }
   }, [userDetails]);
 
-  const onSubmit = (data) => {
-    axios
-      .put(`${BACKEND_URL}/users/${userDetails.id}`, {
-        first_name: data.firstName,
-        last_name: data.lastName,
-        phone: data.phone,
-        shipping_address: data.shippingAddress,
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  const onSubmit = async (data) => {
+    // Retrieve access token
+    const accessToken = getAccessTokenSilently({
+      audience: "https://group1-project3/api",
+      scope: "read:current_user",
+    });
+    try {
+      await axios
+        .put(
+          `${BACKEND_URL}/users/${userDetails.id}`,
+          {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            phone: data.phone,
+            shippingAddress: data.shippingAddress,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
+        .then(function (response) {
+          console.log(response);
+        });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (

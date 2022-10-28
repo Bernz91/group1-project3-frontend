@@ -10,39 +10,65 @@ import { useNavigate } from "react-router";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const UserAccountPage = () => {
-  const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+  const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
+    useAuth0();
   let navigate = useNavigate();
   const [userDetails, setUserDetails] = useState([]);
+  const [isRegisteringUserDetail, setRegistering] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      const [connection, userId] = user.sub.split("|");
-
-      try {
-        axios
-          .get(`${BACKEND_URL}/users/${userId}`)
-          .then((res) => res.data)
-          .then((res) => {
-            if (!res) {
-              axios
-                .post(`${BACKEND_URL}/users`, {
-                  id: userId,
-                  email: user.email,
-                })
-                .then((response) => {
-                  console.log(response);
-                })
-                .catch(function(error) {
-                  console.log(error);
-                });
-            }
-            setUserDetails(res);
+    console.log(userDetails);
+    const getUser = async () => {
+      if (user) {
+        try {
+          // Retrieve access token
+          const accessToken = await getAccessTokenSilently({
+            audience: "https://group1-project3/api",
+            scope: "read:current_user",
           });
-      } catch (error) {
-        console.log(error);
+
+          await axios
+            .get(`${BACKEND_URL}/users/${user.sub}`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            })
+            .then((res) => res.data)
+            .then((res) => {
+              if (!res) {
+                try {
+                  axios
+                    .post(
+                      `${BACKEND_URL}/users`,
+                      {
+                        id: user.sub,
+                        email: user.email,
+                      },
+                      {
+                        headers: {
+                          Authorization: `Bearer ${accessToken}`,
+                        },
+                      }
+                    )
+                    .then((response) => {
+                      console.log(response);
+                      setRegistering(true);
+                    });
+                } catch (e) {
+                  console.log(e);
+                }
+              } else {
+                setUserDetails(res);
+                setRegistering(false);
+              }
+            });
+        } catch (error) {
+          console.log(error);
+        }
       }
-    }
-  }, [user, userDetails]);
+    };
+    getUser();
+  }, [user, isRegisteringUserDetail]);
 
   if (isLoading) {
     return <div>Loading ...</div>;

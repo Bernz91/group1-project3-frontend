@@ -11,9 +11,14 @@ const Header = () => {
 
   return (
     <div>
-      <Grid2 container columnSpacing={1} rowSpacing={0} className="header">
-        <Grid2 xs={9}>
+      <Grid2 container columnSpacing={2} rowSpacing={0.5} className="header">
+        <Grid2 xs={3}>
           <NavBar />
+        </Grid2>
+        <Grid2 xs={6}>
+          <div align="middle" onClick={() => navigate("/")}>
+            Sew Sew Tailor
+          </div>
         </Grid2>
         <Grid2 xs={1}>
           <FavoriteBorderOutlinedIcon />
