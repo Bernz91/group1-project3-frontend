@@ -32,7 +32,7 @@ const Customisation = () => {
       <Typography variant="h3">
         <div>Customise your shirt</div>
       </Typography>
-      <Typography color="white">
+      <Typography variant="h5">
         <div>You have chosen fabric {chosenFabric}.</div>
       </Typography>
       <Typography variant="h4" color="white">
