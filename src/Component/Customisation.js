@@ -24,14 +24,18 @@ const Customisation = () => {
   }, []);
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundImage: `url("https://images.unsplash.com/photo-1603251579431-8041402bdeda?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")`,
+      }}
+    >
       <Typography variant="h3">
         <div>Customise your shirt</div>
       </Typography>
-      <Typography>
+      <Typography color="white">
         <div>You have chosen fabric {chosenFabric}.</div>
       </Typography>
-      <Typography variant="h4">
+      <Typography variant="h4" color="white">
         <div>Step One: Fabrics</div>
       </Typography>
       {fabrics.map((fabric, index) => {
