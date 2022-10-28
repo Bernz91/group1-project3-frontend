@@ -32,7 +32,7 @@ const Customisation = () => {
       <Typography variant="h3">
         <div>Customise your shirt</div>
       </Typography>
-      <Typography color="white">
+      <Typography variant="h5">
         <div>You have chosen fabric {chosenFabric}.</div>
       </Typography>
       <Typography variant="h4" color="white">
@@ -50,13 +50,13 @@ const Customisation = () => {
                   image={fabric.imageOne}
                 />
                 <CardContent>
-                  <Typography variant="body1" component="div">
+                  <Typography variant="h5" fontWeight="bold" component="div">
                     {fabric.fabricName}
                   </Typography>
-                  <Typography variant="body2" component="div">
+                  <Typography variant="body1" component="div">
                     Price: ${fabric.sellingPrice}
                   </Typography>
-                  <Typography variant="body6" color="">
+                  <Typography variant="body2" fontFamily="default">
                     {fabric.description}
                   </Typography>
                   <Typography>
