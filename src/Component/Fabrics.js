@@ -49,14 +49,13 @@ const Fabrics = () => {
                   alt="shirt"
                   width="250"
                   image={fabric.imageOne}
-                  color="white"
                 />
                 <CardContent>
                   <Typography variant="h6" component="div" color="white">
                     {fabric.fabricName}
                   </Typography>
                   <Typography variant="body1" component="div">
-                    Price: ${fabric.sellingPrice}
+                    Price: ${fabric.cost}
                   </Typography>
                   <Typography variant="body2" color="">
                     {fabric.description}

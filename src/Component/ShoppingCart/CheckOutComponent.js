@@ -50,7 +50,7 @@ const CheckOutComponent = (props) => {
           align="right"
           sx={{ textAlign: "right" }}
         >
-          <Typography variant="h6">SGD {props.total}</Typography>
+          <Typography variant="h6">SGD {props.totalCost}</Typography>
         </TableCell>
       </TableRow>
     </Table>
