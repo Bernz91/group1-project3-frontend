@@ -11,11 +11,7 @@ const Logout = () => {
     logout({ returnTo: window.location.origin });
   };
 
-  return (
-    <div>
-      <div onClick={handleSubmit(onSubmit)}>Logout</div>
-    </div>
-  );
+  return <span onClick={handleSubmit(onSubmit)}>Logout</span>;
 };
 
 export default Logout;
