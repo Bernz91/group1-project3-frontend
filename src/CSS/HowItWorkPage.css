@@ -1,29 +1,29 @@
-.home {
+.howItWorksMainDiv {
   background-image: url("https://images.unsplash.com/photo-1603251579431-8041402bdeda?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80");
   background-position-x: -110px;
   background-position-y: top;
   background-size: 68vh;
   height: 100vh;
   color: white;
-}
-
-/* .logo-container {
-  text-align: center;
   position: relative;
-  top: 70vh;
-  height: 5vh;
-} */
-
-.brand {
-  font-size: 10vw;
-  margin: 0;
-  width: 100%;
-  position: absolute;
-  top: 82%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+  width: 101vw;
+  left: 0px;
 }
 
-button {
-  font-size: 8vw;
+.howItWorksTitle {
+  font-size: 10vw;
+}
+
+.howItWorksLabel {
+  font-size: 3.5vw;
+  font-weight: 700;
+}
+
+.howItWorksDescription {
+  font-size: 3vw;
+}
+
+img {
+  height: 10vh;
+  width: 20vw;
 }
