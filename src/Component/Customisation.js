@@ -54,7 +54,7 @@ const Customisation = () => {
                     {fabric.fabricName}
                   </Typography>
                   <Typography variant="body1" component="div">
-                    Price: ${fabric.sellingPrice}
+                    Price: ${fabric.cost}
                   </Typography>
                   <Typography variant="body2" fontFamily="default">
                     {fabric.description}
