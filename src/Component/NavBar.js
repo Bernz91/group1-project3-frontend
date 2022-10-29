@@ -33,7 +33,7 @@ const NavBar = () => {
             onKeyDown={toggleDrawer}
           >
             <List>
-              {["Home", "How-it-works", "Customisation", "Order summary"].map(
+              {["Home", "How-it-works", "Customisation", "My Cart", "Order summary"].map(
                 (text, index) => (
                   <ListItem key={text} disablePadding>
                     <ListItemButton>
