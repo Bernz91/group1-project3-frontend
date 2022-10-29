@@ -24,33 +24,42 @@ const HowItWorksPage = () => {
 
   return (
     <div className="howItWorksMainDiv">
-      <div className="howItWorksTitle" align="middle">
+      <div className="adjustVerticalPosition">
+        <div className="howItWorksTitle" align="middle">
+          How it works
+        </div>
         <br />
-        How it works
+        {labels.map((label, index) => {
+          return (
+            <div key={label} align="middle">
+              <Grid2
+                container
+                columnSpacing={2}
+                rowSpacing={0}
+                className="card"
+              >
+                <Grid2 xs={8}>
+                  <label className="howItWorksLabel">{label}</label>
+                  <br />
+                  <p className="howItWorksDescription">{description}</p>
+                </Grid2>
+                <Grid2 xs={4}>
+                  <div className="images">
+                    <img
+                      className="howItWorksImg"
+                      src={images[index]}
+                      alt="error"
+                    />
+                  </div>
+                </Grid2>
+              </Grid2>
+              <br />
+            </div>
+          );
+        })}
       </div>
-      <br />
-      {labels.map((label, index) => {
-        return (
-          <div key={label} align="middle" className="adjustVerticalPosition">
-            <Grid2 container columnSpacing={2} rowSpacing={0} className="card">
-              <Grid2 xs={10}>
-                <label className="howItWorksLabel">{label}</label>
-              </Grid2>
-              <Grid2 xs={8}>
-                <div className="howItWorksDescription">{description}</div>
-              </Grid2>
-              <Grid2 xs={2}>
-                <div className="images">
-                  <img src={images[index]} alt="error" />
-                </div>
-              </Grid2>
-            </Grid2>
-            <br />
-          </div>
-        );
-      })}
       <div align="middle" className="mainPageButton">
-        <Button variant="contained" onClick={() => navigate("/howItWorks")}>
+        <Button variant="contained" onClick={() => navigate("/customisation")}>
           Begin
         </Button>
       </div>

@@ -7,20 +7,26 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
+import "../CSS/Header.css";
 
 const Header = () => {
   let navigate = useNavigate();
 
   return (
     <div>
-      <Grid2 container columnSpacing={2} rowSpacing={0.5} className="header">
-        <Grid2 xs={3.2}>
+      <Grid2 container columnSpacing={0} rowSpacing={0} className="header">
+        <Grid2 xs={3.5}>
           <NavBar />
         </Grid2>
-        <Grid2 xs={5.6}>
-          <div align="middle" onClick={() => navigate("/")}>
+        <Grid2 xs={5} className="headerLogo" onClick={() => navigate("/")}>
+          Sew Sew Tailor
+          {/* <div
+            align="middle"
+            className="headerLogo"
+            onClick={() => navigate("/")}
+          >
             Sew Sew Tailor
-          </div>
+          </div> */}
         </Grid2>
         <Grid2 xs={1}>
           <FavoriteBorderOutlinedIcon />
@@ -30,10 +36,12 @@ const Header = () => {
         </Grid2>
         <Grid2 xs={1}>
           <Badge color="secondary" badgeContent={2}>
-            <ShoppingBagOutlinedIcon />
+            <ShoppingBagOutlinedIcon
+              onClick={() => navigate("/shoppingCart")}
+            />
           </Badge>
         </Grid2>
-        <Grid2 xs={0.2}></Grid2>
+        <Grid2 xs={0.5}></Grid2>
       </Grid2>
       <Outlet />
     </div>
