@@ -9,7 +9,7 @@ import Box from "@mui/material/Box";
 const ReviewForm = (props) => {
   const shipmentDetails = props.shipmentDetails;
   const orders = props.orders;
-  const total = props.total;
+  const totalCost = props.totalCost;
   const card = props.card;
   const cardNum = card.cardNumber;
   const cardFourNum = cardNum.substr(-4);
@@ -20,17 +20,19 @@ const ReviewForm = (props) => {
         Order summary
       </Typography>
       <List disablePadding>
-        {orders.map((order) => (
-          <ListItem key={order.name} sx={{ py: 1, px: 0 }}>
-            <ListItemText primary={order.name} secondary={order.quantity} />
-            <Typography variant="body2">{order.subtotal}</Typography>
-          </ListItem>
-        ))}
+        {orders.map((order, i) => {
+          return (
+            <ListItem key={i} sx={{ py: 1, px: 0 }}>
+              <ListItemText primary={order["fabric"].fabricName} secondary={order.quantity} />
+              <Typography variant="body2">{order.subtotal}</Typography>
+            </ListItem>
+          );
+        })}
 
         <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Total" />
+          <ListItemText primary="TotalCost" />
           <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            {total}
+            {totalCost}
           </Typography>
         </ListItem>
       </List>
