@@ -78,26 +78,26 @@ const UserAccountPage = () => {
     <div>
       {!isAuthenticated ? (
         <div>
-          Please login to continue.
-          <button>
-            <Login />
-          </button>
+          You need to login to to proceed. Click here to <Login />.
         </div>
       ) : (
-        <Grid2 container columnSpacing={2} rowSpacing={2}>
-          <Grid2 xs={6}>
-            <Button
-              variant="contained"
-              onClick={() => navigate("/SizeProfile")}
-            >
-              Size Profiles
-            </Button>
+        <div className="userPageDiv">
+          <Grid2 container columnSpacing={2} rowSpacing={2}>
+            <Grid2 xs={6} className="sizeProfileButtonGrid">
+              <Button
+                variant="contained"
+                onClick={() => navigate("/SizeProfile")}
+              >
+                Size Profiles
+              </Button>
+            </Grid2>
+            <Grid2 xs={6} className="orderHistoryButtonGrid">
+              <Button variant="contained">Order History </Button>
+            </Grid2>
           </Grid2>
-          <Grid2 xs={6}>
-            <Button variant="contained">Order Details</Button>
-          </Grid2>
+          <br />
           <UserProfileForm userDetails={userDetails} />
-        </Grid2>
+        </div>
       )}
     </div>
   );

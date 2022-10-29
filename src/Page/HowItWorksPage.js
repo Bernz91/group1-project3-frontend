@@ -16,7 +16,7 @@ const HowItWorksPage = () => {
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in augue arcu.";
 
   const images = [
-    "https://images.unsplash.com/photo-1584799580661-53b7c6b99430?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1160&q=80",
+    "https://images.unsplash.com/photo-1643350964818-34d4a6e951c7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
     "https://images.unsplash.com/photo-1633655442356-ab2dbc69c772?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=685&q=80",
     "https://images.unsplash.com/photo-1591944489410-16ec1074a18e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=629&q=80",
     "https://images.unsplash.com/photo-1584184924103-e310d9dc82fc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",

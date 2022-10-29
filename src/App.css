@@ -66,7 +66,9 @@ body {
   height: 1vh;
 }
 
-input {
+
+
+.sizeInput {
   /* display: flex; */
   /* box-sizing: border-box; */
   width: 10%;
