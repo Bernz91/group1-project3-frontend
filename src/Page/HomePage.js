@@ -8,17 +8,21 @@ const Home = () => {
   let navigate = useNavigate();
 
   return (
-    <Grid2 container columnSpacing={2} rowSpacing={2} className="home">
-      <Grid2 xs={12} className="logo-container">
+    <div className="howItWorksMainDiv">
+      <Grid2 container columnSpacing={0} rowSpacing={0}>
         <Grid2 xs={12}>
-          <div className="brand">Sew Sew Tailor</div>
+          <div className="brand" align="middle">
+            Sew Sew Tailor
+          </div>
           <br />
-          <Button variant="contained" onClick={() => navigate("/how-it-works")}>
-            How it works
-          </Button>
+          <div className="mainPageButton" align="middle">
+            <Button variant="contained" onClick={() => navigate("/howItWorks")}>
+              How it works
+            </Button>
+          </div>
         </Grid2>
       </Grid2>
-    </Grid2>
+    </div>
   );
 };
 

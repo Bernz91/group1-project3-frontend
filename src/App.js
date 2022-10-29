@@ -10,6 +10,7 @@ import Header from "./Component/Header";
 import UserAccountPage from "./Page/UserAccountPage";
 import SizeProfilePage from "./Page/SizeProfilePage";
 import Customisation from "./Component/Customisation";
+import HowItWorksPage from "./Page/HowItWorksPage";
 
 const App = () => {
   return (
@@ -18,7 +19,9 @@ const App = () => {
         <Route path="/" element={<Header />}>
           <Route path="" element={<Home />} />
           <Route path="Home" element={<Home />} />
+          <Route path="HowItWorks" element={<HowItWorksPage />} />
           <Route path="UserProfile" element={<UserAccountPage />} />
+          <Route path="SizeProfile" element={<SizeProfilePage />} />
           <Route path="Customisation" element={<Customisation />} />
           <Route path="Fabrics" element={<Fabrics />} />
           <Route
@@ -26,7 +29,6 @@ const App = () => {
             element={"to add page for individual fabric"}
           />
           <Route path="shoppingcart" element={<ShoppingCartPage />} />
-          <Route path="SizeProfile" element={<SizeProfilePage />} />
           <Route path="*" element={"Nothing here!"} />
         </Route>
       </Routes>
