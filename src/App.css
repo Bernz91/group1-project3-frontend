@@ -6,13 +6,6 @@ body {
   height: 100vh;
 }
 
-.header {
-  background-color: black;
-  color: white;
-  padding: 10px;
-  text-align: left;
-}
-
 .vertical-center {
   margin: 0;
   width: 100%;
@@ -97,25 +90,11 @@ button[type="submit"] {
   text-align: center;
 }
 
-.card {
-  background-color: black;
-  color: white;
-  padding: 10px;
-  text-align: left;
-  width: 80%;
-  align-items: center;
-  align-content: center;
-  justify-self: center;
-  justify-items: center;
-  border-radius: 10px;
-}
-
-
 .mainPageButton {
   margin: 0;
   width: 100%;
   position: absolute;
-  top: 90%;
+  top: 85%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
