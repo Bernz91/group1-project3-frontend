@@ -11,6 +11,7 @@ import UserAccountPage from "./Page/UserAccountPage";
 import SizeProfilePage from "./Page/SizeProfilePage";
 import Customisation from "./Component/Customisation";
 import HowItWorksPage from "./Page/HowItWorksPage";
+import OrderSummaryPage from "./Page/OrderSummaryPage"
 
 const App = () => {
   return (
@@ -28,7 +29,8 @@ const App = () => {
             path="Fabrics/:index"
             element={"to add page for individual fabric"}
           />
-          <Route path="shoppingcart" element={<ShoppingCartPage />} />
+          <Route path="ShoppingCart" element={<ShoppingCartPage />} />
+          <Route path="OrderSummary" element={<OrderSummaryPage />} />
           <Route path="*" element={"Nothing here!"} />
         </Route>
       </Routes>
