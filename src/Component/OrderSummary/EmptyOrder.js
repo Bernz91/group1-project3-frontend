@@ -6,15 +6,15 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
-const EmptyCart = () => {
+const EmptyOrder = () => {
   let navigate = useNavigate();
   return (
     <Container display="center" align="center" sx={{ m: 1 }}>
       <Typography variant="h5" sx={{ mt: 5 }}>
-        Your Cart is empty
+        You have no orders yet :(
       </Typography>
       <Typography variant="h6" sx={{ mt: 3 }}>
-        Add something to make it happy :){" "}
+        Add some orders to make it happy :){" "}
       </Typography>
       <Button
         variant="contained"
@@ -27,4 +27,4 @@ const EmptyCart = () => {
   );
 };
 
-export default EmptyCart;
+export default EmptyOrder;

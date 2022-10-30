@@ -57,3 +57,13 @@ export const postOrderDetails = (orderId, orders) => {
 export const deleteWishlist = (userId, wishlistId) => {
   return axios.delete(`${BACKEND_URL}/users/${userId}/wishlists/${wishlistId}`);
 };
+
+// export const updateCartlength = (userId) => {
+//   axios
+//     .get(`${BACKEND_URL}/users/${userId}/wishlists/`)
+//     .then((res) => res.data)
+//     .then((res) => {
+//       console.log("length", res.length);
+//       return res.length;
+//     });
+// };

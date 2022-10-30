@@ -26,7 +26,9 @@ import { postOrderDetails } from "../../utils";
 const CheckOutModal = (props) => {
   // console.log(props.orders);
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-  const USERID = "3b898f23-1f1a-492f-8481-860c9982ef3b";
+  // const USERID = "3b898f23-1f1a-492f-8481-860c9982ef3b";
+  const USERID = "834fc3ef-6ccc-4ba4-a54e-1a75387da94f";
+
   const orders = props.orders;
   console.log(orders);
   const totalCost = props.totalCost;
@@ -199,7 +201,7 @@ const CheckOutModal = (props) => {
         sx={{ align: "center" }}
         disabled={orders.length === 0}
       >
-        Proceed to checkout
+        Checkout
       </Button>
       <Modal
         open={open}
@@ -252,15 +254,6 @@ const CheckOutModal = (props) => {
             </Paper>
           </Container>
         </ThemeProvider>
-
-        {/* <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-        </Box> */}
       </Modal>
     </Box>
   );

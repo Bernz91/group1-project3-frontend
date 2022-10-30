@@ -22,7 +22,7 @@ const NavBar = () => {
     state ? setState(false) : setState(true);
   };
 
-  const navigateAddress = ["Home", "AboutUs", "HowItWorks", "Customisation"];
+  const navigateAddress = ["Home", "AboutUs", "HowItWorks", "Customisation", "ShoppingCart", "OrderSummary"];
 
   return (
     <div>
@@ -35,7 +35,7 @@ const NavBar = () => {
             onKeyDown={toggleDrawer}
           >
             <List>
-              {["Home", "About Us", "How it works", "Shop"].map(
+              {["Home", "About Us", "How it works", "Shop", "My Cart", "My Orders"].map(
                 (text, index) => (
                   <ListItem key={text} disablePadding>
                     <ListItemButton>

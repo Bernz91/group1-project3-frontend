@@ -15,6 +15,7 @@ import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
+import InfoModal from "../OrderSummary/InfoModal";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -52,12 +53,9 @@ const CartTable = (props) => {
           />
         </TableCell>
         <TableCell component="th" scope="row">
-          <Box>Fabric type: {item["fabric"].fabricName}</Box>
-          <Box>Collar type: {item["collar"].collarName}</Box>
-          <Box>Front type: {item["front"].frontName}</Box>
-          <Box>Back type: {item["back"].backName}</Box>
-          <Box>Cuff type: {item["cuff"].cuffName}</Box>
-          <Box>Pocket type: {item["pocket"].pocketName}</Box>
+          <Box>
+            <InfoModal item={item} />
+          </Box>
           <Box>
             <Link href="#">Edit shirt design</Link>
           </Box>
