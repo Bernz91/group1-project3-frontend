@@ -1,0 +1,14 @@
+.header {
+  background-color: black;
+  color: white;
+  text-align: left;
+  height: 5vh;
+  align-content: center;
+  width: 101vw;
+  padding: 0%;
+}
+
+.headerLogo {
+  align-content: center;
+  text-align: center;
+}

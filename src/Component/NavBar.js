@@ -22,13 +22,7 @@ const NavBar = () => {
     state ? setState(false) : setState(true);
   };
 
-  const linksObj = {
-    0: "Home",
-    1: "howItWorks",
-    2: "Customisation",
-    3: "ShoppingCart",
-    4: "OrderSummary",
-  };
+  const navigateAddress = ["Home", "AboutUs", "HowItWorks", "Customisation", "ShoppingCart", "OrderSummary"];
 
   return (
     <div>
@@ -41,24 +35,22 @@ const NavBar = () => {
             onKeyDown={toggleDrawer}
           >
             <List>
-              {[
-                "Home",
-                "How it works",
-                "Customisation",
-                "My Cart",
-                "My Orders",
-              ].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                  <ListItemButton>
-                    <Link to={`/${linksObj[index]}`}>
-                      <ListItemText primary={text} />
-                    </Link>
-                  </ListItemButton>
-                </ListItem>
-              ))}
+              {["Home", "About Us", "How it works", "Shop", "My Cart", "My Orders"].map(
+                (text, index) => (
+                  <ListItem key={text} disablePadding>
+                    <ListItemButton>
+                      <Link to={`/${navigateAddress[index]}`}>
+                        <ListItemText primary={text} />
+                      </Link>
+                    </ListItemButton>
+                  </ListItem>
+                )
+              )}
             </List>
             <Divider />
-            {user ? <Logout /> : <Login />}
+            <List>
+              <ListItem>{user ? <Logout /> : <Login />}</ListItem>
+            </List>
           </Box>
         </Drawer>
       </Fragment>

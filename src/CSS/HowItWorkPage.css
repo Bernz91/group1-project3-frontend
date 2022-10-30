@@ -10,6 +10,26 @@
   left: 0px;
 }
 
+.adjustVerticalPosition {
+  position: absolute;
+  top: 45%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.card {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  text-align: left;
+  width: 80%;
+  align-items: center;
+  align-content: center;
+  justify-self: center;
+  justify-items: center;
+  border-radius: 10px;
+}
+
 .howItWorksTitle {
   font-size: 10vw;
 }
@@ -23,7 +43,11 @@
   font-size: 3vw;
 }
 
-img {
+.howItWorksImg {
   height: 10vh;
-  width: 20vw;
+  width: 18vw;
+}
+
+.images {
+  text-align: right;
 }
