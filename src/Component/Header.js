@@ -9,14 +9,14 @@ import Badge from "@mui/material/Badge";
 import axios from "axios";
 import { updateCartlength } from "./utils";
 import { useAuth0 } from "@auth0/auth0-react";
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-// const USERID = "834fc3ef-6ccc-4ba4-a54e-1a75387da94f";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import "../CSS/Header.css";
 import Logout from "./Logout";
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+// const USERID = "834fc3ef-6ccc-4ba4-a54e-1a75387da94f";
 
 const Header = () => {
   let navigate = useNavigate();
