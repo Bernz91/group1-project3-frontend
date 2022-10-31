@@ -28,7 +28,7 @@ import { Typography } from "@mui/material";
 const ShoppingCartPage = () => {
   let navigate = useNavigate();
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-  const USERID = "834fc3ef-6ccc-4ba4-a54e-1a75387da94f";
+  const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
 
   const [cart, setCart] = useState([]);
   const [totalCost, setTotalCost] = useState();

@@ -61,7 +61,7 @@ const AddressForm = (props) => {
               onChange={props.handleShipmentChange}
             />
           </Grid>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <TextField
               id="address2"
               name="address2"
@@ -72,7 +72,7 @@ const AddressForm = (props) => {
               defaultValue={details.address2}
               onChange={props.handleShipmentChange}
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={6}>
             <TextField
               required

@@ -67,3 +67,12 @@ export const deleteWishlist = (userId, wishlistId) => {
 //       return res.length;
 //     });
 // };
+
+export const concatStr = (array = []) => {
+  let str = ""
+  for (let i = 0; i < array.length; i++) {
+    str += array[i]
+    str += " "
+  }
+  return str
+}

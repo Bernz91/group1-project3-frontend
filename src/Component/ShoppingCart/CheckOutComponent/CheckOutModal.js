@@ -21,13 +21,13 @@ import CircularIndeterminate from "./CircularProgress";
 import { Card } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import axios from "axios";
-import { postOrderDetails } from "../../utils";
+import { postOrderDetails, concatStr } from "../../utils";
 
 const CheckOutModal = (props) => {
   // console.log(props.orders);
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   // const USERID = "3b898f23-1f1a-492f-8481-860c9982ef3b";
-  const USERID = "834fc3ef-6ccc-4ba4-a54e-1a75387da94f";
+  const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
 
   const orders = props.orders;
   console.log(orders);
@@ -58,7 +58,6 @@ const CheckOutModal = (props) => {
     firstName: "",
     lastName: "",
     address1: "",
-    address2: "",
     city: "",
     state: "",
     zip: "",
@@ -138,6 +137,14 @@ const CheckOutModal = (props) => {
 
   // console.log(shipmentDetails);
 
+  const address1 = shipmentDetails.address1
+  const state = shipmentDetails.state
+  const country = shipmentDetails.country
+  const city = shipmentDetails.city
+  const postal = shipmentDetails.zip
+
+  console.log(concatStr([address1, postal, state, city, country]))
+
   const handleCardChange = (e) => {
     // e.preventDefault();
     let value = e.target.value;
@@ -156,14 +163,13 @@ const CheckOutModal = (props) => {
     handleNext();
   };
 
-  const handleSubmitOrder = () => {
+  const handleSubmitOrder = async () => {
     console.log("attempt submission");
     console.log(shipmentDetails);
-    // const order = Object.assign(shipmentDetails, card);
-    // console.log(order);
-    // setFinalOrder(order);
-    // submitting orders to db
-    axios
+
+
+
+   await axios
       .post(`${BACKEND_URL}/orders/`, {
         paymentId: 1,
         userId: USERID,
@@ -173,11 +179,11 @@ const CheckOutModal = (props) => {
         total: totalCost,
         status: "Preparing",
         shippingAddress: JSON.stringify(shipmentDetails),
-      })
+      },console.log("passed"))
       .then((res) => res.data)
-      .then((res) => {
+      .then(await function (res) {
         console.log(res.id);
-        postOrderDetails(res.id, orders);
+        postOrderDetails (res.id, orders)
         setOrderId(res.id);
         console.log("passed");
       })
