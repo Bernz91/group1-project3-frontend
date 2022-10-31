@@ -125,12 +125,14 @@ const Customisation = () => {
           <card sx={{ maxWidth: 250 }}>
             <div key={index}>
               <ul className="InstaCard">
-                <CardMedia
-                  component="img"
-                  alt="shirt"
-                  width="250"
-                  image={fabric.imageOne}
-                />
+                <div>
+                  <CardMedia
+                    component="img"
+                    alt="shirt"
+                    width="250"
+                    image={fabric.imageOne}
+                  />
+                </div>
                 <CardContent>
                   <Typography variant="h5" fontWeight="bold" component="div">
                     {fabric.fabricName}
