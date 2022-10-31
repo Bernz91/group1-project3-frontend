@@ -26,6 +26,7 @@ const OrderDetail = (props) => {
     "quantity",
     "singleprice",
     "totalprice",
+    "measurement",
   ]);
 
   console.log(orderDetails);

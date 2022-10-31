@@ -19,11 +19,14 @@ import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import InfoModal from "./InfoModal";
+import MeasurementModal from "./MeasurementModel";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const OrderTable = (props) => {
   const item = props.item;
+  const measurements = item.measurement;
+  console.log(item.measurement);
 
   return (
     <>
@@ -42,6 +45,7 @@ const OrderTable = (props) => {
               alt={item["fabric"].description}
             />
             <InfoModal item={item} />
+            <MeasurementModal measurements={measurements} />
           </Grid>
         </TableCell>
         <TableCell component="th" scope="row" align="center">

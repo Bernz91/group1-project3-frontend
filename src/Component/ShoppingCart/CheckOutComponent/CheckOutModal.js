@@ -21,7 +21,7 @@ import CircularIndeterminate from "./CircularProgress";
 import { Card } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import axios from "axios";
-import { postOrderDetails, concatStr } from "../../utils";
+import { postOrderDetails, concatStr, deleteAllWishlists } from "../../utils";
 
 const CheckOutModal = (props) => {
   // console.log(props.orders);
@@ -65,6 +65,7 @@ const CheckOutModal = (props) => {
     saveAddress: "",
   });
   const [orderId, setOrderId] = useState();
+  const [submit, setSubmit] = useState(false);
 
   const getStepContent = (step) => {
     switch (step) {
@@ -76,7 +77,6 @@ const CheckOutModal = (props) => {
             handleShipmentSubmit={(e) => handleShipmentSubmit(e)}
           />
         );
-      // return "this is address form";
       case 1:
         return (
           <PaymentForm
@@ -85,7 +85,6 @@ const CheckOutModal = (props) => {
             handleBack={() => handleBack()}
           />
         );
-      // return "this is payment form";
 
       case 2:
         return (
@@ -94,7 +93,7 @@ const CheckOutModal = (props) => {
             orders={props.orders}
             totalCost={props.totalCost}
             card={card}
-            handleSubmitOrder={() => handleSubmitOrder()}
+            handleSubmitOrder={(e) => handleSubmitOrder(e)}
             handleBack={() => handleBack()}
           />
         );
@@ -135,16 +134,6 @@ const CheckOutModal = (props) => {
     handleNext();
   };
 
-  // console.log(shipmentDetails);
-
-  const address1 = shipmentDetails.address1
-  const state = shipmentDetails.state
-  const country = shipmentDetails.country
-  const city = shipmentDetails.city
-  const postal = shipmentDetails.zip
-
-  console.log(concatStr([address1, postal, state, city, country]))
-
   const handleCardChange = (e) => {
     // e.preventDefault();
     let value = e.target.value;
@@ -163,13 +152,16 @@ const CheckOutModal = (props) => {
     handleNext();
   };
 
-  const handleSubmitOrder = async () => {
-    console.log("attempt submission");
-    console.log(shipmentDetails);
+  const handleSubmitOrder = async (e) => {
+    e.preventDefault();
+    const address1 = shipmentDetails.address1;
+    const state = shipmentDetails.state;
+    const country = shipmentDetails.country;
+    const city = shipmentDetails.city;
+    const postal = shipmentDetails.zip;
+    const shippingDetails = concatStr([address1, postal, state, city, country]);
 
-
-
-   await axios
+    await axios
       .post(`${BACKEND_URL}/orders/`, {
         paymentId: 1,
         userId: USERID,
@@ -178,19 +170,22 @@ const CheckOutModal = (props) => {
         shippingFee: 0,
         total: totalCost,
         status: "Preparing",
-        shippingAddress: JSON.stringify(shipmentDetails),
-      },console.log("passed"))
+        shippingAddress: shippingDetails,
+      })
       .then((res) => res.data)
-      .then(await function (res) {
-        console.log(res.id);
-        postOrderDetails (res.id, orders)
-        setOrderId(res.id);
+      .then(async (res) => {
+        // console.log(res.id);
+        await postOrderDetails(res.id, orders);
+        await setOrderId(res.id);
         console.log("passed");
       })
+      .then((res) => {
+        deleteAllWishlists(USERID);
+      })
+
       .catch((error) => {
         console.log(error);
       });
-
     handleNext();
   };
 

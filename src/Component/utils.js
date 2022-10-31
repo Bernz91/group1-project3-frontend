@@ -39,7 +39,7 @@ export const calcTotalCost = (obj) => {
 
 export const postOrderDetails = (orderId, orders) => {
   orders.map((order) => {
-    return axios.post(`${BACKEND_URL}/orders/${orderId}/orderDetails`, {
+    axios.post(`${BACKEND_URL}/orders/${orderId}/orderDetails`, {
       orderId: orderId,
       fabricId: order["back"].id,
       collarId: order["collar"].id,
@@ -58,6 +58,10 @@ export const deleteWishlist = (userId, wishlistId) => {
   return axios.delete(`${BACKEND_URL}/users/${userId}/wishlists/${wishlistId}`);
 };
 
+export const deleteAllWishlists = (userId) => {
+  return axios.delete (`${BACKEND_URL}/users/${userId}/wishlists/`)
+}
+
 // export const updateCartlength = (userId) => {
 //   axios
 //     .get(`${BACKEND_URL}/users/${userId}/wishlists/`)
@@ -69,10 +73,10 @@ export const deleteWishlist = (userId, wishlistId) => {
 // };
 
 export const concatStr = (array = []) => {
-  let str = ""
+  let str = "";
   for (let i = 0; i < array.length; i++) {
-    str += array[i]
-    str += " "
+    str += array[i];
+    str += " ";
   }
-  return str
-}
+  return str;
+};

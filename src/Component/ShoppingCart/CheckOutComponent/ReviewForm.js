@@ -15,7 +15,7 @@ const ReviewForm = (props) => {
   const cardFourNum = cardNum.substr(-4);
 
   return (
-    <Box component="form" onSubmit={() => props.handleSubmitOrder()}>
+    <Box component="form" onSubmit={(e) => props.handleSubmitOrder(e)}>
       <Typography variant="h6" gutterBottom>
         Order summary
       </Typography>
@@ -23,7 +23,10 @@ const ReviewForm = (props) => {
         {orders.map((order, i) => {
           return (
             <ListItem key={i} sx={{ py: 1, px: 0 }}>
-              <ListItemText primary={order["fabric"].fabricName} secondary={order.quantity} />
+              <ListItemText
+                primary={order["fabric"].fabricName}
+                secondary={order.quantity}
+              />
               <Typography variant="body2">{order.subtotal}</Typography>
             </ListItem>
           );

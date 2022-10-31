@@ -23,7 +23,6 @@ const AccordionDisplay = (props) => {
   };
   const order = props.order;
   const orderDetails = order.order_details;
-  console.log(orderDetails);
 
   //setting date for easier viewing
   let date = new Date(order.createdAt);
