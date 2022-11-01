@@ -10,6 +10,9 @@ import "../CSS/Fabrics.css";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Customisation = () => {
+  //sendToWishist
+  const [sendToWishlist, setSendToWishlist] = useState([]);
+
   //fabrics
   const [fabrics, setFabrics] = useState([]);
   const [chosenFabric, setChosenFabric] = useState([]);
@@ -114,8 +117,29 @@ const Customisation = () => {
         <div>
           You have chosen fabric {chosenFabric}, collar {chosenCollar}, cuff
           {chosenCuff}, front {chosenFront}, pocket {chosenPocket}, back{" "}
-          {chosenBack}.
+          {chosenBack}. We are sending to wishlist {sendToWishlist}.
         </div>
+        <Button
+          variant="contained"
+          sx={{
+            width: 190,
+            fontSize: "10px",
+          }}
+          onClick={(event) => {
+            event.preventDefault();
+            setSendToWishlist(
+              { chosenFabric },
+              { chosenCollar },
+              { chosenCuff },
+              { chosenFront },
+              { chosenPocket },
+              { chosenBack }
+            );
+            console.log("setSendToWishList is " + { sendToWishlist });
+          }}
+        >
+          Add choices to wishlist
+        </Button>
       </Typography>
       <div>
         <Typography variant="Overline" color="black">
@@ -263,7 +287,7 @@ const Customisation = () => {
                       alt="fronts"
                       width="250"
                       image={front.imageOne}
-                      collarID={front.id}
+                      frontID={front.id}
                       onClick={(event) => {
                         var getFrontID = event.target.getAttribute("FrontID");
                         setChosenFront(getFrontID);
