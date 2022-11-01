@@ -24,8 +24,14 @@ const InfoModal = (props) => {
 
   return (
     <div>
-      <Button align="center" sx={{ m:0 }} onClick={handleOpen}>
-        View customisation
+      <Button
+        variant="outlined"
+        align="center"
+        sx={{ m: 0 }}
+        onClick={handleOpen}
+        sx={{ width: "200", p: 1, m: 1, textTransform: "none" }}
+      >
+        <Typography sx={{ fontSize: "12.5px" }}>View Shirt Design </Typography>
       </Button>
       <Modal
         open={open}

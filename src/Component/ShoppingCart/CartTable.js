@@ -53,9 +53,6 @@ const CartTable = (props) => {
             image={item["fabric"].imageOne}
             alt={item["fabric"].description}
           />
-          <Box>
-            <InfoModal item={item} />
-          </Box>
         </TableCell>
         <TableCell variant="body" component="th" scope="row">
           <Box>Price: ${item["fabric"].cost}</Box>
@@ -71,20 +68,23 @@ const CartTable = (props) => {
           {/* <Box>
             <Link href="#">Edit shirt design</Link>
           </Box> */}
-        </TableCell>
-
-        <TableCell variant="body" component="th" scope="row" align="center">
-          {/* <Box>${item["fabric"].cost}</Box> */}
-          {/* <Box>View breakdown</Box> */}
-        </TableCell>
-        <TableCell variant="body" align="right">
+          <Box>
+            <InfoModal item={item} />
+          </Box>
           <ButtonGroup>
             <Button
               style={{
-                backgroundColor: "red",
+                backgroundColor: "#F2F1F0",
               }}
               variant="contained"
-              sx={{ color: "white", borderRadius: 28 }}
+              sx={{
+                color: "black",
+                borderRadius: 0,
+                m: 0,
+                p: 0,
+                width: "10",
+                height: "10",
+              }}
               onClick={() => {
                 props.decreaseCount();
               }}
@@ -94,9 +94,16 @@ const CartTable = (props) => {
             <Box sx={{ p: 2 }}>{item.quantity}</Box>
             <Button
               style={{
-                backgroundColor: "green",
+                backgroundColor: "#F2F1F",
               }}
-              sx={{ color: "white", borderRadius: 28 }}
+              sx={{
+                color: "black",
+                borderRadius: 0,
+                m: 0,
+                p: 0,
+                width: "10",
+                height: "10",
+              }}
               onClick={() => {
                 props.increaseCount();
               }}
@@ -109,8 +116,9 @@ const CartTable = (props) => {
           <IconButton aria-label="delete" size="large">
             <DeleteIcon onClick={() => handleClickOpen()} />
           </IconButton>
+          <Box>${item.subtotal}</Box>
         </TableCell>
-        <TableCell align="right">${item.subtotal}</TableCell>
+        {/* <TableCell align="right">${item.subtotal}</TableCell> */}
       </TableRow>
       <AlertMessageDialog
         open={open}
