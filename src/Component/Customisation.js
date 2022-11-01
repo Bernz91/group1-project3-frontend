@@ -7,28 +7,58 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import "../CSS/Fabrics.css";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Customisation = () => {
   //sendToWishList
-  const [sendToWishlist, setSendToWishlist] = useState();
+  const [sendToWishlist, setSendToWishlist] = useState({
+    fabric: "",
+    collar: "",
+    cuff: "",
+    front: "",
+    pocket: "",
+    back: "",
+  });
 
-  //handleSendToWishList
+  //auth0
+  const { user, getAccessTokenSilently } = useAuth0();
+  console.log(user);
+
+  //handleSendToWishList will contain the axios post
   const handleSendToWishList = () => {
-    setSendToWishlist({
-      fabricId: chosenFabric,
-      collarId: chosenCollar,
-      cuffId: chosenCuff,
-      frontId: chosenFront,
-      pocketId: chosenPocket,
-      backId: chosenBack,
+    const getAccessToken = getAccessTokenSilently();
+    axios({
+      method: "post",
+      url: `${BACKEND_URL}/wishlists`,
+      headers: {
+        Authorization: `Bearer ${getAccessToken}`,
+      },
+      data: {
+        userId: user.sub,
+        fabricId: sendToWishlist.fabric.id,
+        collarId: sendToWishlist.collar.id,
+        cuffId: sendToWishlist.cuff.id,
+        frontId: sendToWishlist.front.id,
+        pocketId: sendToWishlist.pocket.id,
+        backId: sendToWishlist.back.id,
+      },
     });
   };
 
+  //   axios
+  //     .post(`${BACKEND_URL}/users/${user.sub}/wishlists`)
+  //     .then((res) => res.data)
+  //     .then((res) => {
+  //       console.log(res);
+  //       setFabrics(res);
+  //     });
+  // };
+
   //fabrics
   const [fabrics, setFabrics] = useState([]);
-  const [chosenFabric, setChosenFabric] = useState([]);
+  // const [chosenFabric, setChosenFabric] = useState([]);
 
   //fabrics useEffect
   useEffect(() => {
@@ -43,7 +73,7 @@ const Customisation = () => {
 
   //collars
   const [collars, setCollars] = useState([]);
-  const [chosenCollar, setChosenCollar] = useState([]);
+  // const [chosenCollar, setChosenCollar] = useState([]);
 
   //collars useEffect
   useEffect(() => {
@@ -58,7 +88,7 @@ const Customisation = () => {
 
   //cuffs
   const [cuffs, setCuffs] = useState([]);
-  const [chosenCuff, setChosenCuff] = useState([]);
+  // const [chosenCuff, setChosenCuff] = useState([]);
 
   //cuffs useEffect
   useEffect(() => {
@@ -73,7 +103,7 @@ const Customisation = () => {
 
   //fronts
   const [fronts, setFronts] = useState([]);
-  const [chosenFront, setChosenFront] = useState([]);
+  // const [chosenFront, setChosenFront] = useState([]);
 
   //fronts useEffect
   useEffect(() => {
@@ -88,7 +118,7 @@ const Customisation = () => {
 
   //pockets
   const [pockets, setPockets] = useState([]);
-  const [chosenPocket, setChosenPocket] = useState([]);
+  // const [chosenPocket, setChosenPocket] = useState([]);
 
   //pockets useEffect
 
@@ -104,7 +134,7 @@ const Customisation = () => {
 
   //backs
   const [backs, setBacks] = useState([]);
-  const [chosenBack, setChosenBack] = useState([]);
+  // const [chosenBack, setChosenBack] = useState([]);
 
   //backs useEffect
   useEffect(() => {
@@ -128,9 +158,10 @@ const Customisation = () => {
       </Typography>
       <Typography variant="caption">
         <div>
-          You have chosen fabric {chosenFabric}, collar {chosenCollar}, cuff
-          {chosenCuff}, front {chosenFront}, pocket {chosenPocket}, back{" "}
-          {chosenBack}. We are sending to wishlist {sendToWishlist}.
+          We are sending to wishlist {sendToWishlist?.fabric.fabricName},{" "}
+          {sendToWishlist?.collar.collarName},{sendToWishlist?.cuff.cuffName},
+          {sendToWishlist?.front.frontName},{sendToWishlist?.pocket.pocketName},
+          {sendToWishlist?.back.backName}.
         </div>
 
         <Button
@@ -141,7 +172,6 @@ const Customisation = () => {
           }}
           onClick={(event) => {
             handleSendToWishList();
-            console.log("sendToWishList is " + sendToWishlist);
           }}
         >
           Add choices to wishlist
@@ -165,7 +195,10 @@ const Customisation = () => {
                       width="250"
                       image={fabric.imageOne}
                       onClick={(event) => {
-                        setChosenFabric(fabric.id);
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          fabric: fabric,
+                        });
                       }}
                     />
                     <CardContent>
@@ -206,7 +239,10 @@ const Customisation = () => {
                       width="250"
                       image={collar.imageOne}
                       onClick={(event) => {
-                        setChosenCollar(collar.id);
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          collar: collar,
+                        });
                       }}
                     />
                     <CardContent>
@@ -247,7 +283,10 @@ const Customisation = () => {
                       width="250"
                       image={cuff.imageOne}
                       onClick={() => {
-                        setChosenCuff(cuff.id);
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          cuff: cuff,
+                        });
                       }}
                     />
                     <CardContent>
@@ -288,7 +327,10 @@ const Customisation = () => {
                       width="250"
                       image={front.imageOne}
                       onClick={(event) => {
-                        setChosenFront(front.id);
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          front: front,
+                        });
                       }}
                     />
                     <CardContent>
@@ -329,7 +371,10 @@ const Customisation = () => {
                       width="250"
                       image={pocket.imageOne}
                       onClick={(event) => {
-                        setChosenPocket(pocket.id);
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          pocket: pocket,
+                        });
                       }}
                     />
                     <CardContent>
@@ -370,7 +415,10 @@ const Customisation = () => {
                       width="250"
                       image={back.imageOne}
                       onClick={(event) => {
-                        setChosenBack(back.id);
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          back: back,
+                        });
                       }}
                     />
                     <CardContent>
