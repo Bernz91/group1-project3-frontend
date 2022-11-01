@@ -34,6 +34,7 @@ const ShoppingCartPage = () => {
   const [totalCost, setTotalCost] = useState();
   const [totalQuantity, setTotalQuantity] = useState();
   const [change, setChange] = useState(true);
+  const [measurement, setMeasurement] = useState ([])
 
   useEffect(() => {
     if (change) {
@@ -41,7 +42,7 @@ const ShoppingCartPage = () => {
         .get(`${BACKEND_URL}/users/${USERID}/wishlists`)
         .then((res) => res.data)
         .then((res) => {
-          // console.log(res.length);
+          console.log(res);
           // extract the keys to display
           const items = extractArr(res, [
             "fabric",
@@ -70,6 +71,16 @@ const ShoppingCartPage = () => {
     }
   }, [change]);
 
+  useEffect (() => {
+    axios.get (`${BACKEND_URL}/users/${USERID}/measurements`)
+    .then ((res)=> res.data)
+    .then ((res) => {
+      setMeasurement(res)
+    })
+  },[])
+
+  console.log(measurement)
+
   useEffect(() => {
     const handleCalculateTotalCost = (cart) => {
       const shippingFees = 0;
@@ -88,6 +99,8 @@ const ShoppingCartPage = () => {
     setTotalQuantity(handleCalcTotalQuantity(cart));
     setTotalCost(handleCalculateTotalCost(cart));
   }, [cart]);
+
+
 
   const handleCalculateSubtotal = (cartItems, index) => {
     const newCartCopy = [...cartItems];
@@ -161,6 +174,7 @@ const ShoppingCartPage = () => {
                       key={index}
                       wishlistId={item.wishlistId}
                       item={item}
+                      measurements = {measurement}
                       increaseCount={() => handleIncreaseCount(cart, index)}
                       decreaseCount={() => handleDecreaseCount(cart, index)}
                       handleRemoveCartId={() =>

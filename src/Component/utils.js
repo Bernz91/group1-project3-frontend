@@ -1,3 +1,4 @@
+import { SignalCellularNullOutlined } from "@mui/icons-material";
 import axios from "axios";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -37,10 +38,37 @@ export const calcTotalCost = (obj) => {
   return sum;
 };
 
+export const getMeasurementId = async (userId) => {
+  try {
+    await axios.get(`${BACKEND_URL}/users/${userId}/measurements`)
+    .then ((res) => res.data)
+    .then ((res) => {
+      console.log(res[0].id)
+      return res[0].id
+    })
+  } catch (err) {
+    return null
+  }
+}
+
+// const getMeasurementId = async (userId) => {
+//   try {
+//     await axios.get(`${BACKEND_URL}/users/${userId}/measurements`)
+//     .then ((res) => res.data)
+//     .then ((res) => {
+//       console.log(res[0].id)
+//       return res[0].id
+//     })
+//   } catch (err) {
+//     return null
+//   }
+// }
+
 export const postOrderDetails = (orderId, orders) => {
   orders.map((order) => {
     axios.post(`${BACKEND_URL}/orders/${orderId}/orderDetails`, {
       orderId: orderId,
+      measurementId: 1,
       fabricId: order["back"].id,
       collarId: order["collar"].id,
       cuffId: order["cuff"].id,

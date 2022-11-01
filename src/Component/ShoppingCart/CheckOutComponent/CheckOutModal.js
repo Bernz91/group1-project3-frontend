@@ -21,7 +21,7 @@ import CircularIndeterminate from "./CircularProgress";
 import { Card } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import axios from "axios";
-import { postOrderDetails, concatStr, deleteAllWishlists } from "../../utils";
+import { postOrderDetails, concatStr, deleteAllWishlists, getMeasurementId } from "../../utils";
 
 const CheckOutModal = (props) => {
   // console.log(props.orders);
@@ -160,6 +160,8 @@ const CheckOutModal = (props) => {
     const city = shipmentDetails.city;
     const postal = shipmentDetails.zip;
     const shippingDetails = concatStr([address1, postal, state, city, country]);
+    // const measurementId = getMeasurementId (USERID)
+    // console.log(measurementId)
 
     await axios
       .post(`${BACKEND_URL}/orders/`, {
@@ -174,13 +176,13 @@ const CheckOutModal = (props) => {
       })
       .then((res) => res.data)
       .then(async (res) => {
-        // console.log(res.id);
+        console.log(res.id); 
         await postOrderDetails(res.id, orders);
         await setOrderId(res.id);
         console.log("passed");
       })
       .then((res) => {
-        deleteAllWishlists(USERID);
+        // deleteAllWishlists(USERID);
       })
 
       .catch((error) => {

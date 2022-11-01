@@ -16,6 +16,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import InfoModal from "../OrderSummary/InfoModal";
+import MeasurementModal from "./MeasurementModal"
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -33,7 +34,9 @@ const CartTable = (props) => {
   };
 
   const item = props.item;
-  console.log(item.wishlistId);
+  // console.log(item.wishlistId);
+
+  console.log("meaurements", props.measurements)
 
   return (
     <>
@@ -55,6 +58,9 @@ const CartTable = (props) => {
         <TableCell component="th" scope="row">
           <Box>
             <InfoModal item={item} />
+          </Box>
+          <Box>
+            <MeasurementModal measurements={props.measurements} />
           </Box>
           <Box>
             <Link href="#">Edit shirt design</Link>
