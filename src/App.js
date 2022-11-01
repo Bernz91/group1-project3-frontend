@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./Page/HomePage";
-import Fabrics from "./Component/Fabrics";
+// import Fabrics from "./Component/DNUFabrics";
 import LoginPage from "./Page/LoginPage";
 import RegisterPage from "./Page/Register";
 import ShoppingCartPage from "./Page/ShoppingCartPage";
@@ -11,7 +11,7 @@ import UserAccountPage from "./Page/UserAccountPage";
 import SizeProfilePage from "./Page/SizeProfilePage";
 import Customisation from "./Component/Customisation";
 import HowItWorksPage from "./Page/HowItWorksPage";
-import OrderSummaryPage from "./Page/OrderSummaryPage"
+import OrderSummaryPage from "./Page/OrderSummaryPage";
 
 const App = () => {
   return (
@@ -24,7 +24,7 @@ const App = () => {
           <Route path="UserProfile" element={<UserAccountPage />} />
           <Route path="SizeProfile" element={<SizeProfilePage />} />
           <Route path="Customisation" element={<Customisation />} />
-          <Route path="Fabrics" element={<Fabrics />} />
+          {/* <Route path="Fabrics" element={<Fabrics />} /> */}
           <Route
             path="Fabrics/:index"
             element={"to add page for individual fabric"}
