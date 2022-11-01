@@ -6,7 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import "../CSS/Fabrics.css";
-
+//
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Customisation = () => {
@@ -119,6 +119,7 @@ const Customisation = () => {
           {chosenCuff}, front {chosenFront}, pocket {chosenPocket}, back{" "}
           {chosenBack}. We are sending to wishlist {sendToWishlist}.
         </div>
+
         <Button
           variant="contained"
           sx={{
