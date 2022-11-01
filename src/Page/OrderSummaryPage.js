@@ -49,7 +49,7 @@ const OrderSummaryPage = () => {
         ]);
 
         setOrders(allOrders);
-        console.log(orders);
+        // console.log(orders);
       });
   }, []);
 
@@ -57,7 +57,7 @@ const OrderSummaryPage = () => {
 
   return (
     <Container>
-      <Typography variant="h5" align="center" sx={{ mt: 2 }}>
+      <Typography variant="h5" align="left" sx={{ mt: 2 }}>
         My orders
       </Typography>
 

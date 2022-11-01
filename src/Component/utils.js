@@ -34,22 +34,22 @@ export const calcQuantity = (arr) => {
 export const calcTotalCost = (obj) => {
   let sum = 0;
   sum += Object.keys(obj).reduce((prev, key) => prev + obj[key].cost, 0);
-
   return sum;
 };
 
 export const getMeasurementId = async (userId) => {
   try {
-    await axios.get(`${BACKEND_URL}/users/${userId}/measurements`)
-    .then ((res) => res.data)
-    .then ((res) => {
-      console.log(res[0].id)
-      return res[0].id
-    })
+    await axios
+      .get(`${BACKEND_URL}/users/${userId}/measurements`)
+      .then((res) => res.data)
+      .then((res) => {
+        console.log(res[0].id);
+        return res[0].id;
+      });
   } catch (err) {
-    return null
+    return null;
   }
-}
+};
 
 // const getMeasurementId = async (userId) => {
 //   try {
@@ -68,7 +68,7 @@ export const postOrderDetails = (orderId, orders) => {
   orders.map((order) => {
     axios.post(`${BACKEND_URL}/orders/${orderId}/orderDetails`, {
       orderId: orderId,
-      measurementId: 1,
+      measurementId: order["measurement"].id,
       fabricId: order["back"].id,
       collarId: order["collar"].id,
       cuffId: order["cuff"].id,
@@ -87,8 +87,8 @@ export const deleteWishlist = (userId, wishlistId) => {
 };
 
 export const deleteAllWishlists = (userId) => {
-  return axios.delete (`${BACKEND_URL}/users/${userId}/wishlists/`)
-}
+  return axios.delete(`${BACKEND_URL}/users/${userId}/wishlists/`);
+};
 
 // export const updateCartlength = (userId) => {
 //   axios

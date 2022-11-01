@@ -16,7 +16,8 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import InfoModal from "../OrderSummary/InfoModal";
-import MeasurementModal from "./MeasurementModal"
+import MeasurementModal from "./MeasurementModal";
+import { AddBoxOutlined } from "@mui/icons-material";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -34,9 +35,7 @@ const CartTable = (props) => {
   };
 
   const item = props.item;
-  // console.log(item.wishlistId);
-
-  console.log("meaurements", props.measurements)
+  console.log(props.index);
 
   return (
     <>
@@ -47,55 +46,57 @@ const CartTable = (props) => {
           "&:last-child td, &:last-child th": { border: 0 },
         }}
       >
-        <TableCell component="th" scope="row">
+        <TableCell variant="body" component="th" scope="row">
           <CardMedia
             component="img"
-            sx={{ width: 151 }}
+            sx={{ height: "20vh", width: "20vw" }}
             image={item["fabric"].imageOne}
             alt={item["fabric"].description}
           />
-        </TableCell>
-        <TableCell component="th" scope="row">
           <Box>
             <InfoModal item={item} />
           </Box>
+        </TableCell>
+        <TableCell variant="body" component="th" scope="row">
+          <Box>Price: ${item["fabric"].cost}</Box>
           <Box>
-            <MeasurementModal measurements={props.measurements} />
+            {/* <MeasurementModal
+              measurementOptions={props.measurementOptions}
+              handleSetMeasurementId={(e) => props.handleSetMeasurementId(e)}
+              index={props.index}
+              handleIdChange={props.handleIdChange}
+              measurementId={props.measurementId}
+            /> */}
           </Box>
-          <Box>
+          {/* <Box>
             <Link href="#">Edit shirt design</Link>
-          </Box>
+          </Box> */}
         </TableCell>
 
-        <TableCell component="th" scope="row" align="center">
-          <Box>{item["fabric"].cost}</Box>
-          <Box>View breakdown</Box>
+        <TableCell variant="body" component="th" scope="row" align="center">
+          {/* <Box>${item["fabric"].cost}</Box> */}
+          {/* <Box>View breakdown</Box> */}
         </TableCell>
-        <TableCell align="right">
+        <TableCell variant="body" align="right">
           <ButtonGroup>
             <Button
               style={{
                 backgroundColor: "red",
               }}
               variant="contained"
-              sx={{ color: "white" }}
+              sx={{ color: "white", borderRadius: 28 }}
               onClick={() => {
                 props.decreaseCount();
               }}
             >
               -
             </Button>
-            <Box sx={{ p: 0, mr: 0 }}>
-              <TextField
-                value={item.quantity}
-                sx={{ p: 0, mr: 0, textAlign: "middle" }}
-              ></TextField>
-            </Box>
+            <Box sx={{ p: 2 }}>{item.quantity}</Box>
             <Button
               style={{
                 backgroundColor: "green",
               }}
-              sx={{ color: "white" }}
+              sx={{ color: "white", borderRadius: 28 }}
               onClick={() => {
                 props.increaseCount();
               }}
@@ -109,7 +110,7 @@ const CartTable = (props) => {
             <DeleteIcon onClick={() => handleClickOpen()} />
           </IconButton>
         </TableCell>
-        <TableCell align="right">{item.subtotal}</TableCell>
+        <TableCell align="right">${item.subtotal}</TableCell>
       </TableRow>
       <AlertMessageDialog
         open={open}

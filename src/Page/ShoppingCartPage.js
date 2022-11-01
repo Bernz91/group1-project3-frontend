@@ -34,7 +34,8 @@ const ShoppingCartPage = () => {
   const [totalCost, setTotalCost] = useState();
   const [totalQuantity, setTotalQuantity] = useState();
   const [change, setChange] = useState(true);
-  const [measurement, setMeasurement] = useState ([])
+  const [measurementOptions, setMeasurementOptions] = useState([]);
+  const [measurementId, setMeasurementId] = useState(null);
 
   useEffect(() => {
     if (change) {
@@ -58,28 +59,31 @@ const ShoppingCartPage = () => {
             return {
               ...item,
               wishlistId: res[i].id,
+              measurement: res[i].measurement,
               userId: USERID,
               quantity: 1,
               price: calcTotalCost(item),
               subtotal: calcTotalCost(item),
             };
           });
-          // console.log(newItems)
+          console.log("newItems", newItems);
           setCart(newItems);
         });
       setChange(false);
     }
   }, [change]);
 
-  useEffect (() => {
-    axios.get (`${BACKEND_URL}/users/${USERID}/measurements`)
-    .then ((res)=> res.data)
-    .then ((res) => {
-      setMeasurement(res)
-    })
-  },[])
+  // get all the measurements from measurement profile
+  useEffect(() => {
+    axios
+      .get(`${BACKEND_URL}/users/${USERID}/measurements`)
+      .then((res) => res.data)
+      .then((res) => {
+        setMeasurementOptions(res);
+      });
+  }, []);
 
-  console.log(measurement)
+  // console.log(measurementOptions);
 
   useEffect(() => {
     const handleCalculateTotalCost = (cart) => {
@@ -93,14 +97,9 @@ const ShoppingCartPage = () => {
       const quantities = calcQuantity(extractArr(cart, ["quantity"]));
       return quantities;
     };
-
-    console.log("totalcost", handleCalculateTotalCost(cart));
-    console.log("totalquantities", handleCalcTotalQuantity(cart));
     setTotalQuantity(handleCalcTotalQuantity(cart));
     setTotalCost(handleCalculateTotalCost(cart));
   }, [cart]);
-
-
 
   const handleCalculateSubtotal = (cartItems, index) => {
     const newCartCopy = [...cartItems];
@@ -137,57 +136,91 @@ const ShoppingCartPage = () => {
     setChange(true);
   };
 
+  const handleIdChange = (e) => {
+    console.log(e.target.value);
+    setMeasurementId(e.target.value);
+    console.log("something changed");
+  };
+
+  console.log("measurement id", measurementId);
+
+  const handleSetMeasurementId = (e) => {
+    e.preventDefault();
+    console.log(e);
+    const currWishlistId = e.target.id;
+    const newCartCopy = [...cart];
+    newCartCopy[currWishlistId].measurementId = measurementId;
+    setCart(newCartCopy);
+  };
+
   return (
-    <Container>
-      <Typography variant="h5" align="center" sx={{ mt: 2 }}>
+    <Container sx={{ display: "flex", flexDirection: "column" }}>
+      <Typography variant="h5" align="left" sx={{ mt: 2 }}>
         My cart
       </Typography>
       {cart.length !== 0 ? (
-        <TableContainer>
+        <Box>
           <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Product Name</TableCell>
-                <TableCell></TableCell>
-                <TableCell align="right" sx={{ textAlign: "center" }}>
-                  Price
-                </TableCell>
-                <TableCell align="right" sx={{ textAlign: "center" }}>
-                  Quantity
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ textAlign: "center" }}
-                ></TableCell>
-                <TableCell align="right" sx={{ textAlign: "center" }}>
-                  Total
-                </TableCell>
-              </TableRow>
-            </TableHead>
+            {/* <TableHead> */}
+            {/* <TableRow>
+              <TableCell variant="head">Product Name</TableCell>
+              <TableCell></TableCell>
+              <TableCell
+                variant="head"
+                // align="right"
+                sx={{ textAlign: "center" }}
+              >
+                Price
+              </TableCell>
+              <TableCell
+                variant="head"
+                // align="right"
+                sx={{ textAlign: "center" }}
+              >
+                Quantity
+              </TableCell>
+              <TableCell
+                variant="head"
+                // align="right"
+                sx={{ textAlign: "center" }}
+              ></TableCell>
+              <TableCell
+                variant="head"
+                // align="right"
+                sx={{ textAlign: "center" }}
+              >
+                Total
+              </TableCell>
+            </TableRow> */}
+            {/* </TableHead> */}
 
-            <TableBody>
-              {cart.map((item, index) => {
-                // console.log(item);
-                return (
-                  <>
-                    <CartTable
-                      key={index}
-                      wishlistId={item.wishlistId}
-                      item={item}
-                      measurements = {measurement}
-                      increaseCount={() => handleIncreaseCount(cart, index)}
-                      decreaseCount={() => handleDecreaseCount(cart, index)}
-                      handleRemoveCartId={() =>
-                        handleRemoveCartId(item.wishlistId)
-                      }
-                      handleCalculateSubtotal={() =>
-                        handleCalculateSubtotal(cart, index)
-                      }
-                    />
-                  </>
-                );
-              })}
-            </TableBody>
+            {/* <TableBody> */}
+            {cart.map((item, index) => {
+              // console.log(item);
+              return (
+                <>
+                  <CartTable
+                    key={index}
+                    wishlistId={item.wishlistId}
+                    item={item}
+                    index={index}
+                    measurementOptions={measurementOptions}
+                    measurementId={measurementId}
+                    increaseCount={() => handleIncreaseCount(cart, index)}
+                    decreaseCount={() => handleDecreaseCount(cart, index)}
+                    handleRemoveCartId={() =>
+                      handleRemoveCartId(item.wishlistId)
+                    }
+                    handleCalculateSubtotal={() =>
+                      handleCalculateSubtotal(cart, index)
+                    }
+                    handleSetMeasurementId={(e) => handleSetMeasurementId(e)}
+                    handleIdChange={(e) => handleIdChange(e)}
+                  />
+                </>
+              );
+            })}
+            {/* </TableBody> */}
           </Table>
           <Divider />
           <CheckOutComponent totalCost={totalCost} />
@@ -198,7 +231,7 @@ const ShoppingCartPage = () => {
               totalQuantity={totalQuantity}
             />
           </Box>
-        </TableContainer>
+        </Box>
       ) : (
         <EmptyCart />
       )}
