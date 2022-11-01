@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -10,8 +11,20 @@ import "../CSS/Fabrics.css";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Customisation = () => {
-  //sendToWishist
-  const [sendToWishlist, setSendToWishlist] = useState([]);
+  //sendToWishList
+  const [sendToWishlist, setSendToWishlist] = useState();
+
+  //handleSendToWishList
+  const handleSendToWishList = () => {
+    setSendToWishlist({
+      fabricId: chosenFabric,
+      collarId: chosenCollar,
+      cuffId: chosenCuff,
+      frontId: chosenFront,
+      pocketId: chosenPocket,
+      backId: chosenBack,
+    });
+  };
 
   //fabrics
   const [fabrics, setFabrics] = useState([]);
@@ -127,16 +140,8 @@ const Customisation = () => {
             fontSize: "10px",
           }}
           onClick={(event) => {
-            event.preventDefault();
-            setSendToWishlist(
-              { chosenFabric },
-              { chosenCollar },
-              { chosenCuff },
-              { chosenFront },
-              { chosenPocket },
-              { chosenBack }
-            );
-            console.log("setSendToWishList is " + { sendToWishlist });
+            handleSendToWishList();
+            console.log("sendToWishList is " + sendToWishlist);
           }}
         >
           Add choices to wishlist
@@ -147,11 +152,11 @@ const Customisation = () => {
           Step One: Choose your fabric
         </Typography>
       </div>
-      <div class="container">
+      <div className="container">
         {fabrics.map((fabric, index) => {
           return (
-            <card sx={{ maxWidth: 250 }}>
-              <div key={index}>
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
                 <CardActions>
                   <ul className="InstaCard">
                     <CardMedia
@@ -159,10 +164,8 @@ const Customisation = () => {
                       alt="shirt"
                       width="250"
                       image={fabric.imageOne}
-                      fabricID={fabric.id}
                       onClick={(event) => {
-                        var getFabricID = event.target.getAttribute("fabricID");
-                        setChosenFabric(getFabricID);
+                        setChosenFabric(fabric.id);
                       }}
                     />
                     <CardContent>
@@ -181,7 +184,7 @@ const Customisation = () => {
                   </ul>
                 </CardActions>
               </div>
-            </card>
+            </Card>
           );
         })}
       </div>
@@ -190,11 +193,11 @@ const Customisation = () => {
           Step Two: Choose your collar
         </Typography>
       </div>
-      <div class="container">
+      <div className="container">
         {collars.map((collar, index) => {
           return (
-            <card sx={{ maxWidth: 250 }}>
-              <div key={index}>
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
                 <CardActions>
                   <ul className="InstaCardOther">
                     <CardMedia
@@ -202,10 +205,8 @@ const Customisation = () => {
                       alt="collar"
                       width="250"
                       image={collar.imageOne}
-                      collarID={collar.id}
                       onClick={(event) => {
-                        var getCollarID = event.target.getAttribute("collarID");
-                        setChosenCollar(getCollarID);
+                        setChosenCollar(collar.id);
                       }}
                     />
                     <CardContent>
@@ -224,7 +225,7 @@ const Customisation = () => {
                   </ul>
                 </CardActions>
               </div>
-            </card>
+            </Card>
           );
         })}
       </div>
@@ -233,11 +234,11 @@ const Customisation = () => {
           Step Three: Choose your cuff
         </Typography>
       </div>
-      <div class="container">
+      <div className="container">
         {cuffs.map((cuff, index) => {
           return (
-            <card sx={{ maxWidth: 250 }}>
-              <div key={index}>
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
                 <CardActions>
                   <ul className="InstaCardOther">
                     <CardMedia
@@ -245,10 +246,8 @@ const Customisation = () => {
                       alt="cuff"
                       width="250"
                       image={cuff.imageOne}
-                      cuffID={cuff.id}
-                      onClick={(event) => {
-                        var getCuffID = event.target.getAttribute("cuffID");
-                        setChosenCuff(getCuffID);
+                      onClick={() => {
+                        setChosenCuff(cuff.id);
                       }}
                     />
                     <CardContent>
@@ -267,7 +266,7 @@ const Customisation = () => {
                   </ul>
                 </CardActions>
               </div>
-            </card>
+            </Card>
           );
         })}
       </div>
@@ -276,11 +275,11 @@ const Customisation = () => {
           Step Four: Choose your fronts
         </Typography>
       </div>
-      <div class="container">
+      <div className="container">
         {fronts.map((front, index) => {
           return (
-            <card sx={{ maxWidth: 250 }}>
-              <div key={index}>
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
                 <CardActions>
                   <ul className="InstaCardOther">
                     <CardMedia
@@ -288,10 +287,8 @@ const Customisation = () => {
                       alt="fronts"
                       width="250"
                       image={front.imageOne}
-                      frontID={front.id}
                       onClick={(event) => {
-                        var getFrontID = event.target.getAttribute("FrontID");
-                        setChosenFront(getFrontID);
+                        setChosenFront(front.id);
                       }}
                     />
                     <CardContent>
@@ -310,7 +307,7 @@ const Customisation = () => {
                   </ul>
                 </CardActions>
               </div>
-            </card>
+            </Card>
           );
         })}
       </div>
@@ -319,11 +316,11 @@ const Customisation = () => {
           Step Five: Choose your pockets
         </Typography>
       </div>
-      <div class="container">
+      <div className="container">
         {pockets.map((pocket, index) => {
           return (
-            <card sx={{ maxWidth: 250 }}>
-              <div key={index}>
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
                 <CardActions>
                   <ul className="InstaCardOther">
                     <CardMedia
@@ -331,10 +328,8 @@ const Customisation = () => {
                       alt="pockets"
                       width="250"
                       image={pocket.imageOne}
-                      pocketID={pocket.id}
                       onClick={(event) => {
-                        var getPocketID = event.target.getAttribute("pocketID");
-                        setChosenPocket(getPocketID);
+                        setChosenPocket(pocket.id);
                       }}
                     />
                     <CardContent>
@@ -353,7 +348,7 @@ const Customisation = () => {
                   </ul>
                 </CardActions>
               </div>
-            </card>
+            </Card>
           );
         })}
       </div>
@@ -362,11 +357,11 @@ const Customisation = () => {
           Step Six: Choose your back
         </Typography>
       </div>
-      <div class="container">
+      <div className="container">
         {backs.map((back, index) => {
           return (
-            <card sx={{ maxWidth: 250 }}>
-              <div key={index}>
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
                 <CardActions>
                   <ul className="InstaCardOther">
                     <CardMedia
@@ -374,10 +369,8 @@ const Customisation = () => {
                       alt="back"
                       width="250"
                       image={back.imageOne}
-                      backID={back.id}
                       onClick={(event) => {
-                        var getBackID = event.target.getAttribute("backID");
-                        setChosenBack(getBackID);
+                        setChosenBack(back.id);
                       }}
                     />
                     <CardContent>
@@ -396,7 +389,7 @@ const Customisation = () => {
                   </ul>
                 </CardActions>
               </div>
-            </card>
+            </Card>
           );
         })}
       </div>
