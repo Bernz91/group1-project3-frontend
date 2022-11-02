@@ -7,7 +7,7 @@ const Logout = () => {
 
   const { logout } = useAuth0();
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     logout({ returnTo: window.location.origin });
   };
 

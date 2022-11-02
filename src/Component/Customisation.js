@@ -1,18 +1,64 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import "../CSS/Fabrics.css";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Customisation = () => {
+  //sendToWishList
+  const [sendToWishlist, setSendToWishlist] = useState({
+    fabric: "",
+    collar: "",
+    cuff: "",
+    front: "",
+    pocket: "",
+    back: "",
+  });
+
+  //auth0
+  const { user, getAccessTokenSilently } = useAuth0();
+  console.log(user);
+
+  //handleSendToWishList will contain the axios post
+  const handleSendToWishList = () => {
+    const getAccessToken = getAccessTokenSilently();
+    axios({
+      method: "post",
+      url: `${BACKEND_URL}/wishlists`,
+      headers: {
+        Authorization: `Bearer ${getAccessToken}`,
+      },
+      data: {
+        userId: user.sub,
+        fabricId: sendToWishlist.fabric.id,
+        collarId: sendToWishlist.collar.id,
+        cuffId: sendToWishlist.cuff.id,
+        frontId: sendToWishlist.front.id,
+        pocketId: sendToWishlist.pocket.id,
+        backId: sendToWishlist.back.id,
+      },
+    });
+  };
+
+  //   axios
+  //     .post(`${BACKEND_URL}/users/${user.sub}/wishlists`)
+  //     .then((res) => res.data)
+  //     .then((res) => {
+  //       console.log(res);
+  //       setFabrics(res);
+  //     });
+  // };
+
   //fabrics
   const [fabrics, setFabrics] = useState([]);
-  const [chosenFabric, setChosenFabric] = useState([]);
+  // const [chosenFabric, setChosenFabric] = useState([]);
 
   //fabrics useEffect
   useEffect(() => {
@@ -27,7 +73,7 @@ const Customisation = () => {
 
   //collars
   const [collars, setCollars] = useState([]);
-  const [chosenCollar, setChosenCollar] = useState([]);
+  // const [chosenCollar, setChosenCollar] = useState([]);
 
   //collars useEffect
   useEffect(() => {
@@ -42,7 +88,7 @@ const Customisation = () => {
 
   //cuffs
   const [cuffs, setCuffs] = useState([]);
-  const [chosenCuff, setChosenCuff] = useState([]);
+  // const [chosenCuff, setChosenCuff] = useState([]);
 
   //cuffs useEffect
   useEffect(() => {
@@ -57,7 +103,7 @@ const Customisation = () => {
 
   //fronts
   const [fronts, setFronts] = useState([]);
-  const [chosenFront, setChosenFront] = useState([]);
+  // const [chosenFront, setChosenFront] = useState([]);
 
   //fronts useEffect
   useEffect(() => {
@@ -72,7 +118,7 @@ const Customisation = () => {
 
   //pockets
   const [pockets, setPockets] = useState([]);
-  const [chosenPocket, setChosenPocket] = useState([]);
+  // const [chosenPocket, setChosenPocket] = useState([]);
 
   //pockets useEffect
 
@@ -88,7 +134,7 @@ const Customisation = () => {
 
   //backs
   const [backs, setBacks] = useState([]);
-  const [chosenBack, setChosenBack] = useState([]);
+  // const [chosenBack, setChosenBack] = useState([]);
 
   //backs useEffect
   useEffect(() => {
@@ -107,289 +153,294 @@ const Customisation = () => {
         backgroundImage: `url("https://images.unsplash.com/photo-1603251579431-8041402bdeda?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")`,
       }}
     >
-      <Typography variant="h3">
+      <Typography variant="h6">
         <div>Customise your shirt</div>
       </Typography>
-      <Typography variant="h5">
+      <Typography variant="caption">
         <div>
-          You have chosen fabric {chosenFabric}, collar {chosenCollar}, cuff
-          {chosenCuff}, front {chosenFront}, pocket {chosenPocket}, back{" "}
-          {chosenBack}.
+          We are sending to wishlist {sendToWishlist?.fabric.fabricName},{" "}
+          {sendToWishlist?.collar.collarName},{sendToWishlist?.cuff.cuffName},
+          {sendToWishlist?.front.frontName},{sendToWishlist?.pocket.pocketName},
+          {sendToWishlist?.back.backName}.
         </div>
+
+        <Button
+          variant="contained"
+          sx={{
+            width: 190,
+            fontSize: "10px",
+          }}
+          onClick={(event) => {
+            handleSendToWishList();
+          }}
+        >
+          Add choices to wishlist
+        </Button>
       </Typography>
-      <Typography variant="h4" color="white">
-        <div>Step One: Fabrics</div>
-      </Typography>
-      {fabrics.map((fabric, index) => {
-        return (
-          <card sx={{ maxWidth: 250 }}>
-            <div key={index}>
-              <ul className="InstaCard">
-                <CardMedia
-                  component="img"
-                  alt="shirt"
-                  width="250"
-                  image={fabric.imageOne}
-                />
-                <CardContent>
-                  <Typography variant="h5" fontWeight="bold" component="div">
-                    {fabric.fabricName}
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Price: ${fabric.cost} Fabric ID: {fabric.id}
-                  </Typography>
-                  <Typography variant="body2" fontFamily="default">
-                    {fabric.description}
-                  </Typography>
-                  <Typography>
-                    <CardActions>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        fabricID={fabric.id}
-                        onClick={(event) => {
-                          var getFabricID =
-                            event.target.getAttribute("fabricID");
-                          setChosenFabric(getFabricID);
-                        }}
+      <div>
+        <Typography variant="Overline" color="black">
+          Step One: Choose your fabric
+        </Typography>
+      </div>
+      <div className="container">
+        {fabrics.map((fabric, index) => {
+          return (
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
+                <CardActions>
+                  <ul className="InstaCard">
+                    <CardMedia
+                      component="img"
+                      alt="shirt"
+                      width="250"
+                      image={fabric.imageOne}
+                      onClick={(event) => {
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          fabric: fabric,
+                        });
+                      }}
+                    />
+                    <CardContent>
+                      <Typography
+                        variant="overline"
+                        fontWeight="regular"
+                        component="div"
+                        lineHeight="1"
                       >
-                        Select me
-                      </Button>
-                    </CardActions>
-                  </Typography>
-                </CardContent>
-              </ul>
-            </div>
-          </card>
-        );
-      })}
-      <Typography variant="h4" color="white">
-        <div>Step Two: Collars</div>
-      </Typography>
-      {collars.map((collar, index) => {
-        return (
-          <card sx={{ maxWidth: 250 }}>
-            <div key={index}>
-              <ul className="InstaCard">
-                <CardMedia
-                  component="img"
-                  alt="collar"
-                  width="250"
-                  image={collar.imageOne}
-                />
-                <CardContent>
-                  <Typography variant="h5" fontWeight="bold" component="div">
-                    {collar.collarName}
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Price: ${collar.cost} Collar ID: {collar.id}
-                  </Typography>
-                  <Typography variant="body2" fontFamily="default">
-                    {collar.description}
-                  </Typography>
-                  <Typography>
-                    <CardActions>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        collarID={collar.id}
-                        onClick={(event) => {
-                          var getCollarID =
-                            event.target.getAttribute("collarID");
-                          setChosenCollar(getCollarID);
-                        }}
+                        {fabric.fabricName}
+                      </Typography>
+                      <Typography variant="caption" component="div">
+                        Price: ${fabric.cost}
+                      </Typography>
+                    </CardContent>
+                  </ul>
+                </CardActions>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+      <div>
+        <Typography variant="Overline" color="black">
+          Step Two: Choose your collar
+        </Typography>
+      </div>
+      <div className="container">
+        {collars.map((collar, index) => {
+          return (
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
+                <CardActions>
+                  <ul className="InstaCardOther">
+                    <CardMedia
+                      component="img"
+                      alt="collar"
+                      width="250"
+                      image={collar.imageOne}
+                      onClick={(event) => {
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          collar: collar,
+                        });
+                      }}
+                    />
+                    <CardContent>
+                      <Typography
+                        variant="overline"
+                        fontWeight="regular"
+                        component="div"
+                        lineHeight="1"
                       >
-                        Select me
-                      </Button>
-                    </CardActions>
-                  </Typography>
-                </CardContent>
-              </ul>
-            </div>
-          </card>
-        );
-      })}
-      <Typography variant="h4" color="white">
-        <div>Step Three: Cuffs</div>
-      </Typography>
-      {cuffs.map((cuff, index) => {
-        return (
-          <card sx={{ maxWidth: 250 }}>
-            <div key={index}>
-              <ul className="InstaCard">
-                <CardMedia
-                  component="img"
-                  alt="cuff"
-                  width="250"
-                  image={cuff.imageOne}
-                />
-                <CardContent>
-                  <Typography variant="h5" fontWeight="bold" component="div">
-                    {cuff.cuffName}
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Price: ${cuff.cost} Cuff ID: {cuff.id}
-                  </Typography>
-                  <Typography variant="body2" fontFamily="default">
-                    {cuff.description}
-                  </Typography>
-                  <Typography>
-                    <CardActions>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        collarID={cuff.id}
-                        onClick={(event) => {
-                          var getCuffID = event.target.getAttribute("cuffID");
-                          setChosenCuff(getCuffID);
-                        }}
+                        {collar.collarName}
+                      </Typography>
+                      <Typography variant="caption" component="div">
+                        Price: ${collar.cost}
+                      </Typography>
+                    </CardContent>
+                  </ul>
+                </CardActions>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+      <div>
+        <Typography variant="Overline" color="black">
+          Step Three: Choose your cuff
+        </Typography>
+      </div>
+      <div className="container">
+        {cuffs.map((cuff, index) => {
+          return (
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
+                <CardActions>
+                  <ul className="InstaCardOther">
+                    <CardMedia
+                      component="img"
+                      alt="cuff"
+                      width="250"
+                      image={cuff.imageOne}
+                      onClick={() => {
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          cuff: cuff,
+                        });
+                      }}
+                    />
+                    <CardContent>
+                      <Typography
+                        variant="overline"
+                        fontWeight="regular"
+                        component="div"
+                        lineHeight="1"
                       >
-                        Select me
-                      </Button>
-                    </CardActions>
-                  </Typography>
-                </CardContent>
-              </ul>
-            </div>
-          </card>
-        );
-      })}
-      <Typography variant="h4" color="white">
-        <div>Step Four: Fronts</div>
-      </Typography>
-      {fronts.map((front, index) => {
-        return (
-          <card sx={{ maxWidth: 250 }}>
-            <div key={index}>
-              <ul className="InstaCard">
-                <CardMedia
-                  component="img"
-                  alt="front"
-                  width="250"
-                  image={front.imageOne}
-                />
-                <CardContent>
-                  <Typography variant="h5" fontWeight="bold" component="div">
-                    {front.frontName}
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Price: ${front.cost} Front ID: {front.id}
-                  </Typography>
-                  <Typography variant="body2" fontFamily="default">
-                    {front.description}
-                  </Typography>
-                  <Typography>
-                    <CardActions>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        frontID={front.id}
-                        onClick={(event) => {
-                          var getFrontID = event.target.getAttribute("frontID");
-                          setChosenFront(getFrontID);
-                        }}
+                        {cuff.cuffName}
+                      </Typography>
+                      <Typography variant="caption" component="div">
+                        Price: ${cuff.cost}
+                      </Typography>
+                    </CardContent>
+                  </ul>
+                </CardActions>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+      <div>
+        <Typography variant="Overline" color="black">
+          Step Four: Choose your fronts
+        </Typography>
+      </div>
+      <div className="container">
+        {fronts.map((front, index) => {
+          return (
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
+                <CardActions>
+                  <ul className="InstaCardOther">
+                    <CardMedia
+                      component="img"
+                      alt="fronts"
+                      width="250"
+                      image={front.imageOne}
+                      onClick={(event) => {
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          front: front,
+                        });
+                      }}
+                    />
+                    <CardContent>
+                      <Typography
+                        variant="overline"
+                        fontWeight="regular"
+                        component="div"
+                        lineHeight="1"
                       >
-                        Select me
-                      </Button>
-                    </CardActions>
-                  </Typography>
-                </CardContent>
-              </ul>
-            </div>
-          </card>
-        );
-      })}
-      <Typography variant="h4" color="white">
-        <div>Step Five: Pockets</div>
-      </Typography>
-      {pockets.map((pocket, index) => {
-        return (
-          <card sx={{ maxWidth: 250 }}>
-            <div key={index}>
-              <ul className="InstaCard">
-                <CardMedia
-                  component="img"
-                  alt="pocket"
-                  width="250"
-                  image={pocket.imageOne}
-                />
-                <CardContent>
-                  <Typography variant="h5" fontWeight="bold" component="div">
-                    {pocket.pocketName}
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Price: ${pocket.cost} Pocket ID: {pocket.id}
-                  </Typography>
-                  <Typography variant="body2" fontFamily="default">
-                    {pocket.description}
-                  </Typography>
-                  <Typography>
-                    <CardActions>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        pocketID={pocket.id}
-                        onClick={(event) => {
-                          var getPocketID =
-                            event.target.getAttribute("pocketID");
-                          setChosenPocket(getPocketID);
-                        }}
+                        {front.frontName}
+                      </Typography>
+                      <Typography variant="caption" component="div">
+                        Price: ${front.cost}
+                      </Typography>
+                    </CardContent>
+                  </ul>
+                </CardActions>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+      <div>
+        <Typography variant="Overline" color="black">
+          Step Five: Choose your pockets
+        </Typography>
+      </div>
+      <div className="container">
+        {pockets.map((pocket, index) => {
+          return (
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
+                <CardActions>
+                  <ul className="InstaCardOther">
+                    <CardMedia
+                      component="img"
+                      alt="pockets"
+                      width="250"
+                      image={pocket.imageOne}
+                      onClick={(event) => {
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          pocket: pocket,
+                        });
+                      }}
+                    />
+                    <CardContent>
+                      <Typography
+                        variant="overline"
+                        fontWeight="regular"
+                        component="div"
+                        lineHeight="1"
                       >
-                        Select me
-                      </Button>
-                    </CardActions>
-                  </Typography>
-                </CardContent>
-              </ul>
-            </div>
-          </card>
-        );
-      })}
-      <Typography variant="h4" color="white">
-        <div>Step Six: Backs</div>
-      </Typography>
-      {backs.map((back, index) => {
-        return (
-          <card sx={{ maxWidth: 250 }}>
-            <div key={index}>
-              <ul className="InstaCard">
-                <CardMedia
-                  component="img"
-                  alt="back"
-                  width="250"
-                  image={back.imageOne}
-                />
-                <CardContent>
-                  <Typography variant="h5" fontWeight="bold" component="div">
-                    {back.backName}
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Price: ${back.cost} Back ID: {back.id}
-                  </Typography>
-                  <Typography variant="body2" fontFamily="default">
-                    {back.description}
-                  </Typography>
-                  <Typography>
-                    <CardActions>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        backID={back.id}
-                        onClick={(event) => {
-                          var getBackID = event.target.getAttribute("backID");
-                          setChosenBack(getBackID);
-                        }}
+                        {pocket.pocketName}
+                      </Typography>
+                      <Typography variant="caption" component="div">
+                        Price: ${pocket.cost}
+                      </Typography>
+                    </CardContent>
+                  </ul>
+                </CardActions>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+      <div>
+        <Typography variant="Overline" color="black">
+          Step Six: Choose your back
+        </Typography>
+      </div>
+      <div className="container">
+        {backs.map((back, index) => {
+          return (
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
+                <CardActions>
+                  <ul className="InstaCardOther">
+                    <CardMedia
+                      component="img"
+                      alt="back"
+                      width="250"
+                      image={back.imageOne}
+                      onClick={(event) => {
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          back: back,
+                        });
+                      }}
+                    />
+                    <CardContent>
+                      <Typography
+                        variant="overline"
+                        fontWeight="regular"
+                        component="div"
+                        lineHeight="1"
                       >
-                        Select me
-                      </Button>
-                    </CardActions>
-                  </Typography>
-                </CardContent>
-              </ul>
-            </div>
-          </card>
-        );
-      })}
+                        {back.backName}
+                      </Typography>
+                      <Typography variant="caption" component="div">
+                        Price: ${back.cost}
+                      </Typography>
+                    </CardContent>
+                  </ul>
+                </CardActions>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
     </div>
   );
 };

@@ -18,7 +18,6 @@ import Logout from "./Logout";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 // const USERID = "834fc3ef-6ccc-4ba4-a54e-1a75387da94f";
 
-
 const Header = () => {
   let navigate = useNavigate();
   const [cartlength, setCartLength] = useState();
