@@ -1,0 +1,36 @@
+.SizeProfileCards {
+  width: 90%;
+  text-align: left;
+  background-color: black;
+  color: white;
+  border-radius: 15px;
+  padding: 5px;
+}
+
+.newSizeProfileCard {
+  text-align: left;
+  width: 90%;
+}
+
+.newSizeProfileCard {
+  background-color: black;
+  color: white;
+  border-radius: 15px;
+  padding: 5px;
+}
+
+.newSizeProfileForm {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid black;
+  padding: 5px 15px;
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+}
+
+.sizeProfileCategoryName {
+  font-size: 5vw;
+  font-weight: 600;
+}

@@ -4,6 +4,7 @@ import Grid2 from "@mui/material/Unstable_Grid2"; // Grid version 2
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import "../CSS/SizeProfilePage.css";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -60,7 +61,7 @@ const NewSizeForm = (props) => {
         {/* category by user  row */}
 
         <Grid2 xs={10}>
-          <label>Size Name</label>
+          <label>Size Name</label>{" "}
           <input
             {...register("categoryByUser", {
               required: true,
@@ -77,9 +78,11 @@ const NewSizeForm = (props) => {
           </select>
         </Grid2>
 
-        <Grid2 xs={5}>
+        <Grid2 xs={5.75}>
           <label>Collar</label>
+          <br />
           <input
+            className="newSizeProfileForm"
             {...register("collar", {
               required: true,
               pattern: {
@@ -91,7 +94,9 @@ const NewSizeForm = (props) => {
           <div className="validation-error">{errors.collar?.message}</div>
           <br />
           <label>Shoulder</label>
+          <br />
           <input
+            className="newSizeProfileForm"
             {...register("shoulder", {
               required: true,
               pattern: {
@@ -103,7 +108,9 @@ const NewSizeForm = (props) => {
           <div className="validation-error">{errors.shoulder?.message}</div>
           <br />
           <label>Chest</label>
+          <br />
           <input
+            className="newSizeProfileForm"
             {...register("chest", {
               required: true,
               pattern: {
@@ -115,7 +122,9 @@ const NewSizeForm = (props) => {
           <div className="validation-error">{errors.chest?.message}</div>
           <br />
           <label>Waist</label>
+          <br />
           <input
+            className="newSizeProfileForm"
             {...register("waist", {
               required: true,
               pattern: {
@@ -127,7 +136,9 @@ const NewSizeForm = (props) => {
           <div className="validation-error">{errors.waist?.message}</div>
           <br />
           <label>Elbow</label>
+          <br />
           <input
+            className="newSizeProfileForm"
             {...register("elbow", {
               required: true,
               pattern: {
@@ -138,9 +149,12 @@ const NewSizeForm = (props) => {
           />
           <div className="validation-error">{errors.elbow?.message}</div>
         </Grid2>
-        <Grid2 xs={5}>
+        <Grid2 xs={0.5}></Grid2>
+        <Grid2 xs={5.75}>
           <label>Sleeves Length</label>
+          <br />
           <input
+            className="newSizeProfileForm"
             {...register("sleevesLength", {
               required: true,
               pattern: {
@@ -154,7 +168,9 @@ const NewSizeForm = (props) => {
           </div>
           <br />
           <label>Sleeves Width</label>
+          <br />
           <input
+            className="newSizeProfileForm"
             {...register("sleevesWidth", {
               required: true,
               pattern: {
@@ -166,7 +182,9 @@ const NewSizeForm = (props) => {
           <div className="validation-error">{errors.sleevesWidth?.message}</div>
           <br />
           <label>Left Cuff</label>
+          <br />
           <input
+            className="newSizeProfileForm"
             {...register("leftCuff", {
               required: true,
               pattern: {
@@ -178,7 +196,9 @@ const NewSizeForm = (props) => {
           <div className="validation-error">{errors.leftCuff?.message}</div>
           <br />
           <label>Right Cuff</label>
+          <br />
           <input
+            className="newSizeProfileForm"
             {...register("rightCuff", {
               required: true,
               pattern: {
@@ -190,7 +210,9 @@ const NewSizeForm = (props) => {
           <div className="validation-error">{errors.rightCuff?.message}</div>
           <br />
           <label>Shirt Length</label>
+          <br />
           <input
+            className="newSizeProfileForm"
             {...register("shirtLength", {
               required: true,
               pattern: {

@@ -5,6 +5,7 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
 import NewSizeForm from "../Component/NewSizeForm";
+import "../CSS/SizeProfilePage.css";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -89,59 +90,84 @@ const SizeProfilePage = () => {
 
   return (
     <div>
-      <div hidden={isAdd ? true : false}>
-        <Button variant="contained" onClick={() => handleAdd()}>
-          +
-        </Button>
+      <br />
+      <div align="middle">
+        <Grid2 container columnSpacing={2} rowSpacing={2}>
+          <Grid2 xs={12}>
+            <div hidden={isAdd ? true : false}>
+              <Button variant="contained" onClick={() => handleAdd()}>
+                +
+              </Button>
+            </div>
+            <div hidden={isAdd ? false : true} className="newSizeProfileCard">
+              <div align="right">
+                <CloseIcon onClick={() => handleAdd()} />
+              </div>
+              <div className="newSizeProfileForm">
+                <NewSizeForm user={user} handleAdd={handleAdd} />
+              </div>
+            </div>
+          </Grid2>
+        </Grid2>
       </div>
-      <div hidden={isAdd ? false : true}>
-        <CloseIcon onClick={() => handleAdd()} />
-        <NewSizeForm user={user} handleAdd={handleAdd} />
-      </div>
-
+      <br />
       {sizeProfiles
         .slice(0)
         .reverse()
         .map((size, index) => {
           return (
-            <div key={index}>
-              <Grid2 container columnSpacing={2} rowSpacing={2}>
+            <div key={index} align="middle">
+              <Grid2
+                container
+                columnSpacing={2}
+                rowSpacing={2}
+                className="SizeProfileCards"
+              >
                 {/* Size Profile Card */}
-                <Grid2 xs={6}>
-                  <label>Category: {size.categoryByUser}</label>
+                <Grid2 xs={10.5}>
+                  <label className="sizeProfileCategoryName">Category: {size.categoryByUser}</label>
                 </Grid2>
-                <Grid2 xs={6}>{size.measurementType}</Grid2>
-                <Grid2 xs={5}>
-                  Collar: {size.collar}
-                  <br />
-                  Shoulder: {size.shoulder}
-                  <br />
-                  Chest: {size.chest}
-                  <br />
-                  Waist: {size.waist}
-                  <br />
-                  Elbow: {size.elbow}
-                </Grid2>
-                <Grid2 xs={5}>
-                  Sleeves Length: {size.sleevesLength}
-                  <br />
-                  Sleeves Width: {size.sleevesWidth}
-                  <br />
-                  Left Cuff: {size.leftCuff}
-                  <br />
-                  Right Cuff: {size.rightCuff}
-                  <br />
-                  Shirt Length: {size.shirtLength}
-                </Grid2>
-                <Grid2 xs={2}>
+                <Grid2 xs={1.5}>
                   <CloseIcon
                     onClick={() => {
                       handleDelete(size);
                     }}
                   />
                 </Grid2>
-                <Grid2></Grid2>
+                <Grid2 xs={6}>
+                  <label>Collar: </label>
+                  {size.collar} {size.measurementType}
+                  <br />
+                  <label>Shoulder: </label>
+                  {size.shoulder} {size.measurementType}
+                  <br />
+                  <label>Chest: </label>
+                  {size.chest} {size.measurementType}
+                  <br />
+                  <label>Waist: </label>
+                  {size.waist} {size.measurementType}
+                  <br />
+                  <label>Elbow: </label>
+                  {size.elbow} {size.measurementType}
+                </Grid2>
+                <Grid2 xs={6}>
+                  <label>Sleeves Length: </label> {size.sleevesLength}{" "}
+                  {size.measurementType}
+                  <br />
+                  <label>Sleeves Width: </label>
+                  {size.sleevesWidth} {size.measurementType}
+                  <br />
+                  <label>Left Cuff: </label>
+                  {size.leftCuff} {size.measurementType}
+                  <br />
+                  <label>Right Cuff: </label>
+                  {size.rightCuff} {size.measurementType}
+                  <br />
+                  <label>Shirt Length: </label>
+                  {size.shirtLength} {size.measurementType}
+                </Grid2>
               </Grid2>
+              <br />
             </div>
           );
         })}

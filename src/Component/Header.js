@@ -14,6 +14,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import "../CSS/Header.css";
 import Logout from "./Logout";
+import Login from "./Login";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 // const USERID = "834fc3ef-6ccc-4ba4-a54e-1a75387da94f";
@@ -26,6 +27,7 @@ const Header = () => {
   useEffect(() => {
     const getCartLength = async () => {
       // to be activated once the userAutho is ready (Zi Hao side)
+      // samuel, this needs to be activated when user add item into cart also. maybe use useContext for this one. when user log in, axios.get shopping cart --> then pass the .length here.
       if (user) {
         try {
           const accessToken = await getAccessTokenSilently({
@@ -62,7 +64,8 @@ const Header = () => {
   return (
     <div>
       <Grid2 container columnSpacing={0} rowSpacing={0} className="header">
-        <Grid2 xs={3.5}>
+        <Grid2 xs={0.3}></Grid2>
+        <Grid2 xs={3.2}>
           <NavBar />
         </Grid2>
         <Grid2 xs={5} className="headerLogo" onClick={() => navigate("/")}>
@@ -80,31 +83,23 @@ const Header = () => {
           
           /> */}
         </Grid2>
-        <Grid2 xs={1}>
+        <Grid2 xs={1} className="userDiv">
           <PersonOutlineOutlinedIcon
             aria-controls={open ? "basic-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
           />
-        </Grid2>
-        <Grid2 xs={1}>
-          <Badge
-            color="secondary"
-            badgeContent={cartlength}
-            onClick={() => navigate("/ShoppingCart")}
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
           >
-            <ShoppingBagOutlinedIcon />
-
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
+            {user && (
               <MenuItem
                 onClick={() => {
                   navigate("/userProfile");
@@ -113,6 +108,9 @@ const Header = () => {
               >
                 My account
               </MenuItem>
+            )}
+
+            {user && (
               <MenuItem
                 onClick={() => {
                   navigate("/sizeProfile");
@@ -121,6 +119,8 @@ const Header = () => {
               >
                 Size Profile
               </MenuItem>
+            )}
+            {user && (
               <MenuItem
                 onClick={() => {
                   navigate("/orderHistory");
@@ -129,10 +129,17 @@ const Header = () => {
               >
                 Order History
               </MenuItem>
-              <MenuItem>
-                <Logout />
-              </MenuItem>
-            </Menu>
+            )}
+            <MenuItem>{user ? <Logout /> : <Login />}</MenuItem>
+          </Menu>
+        </Grid2>
+        <Grid2 xs={1} className="shoppingCartDiv">
+          <Badge
+            color="secondary"
+            badgeContent={cartlength}
+            onClick={() => navigate("/ShoppingCart")}
+          >
+            <ShoppingBagOutlinedIcon />
           </Badge>
         </Grid2>
         <Grid2 xs={0.5}></Grid2>
