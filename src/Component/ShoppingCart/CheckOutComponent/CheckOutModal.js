@@ -194,14 +194,16 @@ const CheckOutModal = (props) => {
   return (
     <Box>
       <Button
+      
         variant="contained"
         color="error"
         onClick={handleOpen}
-        disableElevation
+        fullWidth
+        // disableElevation
         size="large"
         startIcon={<AddShoppingCartIcon />}
         align="center"
-        sx={{ align: "center" }}
+        sx={{ align: "center", display: "flex" }}
         disabled={orders.length === 0}
       >
         Checkout

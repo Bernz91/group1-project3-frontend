@@ -18,6 +18,10 @@ import Link from "@mui/material/Link";
 import InfoModal from "../OrderSummary/InfoModal";
 import MeasurementModal from "./MeasurementModal";
 import { AddBoxOutlined } from "@mui/icons-material";
+import Grid from '@mui/material/Grid';
+import Grid2 from '@mui/material/Unstable_Grid2';
+import { Typography } from "@mui/material";
+
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -49,13 +53,13 @@ const CartTable = (props) => {
         <TableCell variant="body" component="th" scope="row">
           <CardMedia
             component="img"
-            sx={{ height: "20vh", width: "20vw" }}
+            sx={{ m: 0, p: 0, height: "25vh", width: "25vw" }}
             image={item["fabric"].imageOne}
             alt={item["fabric"].description}
           />
         </TableCell>
         <TableCell variant="body" component="th" scope="row">
-          <Box>Price: ${item["fabric"].cost}</Box>
+          <Typography sx = {{ml :1,fontWeight: "bold" }}>Price: ${item["fabric"].cost}</Typography>
           <Box>
             {/* <MeasurementModal
               measurementOptions={props.measurementOptions}
@@ -68,10 +72,10 @@ const CartTable = (props) => {
           {/* <Box>
             <Link href="#">Edit shirt design</Link>
           </Box> */}
-          <Box>
+          <Box sx = {{m:0}}>
             <InfoModal item={item} />
           </Box>
-          <ButtonGroup>
+          <ButtonGroup sx = {{ml :1, mt:1}}>
             <Button
               style={{
                 backgroundColor: "#F2F1F0",
@@ -91,11 +95,12 @@ const CartTable = (props) => {
             >
               -
             </Button>
-            <Box sx={{ p: 2 }}>{item.quantity}</Box>
+            <Box sx={{ m: 1 }}>{item.quantity}</Box>
             <Button
               style={{
-                backgroundColor: "#F2F1F",
+                backgroundColor: "#F2F1F0",
               }}
+              variant = "contained"
               sx={{
                 color: "black",
                 borderRadius: 0,
@@ -113,10 +118,12 @@ const CartTable = (props) => {
           </ButtonGroup>
         </TableCell>
         <TableCell align="right">
-          <IconButton aria-label="delete" size="large">
+          <Grid>
+          <IconButton aria-label="delete" size="small">
             <DeleteIcon onClick={() => handleClickOpen()} />
           </IconButton>
           <Box>${item.subtotal}</Box>
+          </Grid>
         </TableCell>
         {/* <TableCell align="right">${item.subtotal}</TableCell> */}
       </TableRow>

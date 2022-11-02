@@ -21,6 +21,7 @@ const InfoModal = (props) => {
   const handleClose = () => setOpen(false);
 
   const item = props.item;
+  console.log(item)
 
   return (
     <div>
@@ -31,7 +32,7 @@ const InfoModal = (props) => {
         onClick={handleOpen}
         sx={{ width: "200", p: 1, m: 1, textTransform: "none" }}
       >
-        <Typography sx={{ fontSize: "12.5px" }}>View Shirt Design </Typography>
+        <Typography sx={{ fontSize: "11px" }}>View Shirt Design </Typography>
       </Button>
       <Modal
         open={open}
@@ -40,7 +41,7 @@ const InfoModal = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" component="h2">
+          <Typography id="modal-modal-title" component="h2" sx = {{fontWeight: "bold"}}>
             Your Shirt Design:
           </Typography>
           <Typography

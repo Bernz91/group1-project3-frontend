@@ -10,9 +10,9 @@ import TableHead from "@mui/material/TableHead";
 const CheckOutComponent = (props) => {
   return (
     <Table
-      sx={{ minWidth: 800 }}
+      // sx={{ minWidth: 800 }}
       aria-label="simple table"
-      sx={{ bgcolor: "#d4e9e2", color: "black", fontWeight: "bold" }}
+      sx={{ bgcolor: "#e9f5f8", color: "black", fontWeight: "bold"}}
     >
       {/* <TableRow>
         <TableCell component="th" scope="row" align="right">
@@ -41,16 +41,16 @@ const CheckOutComponent = (props) => {
         </TableCell>
       </TableRow> */}
       <TableRow>
-        <TableCell component="th" scope="row" align="right">
-          <Typography variant="h6">Total</Typography>
+        <TableCell component="th" scope="row" align="left">
+          <Typography variant="h6" sx ={{fontWeight: "bold"}}>Total</Typography>
         </TableCell>
         <TableCell
           component="th"
           scope="row"
           align="right"
-          sx={{ textAlign: "right" }}
+          sx={{ textAlign: "right", fontWeight: "bold" }}
         >
-          <Typography variant="h6">SGD {props.totalCost}</Typography>
+          <Typography variant="h6" sx ={{fontWeight: "bold"}}>SGD {props.totalCost}</Typography>
         </TableCell>
       </TableRow>
     </Table>
