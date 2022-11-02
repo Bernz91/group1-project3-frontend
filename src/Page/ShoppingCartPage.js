@@ -24,24 +24,30 @@ import {
 } from "../Component/utils";
 import { useNavigate } from "react-router";
 import { Typography } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import Grid2 from "@mui/material/Unstable_Grid2";
 
 const ShoppingCartPage = () => {
   let navigate = useNavigate();
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-  const USERID = "834fc3ef-6ccc-4ba4-a54e-1a75387da94f";
+  const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
 
   const [cart, setCart] = useState([]);
   const [totalCost, setTotalCost] = useState();
   const [totalQuantity, setTotalQuantity] = useState();
+  const [isLoading, setLoading] = useState(true);
   const [change, setChange] = useState(true);
+  const [measurementOptions, setMeasurementOptions] = useState([]);
+  const [measurementId, setMeasurementId] = useState(null);
 
   useEffect(() => {
     if (change) {
+      setLoading(true);
       axios
         .get(`${BACKEND_URL}/users/${USERID}/wishlists`)
         .then((res) => res.data)
         .then((res) => {
-          // console.log(res.length);
+          console.log(res);
           // extract the keys to display
           const items = extractArr(res, [
             "fabric",
@@ -57,18 +63,32 @@ const ShoppingCartPage = () => {
             return {
               ...item,
               wishlistId: res[i].id,
+              measurement: res[i].measurement,
               userId: USERID,
               quantity: 1,
               price: calcTotalCost(item),
               subtotal: calcTotalCost(item),
             };
           });
-          // console.log(newItems)
+          console.log("newItems", newItems);
           setCart(newItems);
+          setLoading(false);
         });
       setChange(false);
     }
   }, [change]);
+
+  // get all the measurements from measurement profile
+  // useEffect(() => {
+  //   axios
+  //     .get(`${BACKEND_URL}/users/${USERID}/measurements`)
+  //     .then((res) => res.data)
+  //     .then((res) => {
+  //       setMeasurementOptions(res);
+  //     });
+  // }, []);
+
+  // console.log(measurementOptions);
 
   useEffect(() => {
     const handleCalculateTotalCost = (cart) => {
@@ -82,9 +102,6 @@ const ShoppingCartPage = () => {
       const quantities = calcQuantity(extractArr(cart, ["quantity"]));
       return quantities;
     };
-
-    console.log("totalcost", handleCalculateTotalCost(cart));
-    console.log("totalquantities", handleCalcTotalQuantity(cart));
     setTotalQuantity(handleCalcTotalQuantity(cart));
     setTotalCost(handleCalculateTotalCost(cart));
   }, [cart]);
@@ -124,56 +141,101 @@ const ShoppingCartPage = () => {
     setChange(true);
   };
 
+  // const handleIdChange = (e) => {
+  //   console.log(e.target.value);
+  //   setMeasurementId(e.target.value);
+  //   console.log("something changed");
+  // };
+
+  // console.log("measurement id", measurementId);
+
+  // const handleSetMeasurementId = (e) => {
+  //   e.preventDefault();
+  //   console.log(e);
+  //   const currWishlistId = e.target.id;
+  //   const newCartCopy = [...cart];
+  //   newCartCopy[currWishlistId].measurementId = measurementId;
+  //   setCart(newCartCopy);
+  // };
+  console.log(change);
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
+
   return (
-    <Container>
-      <Typography variant="h5" align="center" sx={{ mt: 2 }}>
+    <Container sx={{ display: "flex", flexDirection: "column", ml: -1 }}>
+      <Typography
+        variant="h5"
+        align="left"
+        sx={{ mt: 3, ml: 3, fontWeight: "bold" }}
+      >
         My cart
       </Typography>
-      {cart.length !== 0 ? (
-        <TableContainer>
+      {cart.length === 0 ? (
+        <EmptyCart />
+      ) : (
+        <Box>
           <Table aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Product Name</TableCell>
-                <TableCell></TableCell>
-                <TableCell align="right" sx={{ textAlign: "center" }}>
-                  Price
-                </TableCell>
-                <TableCell align="right" sx={{ textAlign: "center" }}>
-                  Quantity
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ textAlign: "center" }}
-                ></TableCell>
-                <TableCell align="right" sx={{ textAlign: "center" }}>
-                  Total
-                </TableCell>
-              </TableRow>
-            </TableHead>
+            {/* <TableHead> */}
+            {/* <TableRow>
+              <TableCell variant="head">Product Name</TableCell>
+              <TableCell></TableCell>
+              <TableCell
+                variant="head"
+                // align="right"
+                sx={{ textAlign: "center" }}
+              >
+                Price
+              </TableCell>
+              <TableCell
+                variant="head"
+                // align="right"
+                sx={{ textAlign: "center" }}
+              >
+                Quantity
+              </TableCell>
+              <TableCell
+                variant="head"
+                // align="right"
+                sx={{ textAlign: "center" }}
+              ></TableCell>
+              <TableCell
+                variant="head"
+                // align="right"
+                sx={{ textAlign: "center" }}
+              >
+                Total
+              </TableCell>
+            </TableRow> */}
+            {/* </TableHead> */}
 
-            <TableBody>
-              {cart.map((item, index) => {
-                // console.log(item);
-                return (
-                  <>
-                    <CartTable
-                      key={index}
-                      wishlistId={item.wishlistId}
-                      item={item}
-                      increaseCount={() => handleIncreaseCount(cart, index)}
-                      decreaseCount={() => handleDecreaseCount(cart, index)}
-                      handleRemoveCartId={() =>
-                        handleRemoveCartId(item.wishlistId)
-                      }
-                      handleCalculateSubtotal={() =>
-                        handleCalculateSubtotal(cart, index)
-                      }
-                    />
-                  </>
-                );
-              })}
-            </TableBody>
+            {/* <TableBody> */}
+            {cart.map((item, index) => {
+              // console.log(item);
+              return (
+                <>
+                  <CartTable
+                    key={index}
+                    wishlistId={item.wishlistId}
+                    item={item}
+                    index={index}
+                    measurementOptions={measurementOptions}
+                    measurementId={measurementId}
+                    increaseCount={() => handleIncreaseCount(cart, index)}
+                    decreaseCount={() => handleDecreaseCount(cart, index)}
+                    handleRemoveCartId={() =>
+                      handleRemoveCartId(item.wishlistId)
+                    }
+                    handleCalculateSubtotal={() =>
+                      handleCalculateSubtotal(cart, index)
+                    }
+                    // handleSetMeasurementId={(e) => handleSetMeasurementId(e)}
+                    // handleIdChange={(e) => handleIdChange(e)}
+                  />
+                </>
+              );
+            })}
+            {/* </TableBody> */}
           </Table>
           <Divider />
           <CheckOutComponent totalCost={totalCost} />
@@ -182,11 +244,10 @@ const ShoppingCartPage = () => {
               orders={cart}
               totalCost={totalCost}
               totalQuantity={totalQuantity}
+              setChange={() => setChange(true)}
             />
           </Box>
-        </TableContainer>
-      ) : (
-        <EmptyCart />
+        </Box>
       )}
     </Container>
   );

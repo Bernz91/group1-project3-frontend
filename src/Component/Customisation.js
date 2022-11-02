@@ -1,21 +1,64 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import "../CSS/Fabrics.css";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const Customisation = () => {
-  //sendToWishist
-  const [sendToWishlist, setSendToWishlist] = useState([]);
+  //sendToWishList
+  const [sendToWishlist, setSendToWishlist] = useState({
+    fabric: "",
+    collar: "",
+    cuff: "",
+    front: "",
+    pocket: "",
+    back: "",
+  });
+
+  //auth0
+  const { user, getAccessTokenSilently } = useAuth0();
+  console.log(user);
+
+  //handleSendToWishList will contain the axios post
+  const handleSendToWishList = () => {
+    const getAccessToken = getAccessTokenSilently();
+    axios({
+      method: "post",
+      url: `${BACKEND_URL}/wishlists`,
+      headers: {
+        Authorization: `Bearer ${getAccessToken}`,
+      },
+      data: {
+        userId: user.sub,
+        fabricId: sendToWishlist.fabric.id,
+        collarId: sendToWishlist.collar.id,
+        cuffId: sendToWishlist.cuff.id,
+        frontId: sendToWishlist.front.id,
+        pocketId: sendToWishlist.pocket.id,
+        backId: sendToWishlist.back.id,
+      },
+    });
+  };
+
+  //   axios
+  //     .post(`${BACKEND_URL}/users/${user.sub}/wishlists`)
+  //     .then((res) => res.data)
+  //     .then((res) => {
+  //       console.log(res);
+  //       setFabrics(res);
+  //     });
+  // };
 
   //fabrics
   const [fabrics, setFabrics] = useState([]);
-  const [chosenFabric, setChosenFabric] = useState([]);
+  // const [chosenFabric, setChosenFabric] = useState([]);
 
   //fabrics useEffect
   useEffect(() => {
@@ -30,7 +73,7 @@ const Customisation = () => {
 
   //collars
   const [collars, setCollars] = useState([]);
-  const [chosenCollar, setChosenCollar] = useState([]);
+  // const [chosenCollar, setChosenCollar] = useState([]);
 
   //collars useEffect
   useEffect(() => {
@@ -45,7 +88,7 @@ const Customisation = () => {
 
   //cuffs
   const [cuffs, setCuffs] = useState([]);
-  const [chosenCuff, setChosenCuff] = useState([]);
+  // const [chosenCuff, setChosenCuff] = useState([]);
 
   //cuffs useEffect
   useEffect(() => {
@@ -60,7 +103,7 @@ const Customisation = () => {
 
   //fronts
   const [fronts, setFronts] = useState([]);
-  const [chosenFront, setChosenFront] = useState([]);
+  // const [chosenFront, setChosenFront] = useState([]);
 
   //fronts useEffect
   useEffect(() => {
@@ -75,7 +118,7 @@ const Customisation = () => {
 
   //pockets
   const [pockets, setPockets] = useState([]);
-  const [chosenPocket, setChosenPocket] = useState([]);
+  // const [chosenPocket, setChosenPocket] = useState([]);
 
   //pockets useEffect
 
@@ -91,7 +134,7 @@ const Customisation = () => {
 
   //backs
   const [backs, setBacks] = useState([]);
-  const [chosenBack, setChosenBack] = useState([]);
+  // const [chosenBack, setChosenBack] = useState([]);
 
   //backs useEffect
   useEffect(() => {
@@ -115,10 +158,12 @@ const Customisation = () => {
       </Typography>
       <Typography variant="caption">
         <div>
-          You have chosen fabric {chosenFabric}, collar {chosenCollar}, cuff
-          {chosenCuff}, front {chosenFront}, pocket {chosenPocket}, back{" "}
-          {chosenBack}. We are sending to wishlist {sendToWishlist}.
+          We are sending to wishlist {sendToWishlist?.fabric.fabricName},{" "}
+          {sendToWishlist?.collar.collarName},{sendToWishlist?.cuff.cuffName},
+          {sendToWishlist?.front.frontName},{sendToWishlist?.pocket.pocketName},
+          {sendToWishlist?.back.backName}.
         </div>
+
         <Button
           variant="contained"
           sx={{
@@ -126,16 +171,7 @@ const Customisation = () => {
             fontSize: "10px",
           }}
           onClick={(event) => {
-            event.preventDefault();
-            setSendToWishlist(
-              { chosenFabric },
-              { chosenCollar },
-              { chosenCuff },
-              { chosenFront },
-              { chosenPocket },
-              { chosenBack }
-            );
-            console.log("setSendToWishList is " + { sendToWishlist });
+            handleSendToWishList();
           }}
         >
           Add choices to wishlist
@@ -146,11 +182,11 @@ const Customisation = () => {
           Step One: Choose your fabric
         </Typography>
       </div>
-      <div class="container">
+      <div className="container">
         {fabrics.map((fabric, index) => {
           return (
-            <card sx={{ maxWidth: 250 }}>
-              <div key={index}>
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
                 <CardActions>
                   <ul className="InstaCard">
                     <CardMedia
@@ -158,10 +194,11 @@ const Customisation = () => {
                       alt="shirt"
                       width="250"
                       image={fabric.imageOne}
-                      fabricID={fabric.id}
                       onClick={(event) => {
-                        var getFabricID = event.target.getAttribute("fabricID");
-                        setChosenFabric(getFabricID);
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          fabric: fabric,
+                        });
                       }}
                     />
                     <CardContent>
@@ -180,7 +217,7 @@ const Customisation = () => {
                   </ul>
                 </CardActions>
               </div>
-            </card>
+            </Card>
           );
         })}
       </div>
@@ -189,11 +226,11 @@ const Customisation = () => {
           Step Two: Choose your collar
         </Typography>
       </div>
-      <div class="container">
+      <div className="container">
         {collars.map((collar, index) => {
           return (
-            <card sx={{ maxWidth: 250 }}>
-              <div key={index}>
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
                 <CardActions>
                   <ul className="InstaCardOther">
                     <CardMedia
@@ -201,10 +238,11 @@ const Customisation = () => {
                       alt="collar"
                       width="250"
                       image={collar.imageOne}
-                      collarID={collar.id}
                       onClick={(event) => {
-                        var getCollarID = event.target.getAttribute("collarID");
-                        setChosenCollar(getCollarID);
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          collar: collar,
+                        });
                       }}
                     />
                     <CardContent>
@@ -223,7 +261,7 @@ const Customisation = () => {
                   </ul>
                 </CardActions>
               </div>
-            </card>
+            </Card>
           );
         })}
       </div>
@@ -232,11 +270,11 @@ const Customisation = () => {
           Step Three: Choose your cuff
         </Typography>
       </div>
-      <div class="container">
+      <div className="container">
         {cuffs.map((cuff, index) => {
           return (
-            <card sx={{ maxWidth: 250 }}>
-              <div key={index}>
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
                 <CardActions>
                   <ul className="InstaCardOther">
                     <CardMedia
@@ -244,10 +282,11 @@ const Customisation = () => {
                       alt="cuff"
                       width="250"
                       image={cuff.imageOne}
-                      cuffID={cuff.id}
-                      onClick={(event) => {
-                        var getCuffID = event.target.getAttribute("cuffID");
-                        setChosenCuff(getCuffID);
+                      onClick={() => {
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          cuff: cuff,
+                        });
                       }}
                     />
                     <CardContent>
@@ -266,7 +305,7 @@ const Customisation = () => {
                   </ul>
                 </CardActions>
               </div>
-            </card>
+            </Card>
           );
         })}
       </div>
@@ -275,11 +314,11 @@ const Customisation = () => {
           Step Four: Choose your fronts
         </Typography>
       </div>
-      <div class="container">
+      <div className="container">
         {fronts.map((front, index) => {
           return (
-            <card sx={{ maxWidth: 250 }}>
-              <div key={index}>
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
                 <CardActions>
                   <ul className="InstaCardOther">
                     <CardMedia
@@ -287,10 +326,11 @@ const Customisation = () => {
                       alt="fronts"
                       width="250"
                       image={front.imageOne}
-                      frontID={front.id}
                       onClick={(event) => {
-                        var getFrontID = event.target.getAttribute("FrontID");
-                        setChosenFront(getFrontID);
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          front: front,
+                        });
                       }}
                     />
                     <CardContent>
@@ -309,7 +349,7 @@ const Customisation = () => {
                   </ul>
                 </CardActions>
               </div>
-            </card>
+            </Card>
           );
         })}
       </div>
@@ -318,11 +358,11 @@ const Customisation = () => {
           Step Five: Choose your pockets
         </Typography>
       </div>
-      <div class="container">
+      <div className="container">
         {pockets.map((pocket, index) => {
           return (
-            <card sx={{ maxWidth: 250 }}>
-              <div key={index}>
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
                 <CardActions>
                   <ul className="InstaCardOther">
                     <CardMedia
@@ -330,10 +370,11 @@ const Customisation = () => {
                       alt="pockets"
                       width="250"
                       image={pocket.imageOne}
-                      pocketID={pocket.id}
                       onClick={(event) => {
-                        var getPocketID = event.target.getAttribute("pocketID");
-                        setChosenPocket(getPocketID);
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          pocket: pocket,
+                        });
                       }}
                     />
                     <CardContent>
@@ -352,7 +393,7 @@ const Customisation = () => {
                   </ul>
                 </CardActions>
               </div>
-            </card>
+            </Card>
           );
         })}
       </div>
@@ -361,11 +402,11 @@ const Customisation = () => {
           Step Six: Choose your back
         </Typography>
       </div>
-      <div class="container">
+      <div className="container">
         {backs.map((back, index) => {
           return (
-            <card sx={{ maxWidth: 250 }}>
-              <div key={index}>
+            <Card key={index} sx={{ maxWidth: 250 }}>
+              <div>
                 <CardActions>
                   <ul className="InstaCardOther">
                     <CardMedia
@@ -373,10 +414,11 @@ const Customisation = () => {
                       alt="back"
                       width="250"
                       image={back.imageOne}
-                      backID={back.id}
                       onClick={(event) => {
-                        var getBackID = event.target.getAttribute("backID");
-                        setChosenBack(getBackID);
+                        setSendToWishlist({
+                          ...sendToWishlist,
+                          back: back,
+                        });
                       }}
                     />
                     <CardContent>
@@ -395,7 +437,7 @@ const Customisation = () => {
                   </ul>
                 </CardActions>
               </div>
-            </card>
+            </Card>
           );
         })}
       </div>

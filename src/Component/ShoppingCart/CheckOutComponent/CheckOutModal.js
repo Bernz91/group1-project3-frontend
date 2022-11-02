@@ -21,13 +21,20 @@ import CircularIndeterminate from "./CircularProgress";
 import { Card } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import axios from "axios";
-import { postOrderDetails } from "../../utils";
+import {
+  postOrderDetails,
+  concatStr,
+  deleteAllWishlists,
+  getMeasurementId,
+} from "../../utils";
+import { useNavigate } from "react-router";
 
 const CheckOutModal = (props) => {
   // console.log(props.orders);
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   // const USERID = "3b898f23-1f1a-492f-8481-860c9982ef3b";
-  const USERID = "834fc3ef-6ccc-4ba4-a54e-1a75387da94f";
+  const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
+  const navigate = useNavigate();
 
   const orders = props.orders;
   console.log(orders);
@@ -35,13 +42,16 @@ const CheckOutModal = (props) => {
   const totalQuantity = props.totalQuantity;
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    props.setChange(true);
+    setOpen(false);
+  };
 
   const steps = [
     "Shipping address",
     "Payment details",
-    "Review your order",
-    "Order Success",
+    "Review order",
+    "Order success!",
   ];
   const theme = createTheme();
 
@@ -58,7 +68,6 @@ const CheckOutModal = (props) => {
     firstName: "",
     lastName: "",
     address1: "",
-    address2: "",
     city: "",
     state: "",
     zip: "",
@@ -66,6 +75,7 @@ const CheckOutModal = (props) => {
     saveAddress: "",
   });
   const [orderId, setOrderId] = useState();
+  const [submit, setSubmit] = useState(false);
 
   const getStepContent = (step) => {
     switch (step) {
@@ -77,7 +87,6 @@ const CheckOutModal = (props) => {
             handleShipmentSubmit={(e) => handleShipmentSubmit(e)}
           />
         );
-      // return "this is address form";
       case 1:
         return (
           <PaymentForm
@@ -86,7 +95,6 @@ const CheckOutModal = (props) => {
             handleBack={() => handleBack()}
           />
         );
-      // return "this is payment form";
 
       case 2:
         return (
@@ -95,7 +103,7 @@ const CheckOutModal = (props) => {
             orders={props.orders}
             totalCost={props.totalCost}
             card={card}
-            handleSubmitOrder={() => handleSubmitOrder()}
+            handleSubmitOrder={(e) => handleSubmitOrder(e)}
             handleBack={() => handleBack()}
           />
         );
@@ -136,8 +144,6 @@ const CheckOutModal = (props) => {
     handleNext();
   };
 
-  // console.log(shipmentDetails);
-
   const handleCardChange = (e) => {
     // e.preventDefault();
     let value = e.target.value;
@@ -156,14 +162,18 @@ const CheckOutModal = (props) => {
     handleNext();
   };
 
-  const handleSubmitOrder = () => {
-    console.log("attempt submission");
-    console.log(shipmentDetails);
-    // const order = Object.assign(shipmentDetails, card);
-    // console.log(order);
-    // setFinalOrder(order);
-    // submitting orders to db
-    axios
+  const handleSubmitOrder = async (e) => {
+    e.preventDefault();
+    const address1 = shipmentDetails.address1;
+    const state = shipmentDetails.state;
+    const country = shipmentDetails.country;
+    const city = shipmentDetails.city;
+    const postal = shipmentDetails.zip;
+    const shippingDetails = concatStr([address1, postal, state, city, country]);
+    // const measurementId = getMeasurementId (USERID)
+    // console.log(measurementId)
+
+    await axios
       .post(`${BACKEND_URL}/orders/`, {
         paymentId: 1,
         userId: USERID,
@@ -172,20 +182,22 @@ const CheckOutModal = (props) => {
         shippingFee: 0,
         total: totalCost,
         status: "Preparing",
-        shippingAddress: JSON.stringify(shipmentDetails),
+        shippingAddress: shippingDetails,
       })
       .then((res) => res.data)
-      .then((res) => {
+      .then(async (res) => {
         console.log(res.id);
-        postOrderDetails(res.id, orders);
-        setOrderId(res.id);
+        await postOrderDetails(res.id, orders);
+        await setOrderId(res.id);
         console.log("passed");
+      })
+      .then((res) => {
+        deleteAllWishlists(USERID);
+        handleNext();
       })
       .catch((error) => {
         console.log(error);
       });
-
-    handleNext();
   };
 
   return (
@@ -194,11 +206,12 @@ const CheckOutModal = (props) => {
         variant="contained"
         color="error"
         onClick={handleOpen}
-        disableElevation
+        fullWidth
+        // disableElevation
         size="large"
         startIcon={<AddShoppingCartIcon />}
         align="center"
-        sx={{ align: "center" }}
+        sx={{ align: "center", display: "flex" }}
         disabled={orders.length === 0}
       >
         Checkout
@@ -210,7 +223,7 @@ const CheckOutModal = (props) => {
         aria-describedby="modal-modal-description"
       >
         <ThemeProvider theme={theme}>
-          <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+          <Container component="main">
             <Paper
               variant="outlined"
               sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
@@ -218,10 +231,15 @@ const CheckOutModal = (props) => {
               <Typography component="h1" variant="h4" align="center">
                 Checkout
               </Typography>
-              <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+              <Stepper
+                activeStep={activeStep}
+                sx={{ pt: 2, pb: 2, fontWeight: "bold" }}
+              >
                 {steps.map((label) => (
                   <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
+                    <StepLabel>
+                      <Typography sx={{ fontSize: "10px" }}>{label}</Typography>
+                    </StepLabel>
                   </Step>
                 ))}
               </Stepper>
@@ -231,7 +249,7 @@ const CheckOutModal = (props) => {
                 ) : (
                   <React.Fragment>
                     {getStepContent(activeStep)}
-                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Box sx={{}}>
                       {/* {activeStep !== 0 && (
                         <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                           Back
