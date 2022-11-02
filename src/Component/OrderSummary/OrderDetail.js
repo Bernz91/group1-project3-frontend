@@ -34,16 +34,6 @@ const OrderDetail = (props) => {
   return (
     <TableContainer>
       <Table aria-label="simple table">
-        {/* <TableHead>
-          <TableRow>
-            <TableCell>Items</TableCell>
-            <TableCell>Quantity</TableCell>
-            <TableCell>Subtotal</TableCell>
-            <TableCell align="right" sx={{ textAlign: "center" }}>
-              Total
-            </TableCell>
-          </TableRow>
-        </TableHead> */}
         <TableBody>
           <OrderTable item={orderDetails} />
         </TableBody>

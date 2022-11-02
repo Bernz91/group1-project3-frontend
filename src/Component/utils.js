@@ -64,21 +64,29 @@ export const getMeasurementId = async (userId) => {
 //   }
 // }
 
-export const postOrderDetails = (orderId, orders) => {
+export const postOrderDetails = (accessToken, orderId, orders) => {
   orders.map((order) => {
-    axios.post(`${BACKEND_URL}/orders/${orderId}/orderDetails`, {
-      orderId: orderId,
-      measurementId: order["measurement"].id,
-      fabricId: order["fabric"].id,
-      collarId: order["collar"].id,
-      cuffId: order["cuff"].id,
-      frontId: order["front"].id,
-      pocketId: order["pocket"].id,
-      backId: order["back"].id,
-      quantity: order["quantity"],
-      singleprice: order["price"],
-      totalprice: order["subtotal"],
-    });
+    axios.post(
+      `${BACKEND_URL}/orders/${orderId}/orderDetails`,
+      {
+        orderId: orderId,
+        measurementId: order["measurement"].id,
+        fabricId: order["fabric"].id,
+        collarId: order["collar"].id,
+        cuffId: order["cuff"].id,
+        frontId: order["front"].id,
+        pocketId: order["pocket"].id,
+        backId: order["back"].id,
+        quantity: order["quantity"],
+        singleprice: order["price"],
+        totalprice: order["subtotal"],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
   });
 };
 
@@ -86,8 +94,12 @@ export const deleteWishlist = (userId, wishlistId) => {
   return axios.delete(`${BACKEND_URL}/users/${userId}/wishlists/${wishlistId}`);
 };
 
-export const deleteAllWishlists = (userId) => {
-  return axios.delete(`${BACKEND_URL}/users/${userId}/wishlists/`);
+export const deleteAllWishlists = (accessToken, userId) => {
+  return axios.delete(`${BACKEND_URL}/users/${userId}/wishlists/`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 };
 
 // export const updateCartlength = (userId) => {

@@ -7,11 +7,6 @@ import CartTable from "../Component/ShoppingCart/CartTable";
 import EmptyCart from "../Component/ShoppingCart/EmptyCart";
 import Container from "@mui/material/Container";
 import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import CheckOutComponent from "../Component/ShoppingCart/CheckOutComponent";
@@ -26,12 +21,13 @@ import { useNavigate } from "react-router";
 import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Grid2 from "@mui/material/Unstable_Grid2";
+import { useAuth0 } from "@auth0/auth0-react";
+import CircularIndeterminate from "../Component/ShoppingCart/CheckOutComponent/CircularProgress";
 
 const ShoppingCartPage = () => {
   let navigate = useNavigate();
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
-
   const [cart, setCart] = useState([]);
   const [totalCost, setTotalCost] = useState();
   const [totalQuantity, setTotalQuantity] = useState();
@@ -40,43 +36,65 @@ const ShoppingCartPage = () => {
   const [measurementOptions, setMeasurementOptions] = useState([]);
   const [measurementId, setMeasurementId] = useState(null);
 
+  //auth0
+  const { user, getAccessTokenSilently } = useAuth0();
+  // console.log(user.sub);
+  // const USERID = user.sub
+
   useEffect(() => {
+    const getWishlists = async () => {
+      if (user) {
+        try {
+          const accessToken = await getAccessTokenSilently({
+            audience: "https://group1-project3/api",
+            scope: "read:current_user",
+          });
+          await axios
+            .get(`${BACKEND_URL}/users/${USERID}/wishlists`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            })
+            .then((res) => res.data)
+            .then((res) => {
+              console.log(res);
+              // extract the keys to display
+              const items = extractArr(res, [
+                "fabric",
+                "cuff",
+                "back",
+                "pocket",
+                "front",
+                "collar",
+              ]);
+              // add in new fields
+              const newItems = items.map((item, i) => {
+                // console.log(item);
+                return {
+                  ...item,
+                  wishlistId: res[i].id,
+                  measurement: res[i].measurement,
+                  userId: USERID,
+                  quantity: 1,
+                  price: calcTotalCost(item),
+                  subtotal: calcTotalCost(item),
+                };
+              });
+              console.log("newItems", newItems);
+              setCart(newItems);
+              setLoading(false);
+            });
+          setChange(false);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    };
     if (change) {
       setLoading(true);
-      axios
-        .get(`${BACKEND_URL}/users/${USERID}/wishlists`)
-        .then((res) => res.data)
-        .then((res) => {
-          console.log(res);
-          // extract the keys to display
-          const items = extractArr(res, [
-            "fabric",
-            "cuff",
-            "back",
-            "pocket",
-            "front",
-            "collar",
-          ]);
-          // add in new fields
-          const newItems = items.map((item, i) => {
-            // console.log(item);
-            return {
-              ...item,
-              wishlistId: res[i].id,
-              measurement: res[i].measurement,
-              userId: USERID,
-              quantity: 1,
-              price: calcTotalCost(item),
-              subtotal: calcTotalCost(item),
-            };
-          });
-          console.log("newItems", newItems);
-          setCart(newItems);
-          setLoading(false);
-        });
-      setChange(false);
+      getWishlists();
     }
-  }, [change]);
+  }, [user, change]);
 
   // get all the measurements from measurement profile
   // useEffect(() => {
@@ -134,10 +152,23 @@ const ShoppingCartPage = () => {
     handleCalculateSubtotal(cartItems, index);
   };
 
-  const handleRemoveCartId = (wishlistId) => {
-    console.log(wishlistId);
-    console.log("tried deleting");
-    deleteWishlist(USERID, wishlistId);
+  const handleRemoveCartId = async (wishlistId) => {
+    try {
+      const accessToken = await getAccessTokenSilently({
+        audience: "https://group1-project3/api",
+        scope: "read:current_user",
+      });
+      await axios.delete(
+        `${BACKEND_URL}/users/${USERID}/wishlists/${wishlistId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
     setChange(true);
   };
 
@@ -159,7 +190,7 @@ const ShoppingCartPage = () => {
   // };
   console.log(change);
   if (isLoading) {
-    return <div>Loading</div>;
+    return <CircularIndeterminate />;
   }
 
   return (

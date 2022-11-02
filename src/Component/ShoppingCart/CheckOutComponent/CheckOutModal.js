@@ -17,7 +17,6 @@ import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import ReviewForm from "./ReviewForm";
 import OrderSuccess from "./OrderSuccess";
-import CircularIndeterminate from "./CircularProgress";
 import { Card } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import axios from "axios";
@@ -28,10 +27,14 @@ import {
   getMeasurementId,
 } from "../../utils";
 import { useNavigate } from "react-router";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const CheckOutModal = (props) => {
   // console.log(props.orders);
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+  const { user, getAccessTokenSilently } = useAuth0();
+  // const USERID = user.sub
+
   // const USERID = "3b898f23-1f1a-492f-8481-860c9982ef3b";
   const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
   const navigate = useNavigate();
@@ -75,7 +78,6 @@ const CheckOutModal = (props) => {
     saveAddress: "",
   });
   const [orderId, setOrderId] = useState();
-  const [submit, setSubmit] = useState(false);
 
   const getStepContent = (step) => {
     switch (step) {
@@ -138,9 +140,7 @@ const CheckOutModal = (props) => {
 
   const handleShipmentSubmit = (e) => {
     // e.preventDefault();
-    console.log("passed");
     setShipmentDetails(shipmentDetails);
-    console.log(shipmentDetails);
     handleNext();
   };
 
@@ -170,34 +170,48 @@ const CheckOutModal = (props) => {
     const city = shipmentDetails.city;
     const postal = shipmentDetails.zip;
     const shippingDetails = concatStr([address1, postal, state, city, country]);
-    // const measurementId = getMeasurementId (USERID)
-    // console.log(measurementId)
 
-    await axios
-      .post(`${BACKEND_URL}/orders/`, {
-        paymentId: 1,
-        userId: USERID,
-        quantity: totalQuantity,
-        subtotal: totalCost,
-        shippingFee: 0,
-        total: totalCost,
-        status: "Preparing",
-        shippingAddress: shippingDetails,
-      })
-      .then((res) => res.data)
-      .then(async (res) => {
-        console.log(res.id);
-        await postOrderDetails(res.id, orders);
-        await setOrderId(res.id);
-        console.log("passed");
-      })
-      .then((res) => {
-        deleteAllWishlists(USERID);
-        handleNext();
-      })
-      .catch((error) => {
-        console.log(error);
+    try {
+      const accessToken = await getAccessTokenSilently({
+        audience: "https://group1-project3/api",
+        scope: "read:current_user",
       });
+      await axios
+        .post(
+          `${BACKEND_URL}/orders/`,
+          {
+            paymentId: 1,
+            userId: USERID,
+            quantity: totalQuantity,
+            subtotal: totalCost,
+            shippingFee: 0,
+            total: totalCost,
+            status: "Preparing",
+            shippingAddress: shippingDetails,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        )
+        .then((res) => res.data)
+        .then(async (res) => {
+          // console.log(res.id);
+          await postOrderDetails(accessToken, res.id, orders);
+          await setOrderId(res.id);
+          // console.log("passed");
+        })
+        .then(async (res) => {
+          await deleteAllWishlists(accessToken, USERID);
+          handleNext();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
