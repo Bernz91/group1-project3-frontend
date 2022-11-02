@@ -24,9 +24,8 @@ import {
 } from "../Component/utils";
 import { useNavigate } from "react-router";
 import { Typography } from "@mui/material";
-import Grid from '@mui/material/Grid';
-import Grid2 from '@mui/material/Unstable_Grid2';
-
+import Grid from "@mui/material/Grid";
+import Grid2 from "@mui/material/Unstable_Grid2";
 
 const ShoppingCartPage = () => {
   let navigate = useNavigate();
@@ -42,9 +41,8 @@ const ShoppingCartPage = () => {
   const [measurementId, setMeasurementId] = useState(null);
 
   useEffect(() => {
- 
     if (change) {
-      setLoading (true)
+      setLoading(true);
       axios
         .get(`${BACKEND_URL}/users/${USERID}/wishlists`)
         .then((res) => res.data)
@@ -74,7 +72,7 @@ const ShoppingCartPage = () => {
           });
           console.log("newItems", newItems);
           setCart(newItems);
-          setLoading (false)
+          setLoading(false);
         });
       setChange(false);
     }
@@ -159,19 +157,23 @@ const ShoppingCartPage = () => {
   //   newCartCopy[currWishlistId].measurementId = measurementId;
   //   setCart(newCartCopy);
   // };
-
+  console.log(change);
   if (isLoading) {
     return <div>Loading</div>;
   }
 
-
   return (
-    <Container sx={{ display: "flex", flexDirection: "column", ml: -1}}>
-      <Typography variant="h5" align="left" sx={{ mt: 3, ml: 3, fontWeight: "bold"}}>
+    <Container sx={{ display: "flex", flexDirection: "column", ml: -1 }}>
+      <Typography
+        variant="h5"
+        align="left"
+        sx={{ mt: 3, ml: 3, fontWeight: "bold" }}
+      >
         My cart
       </Typography>
       {cart.length === 0 ? (
-         <EmptyCart />) : (
+        <EmptyCart />
+      ) : (
         <Box>
           <Table aria-label="simple table">
             {/* <TableHead> */}
@@ -242,9 +244,11 @@ const ShoppingCartPage = () => {
               orders={cart}
               totalCost={totalCost}
               totalQuantity={totalQuantity}
+              setChange={() => setChange(true)}
             />
           </Box>
-        </Box>)}
+        </Box>
+      )}
     </Container>
   );
 };

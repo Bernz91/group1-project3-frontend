@@ -21,13 +21,20 @@ import CircularIndeterminate from "./CircularProgress";
 import { Card } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import axios from "axios";
-import { postOrderDetails, concatStr, deleteAllWishlists, getMeasurementId } from "../../utils";
+import {
+  postOrderDetails,
+  concatStr,
+  deleteAllWishlists,
+  getMeasurementId,
+} from "../../utils";
+import { useNavigate } from "react-router";
 
 const CheckOutModal = (props) => {
   // console.log(props.orders);
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   // const USERID = "3b898f23-1f1a-492f-8481-860c9982ef3b";
   const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
+  const navigate = useNavigate();
 
   const orders = props.orders;
   console.log(orders);
@@ -35,7 +42,10 @@ const CheckOutModal = (props) => {
   const totalQuantity = props.totalQuantity;
 
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    props.setChange(true);
+    setOpen(false);
+  };
 
   const steps = [
     "Shipping address",
@@ -176,26 +186,23 @@ const CheckOutModal = (props) => {
       })
       .then((res) => res.data)
       .then(async (res) => {
-        console.log(res.id); 
+        console.log(res.id);
         await postOrderDetails(res.id, orders);
         await setOrderId(res.id);
         console.log("passed");
       })
       .then((res) => {
-        // deleteAllWishlists(USERID);
+        deleteAllWishlists(USERID);
+        handleNext();
       })
-
       .catch((error) => {
         console.log(error);
       });
-    handleNext();
   };
-
 
   return (
     <Box>
       <Button
-      
         variant="contained"
         color="error"
         onClick={handleOpen}
@@ -216,7 +223,7 @@ const CheckOutModal = (props) => {
         aria-describedby="modal-modal-description"
       >
         <ThemeProvider theme={theme}>
-          <Container component="main" >
+          <Container component="main">
             <Paper
               variant="outlined"
               sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
@@ -224,11 +231,14 @@ const CheckOutModal = (props) => {
               <Typography component="h1" variant="h4" align="center">
                 Checkout
               </Typography>
-              <Stepper activeStep={activeStep} sx={{ pt: 2, pb: 2, fontWeight: "bold"}}>
+              <Stepper
+                activeStep={activeStep}
+                sx={{ pt: 2, pb: 2, fontWeight: "bold" }}
+              >
                 {steps.map((label) => (
                   <Step key={label}>
                     <StepLabel>
-                    <Typography sx = {{fontSize: "10px"}}>{label}</Typography>
+                      <Typography sx={{ fontSize: "10px" }}>{label}</Typography>
                     </StepLabel>
                   </Step>
                 ))}
@@ -239,7 +249,7 @@ const CheckOutModal = (props) => {
                 ) : (
                   <React.Fragment>
                     {getStepContent(activeStep)}
-                    <Box sx={{  }}>
+                    <Box sx={{}}>
                       {/* {activeStep !== 0 && (
                         <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                           Back

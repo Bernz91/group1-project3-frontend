@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -138,14 +139,7 @@ const AddressForm = (props) => {
           </Grid> */}
         </Grid>
         <Grid align="right">
-          <Button
-            variant="contained"
-            sx={{ mt: 3, ml: 1 }}
-            type="submit"
-            // onClick={() => {
-            //   props.handleNext();
-            // }}
-          >
+          <Button variant="contained" sx={{ mt: 3, ml: 1 }} type="submit">
             Next
           </Button>
         </Grid>

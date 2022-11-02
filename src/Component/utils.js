@@ -69,7 +69,7 @@ export const postOrderDetails = (orderId, orders) => {
     axios.post(`${BACKEND_URL}/orders/${orderId}/orderDetails`, {
       orderId: orderId,
       measurementId: order["measurement"].id,
-      fabricId: order["back"].id,
+      fabricId: order["fabric"].id,
       collarId: order["collar"].id,
       cuffId: order["cuff"].id,
       frontId: order["front"].id,
