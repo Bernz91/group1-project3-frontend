@@ -30,7 +30,7 @@ const OrderSummaryPage = () => {
   //   useAuth0();
 
   const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-  const USERID = "3b898f23-1f1a-492f-8481-860c9982ef3b";
+  const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
   const [change, setChange] = useState(true);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const OrderSummaryPage = () => {
         ]);
 
         setOrders(allOrders);
-        console.log(orders);
+        // console.log(orders);
       });
   }, []);
 
@@ -57,7 +57,7 @@ const OrderSummaryPage = () => {
 
   return (
     <Container>
-      <Typography variant="h5" align="center" sx={{ mt: 2 }}>
+      <Typography variant="h5" align="left" sx={{ mt: 3, ml: 3, fontWeight: "bold" }}>
         My orders
       </Typography>
 

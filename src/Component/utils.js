@@ -1,3 +1,4 @@
+import { SignalCellularNullOutlined } from "@mui/icons-material";
 import axios from "axios";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -33,15 +34,42 @@ export const calcQuantity = (arr) => {
 export const calcTotalCost = (obj) => {
   let sum = 0;
   sum += Object.keys(obj).reduce((prev, key) => prev + obj[key].cost, 0);
-
   return sum;
 };
 
+export const getMeasurementId = async (userId) => {
+  try {
+    await axios
+      .get(`${BACKEND_URL}/users/${userId}/measurements`)
+      .then((res) => res.data)
+      .then((res) => {
+        console.log(res[0].id);
+        return res[0].id;
+      });
+  } catch (err) {
+    return null;
+  }
+};
+
+// const getMeasurementId = async (userId) => {
+//   try {
+//     await axios.get(`${BACKEND_URL}/users/${userId}/measurements`)
+//     .then ((res) => res.data)
+//     .then ((res) => {
+//       console.log(res[0].id)
+//       return res[0].id
+//     })
+//   } catch (err) {
+//     return null
+//   }
+// }
+
 export const postOrderDetails = (orderId, orders) => {
   orders.map((order) => {
-    return axios.post(`${BACKEND_URL}/orders/${orderId}/orderDetails`, {
+    axios.post(`${BACKEND_URL}/orders/${orderId}/orderDetails`, {
       orderId: orderId,
-      fabricId: order["back"].id,
+      measurementId: order["measurement"].id,
+      fabricId: order["fabric"].id,
       collarId: order["collar"].id,
       cuffId: order["cuff"].id,
       frontId: order["front"].id,
@@ -58,6 +86,10 @@ export const deleteWishlist = (userId, wishlistId) => {
   return axios.delete(`${BACKEND_URL}/users/${userId}/wishlists/${wishlistId}`);
 };
 
+export const deleteAllWishlists = (userId) => {
+  return axios.delete(`${BACKEND_URL}/users/${userId}/wishlists/`);
+};
+
 // export const updateCartlength = (userId) => {
 //   axios
 //     .get(`${BACKEND_URL}/users/${userId}/wishlists/`)
@@ -67,3 +99,12 @@ export const deleteWishlist = (userId, wishlistId) => {
 //       return res.length;
 //     });
 // };
+
+export const concatStr = (array = []) => {
+  let str = "";
+  for (let i = 0; i < array.length; i++) {
+    str += array[i];
+    str += " ";
+  }
+  return str;
+};

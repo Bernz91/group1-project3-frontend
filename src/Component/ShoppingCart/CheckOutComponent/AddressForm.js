@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
@@ -17,12 +18,12 @@ const AddressForm = (props) => {
         // props.handleNext();
       }}
     >
-      <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+      <Container component="main" maxWidth="sm" maxHeight="sm">
         <Typography variant="h6" gutterBottom>
           Shipping address
         </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
+        <Grid container spacing={0}>
+          <Grid item xs={12} sm={3}>
             <TextField
               required
               id="firstName"
@@ -35,7 +36,7 @@ const AddressForm = (props) => {
               onChange={props.handleShipmentChange}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={3}>
             <TextField
               required
               id="lastName"
@@ -53,7 +54,7 @@ const AddressForm = (props) => {
               required
               id="address1"
               name="address1"
-              label="Address line 1"
+              label="Address line"
               fullWidth
               autoComplete="shipping address-line1"
               variant="standard"
@@ -61,7 +62,7 @@ const AddressForm = (props) => {
               onChange={props.handleShipmentChange}
             />
           </Grid>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <TextField
               id="address2"
               name="address2"
@@ -72,7 +73,7 @@ const AddressForm = (props) => {
               defaultValue={details.address2}
               onChange={props.handleShipmentChange}
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={6}>
             <TextField
               required
@@ -123,7 +124,7 @@ const AddressForm = (props) => {
               onChange={props.handleShipmentChange}
             />
           </Grid>
-          <Grid item xs={12}>
+          {/* <Grid item xs={12}>
             <FormControlLabel
               control={
                 <Checkbox
@@ -135,17 +136,10 @@ const AddressForm = (props) => {
               }
               label="Use this address for payment details"
             />
-          </Grid>
+          </Grid> */}
         </Grid>
         <Grid align="right">
-          <Button
-            variant="contained"
-            sx={{ mt: 3, ml: 1 }}
-            type="submit"
-            // onClick={() => {
-            //   props.handleNext();
-            // }}
-          >
+          <Button variant="contained" sx={{ mt: 3, ml: 1 }} type="submit">
             Next
           </Button>
         </Grid>

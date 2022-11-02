@@ -19,7 +19,7 @@ const PaymentForm = (props) => {
       <Typography variant="h6" gutterBottom>
         Payment method
       </Typography>
-      <Grid container spacing={3}>
+      <Grid>
         <Grid item xs={12} md={6}>
           <TextField
             required
@@ -68,7 +68,7 @@ const PaymentForm = (props) => {
             onChange={props.handleCardChange}
           />
         </Grid>
-        <Grid item xs={12}>
+        {/* <Grid item xs={12}>
           <FormControlLabel
             control={
               <Checkbox
@@ -80,16 +80,20 @@ const PaymentForm = (props) => {
             }
             label="Remember credit card details for next time"
           />
-        </Grid>
+        </Grid> */}
       </Grid>
-      <Grid align="right">
-        <Button onClick={props.handleBack} sx={{ mt: 3, ml: 1 }}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)' ,mt: 2}}>
+      <Grid item xs={8}>
+        <Button variant = "outlined" onClick={props.handleBack}>
           Back
         </Button>
-        <Button variant="contained" sx={{ mt: 3, ml: 1 }} type="submit">
+      </Grid>
+      <Grid item xs={8}>
+        <Button variant="contained" type="submit">
           Next
         </Button>
       </Grid>
+      </Box>
     </Box>
   );
 };
