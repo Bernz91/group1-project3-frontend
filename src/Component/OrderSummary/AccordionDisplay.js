@@ -108,7 +108,7 @@ const AccordionDisplay = (props) => {
             </Grid>
             <Typography
               variant="overline"
-              sx={{ width: "100%", flexShrink: 0, lineHeight: 1            }}
+              sx={{ width: "100%", flexShrink: 0, lineHeight: 1}}
             >
               Deliver to: {order.shippingAddress}
             </Typography>

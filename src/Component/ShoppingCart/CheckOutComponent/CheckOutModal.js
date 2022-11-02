@@ -40,8 +40,8 @@ const CheckOutModal = (props) => {
   const steps = [
     "Shipping address",
     "Payment details",
-    "Review your order",
-    "Order Success",
+    "Review order",
+    "Order success!",
   ];
   const theme = createTheme();
 
@@ -191,6 +191,7 @@ const CheckOutModal = (props) => {
     handleNext();
   };
 
+
   return (
     <Box>
       <Button
@@ -215,7 +216,7 @@ const CheckOutModal = (props) => {
         aria-describedby="modal-modal-description"
       >
         <ThemeProvider theme={theme}>
-          <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
+          <Container component="main" >
             <Paper
               variant="outlined"
               sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
@@ -223,10 +224,12 @@ const CheckOutModal = (props) => {
               <Typography component="h1" variant="h4" align="center">
                 Checkout
               </Typography>
-              <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+              <Stepper activeStep={activeStep} sx={{ pt: 2, pb: 2, fontWeight: "bold"}}>
                 {steps.map((label) => (
                   <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
+                    <StepLabel>
+                    <Typography sx = {{fontSize: "10px"}}>{label}</Typography>
+                    </StepLabel>
                   </Step>
                 ))}
               </Stepper>
@@ -236,7 +239,7 @@ const CheckOutModal = (props) => {
                 ) : (
                   <React.Fragment>
                     {getStepContent(activeStep)}
-                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Box sx={{  }}>
                       {/* {activeStep !== 0 && (
                         <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                           Back

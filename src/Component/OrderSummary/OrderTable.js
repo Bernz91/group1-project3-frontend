@@ -50,7 +50,7 @@ const OrderTable = (props) => {
           </Grid>
         </TableCell>
         <TableCell component="th" scope="row" align="left">
-          <InfoModal item={item} sx = {{p:-1}} />
+          <InfoModal item={item}  />
           <Box sx ={{m: 0}}>
           <Typography variant = "overline" sx= {{lineHeight:0, fontFamily: 'Monospace'}} >Quantity: {item.quantity}</Typography>
           </Box>

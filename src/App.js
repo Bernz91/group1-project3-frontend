@@ -12,6 +12,7 @@ import SizeProfilePage from "./Page/SizeProfilePage";
 import Customisation from "./Component/Customisation";
 import HowItWorksPage from "./Page/HowItWorksPage";
 import OrderSummaryPage from "./Page/OrderSummaryPage"
+import EditShirtDesignPage from "./Page/EditShirtDesignPage"
 
 const App = () => {
   return (
@@ -30,6 +31,7 @@ const App = () => {
             element={"to add page for individual fabric"}
           />
           <Route path="ShoppingCart" element={<ShoppingCartPage />} />
+          <Route path="EditShirtDesign" element={<EditShirtDesignPage />} />
           <Route path="OrderSummary" element={<OrderSummaryPage />} />
           <Route path="*" element={"Nothing here!"} />
         </Route>

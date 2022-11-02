@@ -36,12 +36,15 @@ const ShoppingCartPage = () => {
   const [cart, setCart] = useState([]);
   const [totalCost, setTotalCost] = useState();
   const [totalQuantity, setTotalQuantity] = useState();
+  const [isLoading, setLoading] = useState(true);
   const [change, setChange] = useState(true);
   const [measurementOptions, setMeasurementOptions] = useState([]);
   const [measurementId, setMeasurementId] = useState(null);
 
   useEffect(() => {
+ 
     if (change) {
+      setLoading (true)
       axios
         .get(`${BACKEND_URL}/users/${USERID}/wishlists`)
         .then((res) => res.data)
@@ -71,20 +74,21 @@ const ShoppingCartPage = () => {
           });
           console.log("newItems", newItems);
           setCart(newItems);
+          setLoading (false)
         });
       setChange(false);
     }
   }, [change]);
 
   // get all the measurements from measurement profile
-  useEffect(() => {
-    axios
-      .get(`${BACKEND_URL}/users/${USERID}/measurements`)
-      .then((res) => res.data)
-      .then((res) => {
-        setMeasurementOptions(res);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${BACKEND_URL}/users/${USERID}/measurements`)
+  //     .then((res) => res.data)
+  //     .then((res) => {
+  //       setMeasurementOptions(res);
+  //     });
+  // }, []);
 
   // console.log(measurementOptions);
 
@@ -139,29 +143,35 @@ const ShoppingCartPage = () => {
     setChange(true);
   };
 
-  const handleIdChange = (e) => {
-    console.log(e.target.value);
-    setMeasurementId(e.target.value);
-    console.log("something changed");
-  };
+  // const handleIdChange = (e) => {
+  //   console.log(e.target.value);
+  //   setMeasurementId(e.target.value);
+  //   console.log("something changed");
+  // };
 
-  console.log("measurement id", measurementId);
+  // console.log("measurement id", measurementId);
 
-  const handleSetMeasurementId = (e) => {
-    e.preventDefault();
-    console.log(e);
-    const currWishlistId = e.target.id;
-    const newCartCopy = [...cart];
-    newCartCopy[currWishlistId].measurementId = measurementId;
-    setCart(newCartCopy);
-  };
+  // const handleSetMeasurementId = (e) => {
+  //   e.preventDefault();
+  //   console.log(e);
+  //   const currWishlistId = e.target.id;
+  //   const newCartCopy = [...cart];
+  //   newCartCopy[currWishlistId].measurementId = measurementId;
+  //   setCart(newCartCopy);
+  // };
+
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
+
 
   return (
     <Container sx={{ display: "flex", flexDirection: "column", ml: -1}}>
       <Typography variant="h5" align="left" sx={{ mt: 3, ml: 3, fontWeight: "bold"}}>
         My cart
       </Typography>
-      {cart.length !== 0 ? (
+      {cart.length === 0 ? (
+         <EmptyCart />) : (
         <Box>
           <Table aria-label="simple table">
             {/* <TableHead> */}
@@ -217,8 +227,8 @@ const ShoppingCartPage = () => {
                     handleCalculateSubtotal={() =>
                       handleCalculateSubtotal(cart, index)
                     }
-                    handleSetMeasurementId={(e) => handleSetMeasurementId(e)}
-                    handleIdChange={(e) => handleIdChange(e)}
+                    // handleSetMeasurementId={(e) => handleSetMeasurementId(e)}
+                    // handleIdChange={(e) => handleIdChange(e)}
                   />
                 </>
               );
@@ -234,10 +244,7 @@ const ShoppingCartPage = () => {
               totalQuantity={totalQuantity}
             />
           </Box>
-        </Box>
-      ) : (
-        <EmptyCart />
-      )}
+        </Box>)}
     </Container>
   );
 };
