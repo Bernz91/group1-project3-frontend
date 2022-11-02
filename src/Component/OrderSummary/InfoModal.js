@@ -30,7 +30,7 @@ const InfoModal = (props) => {
         align="center"
         sx={{ m: 0 }}
         onClick={handleOpen}
-        sx={{ width: "200", p: 1, m: 1, textTransform: "none" }}
+        sx={{ width: "200", p: 1, m: 1, ml: 0, textTransform: "none" }}
       >
         <Typography sx={{ fontSize: "11px" }}>View Shirt Design </Typography>
       </Button>
@@ -41,12 +41,12 @@ const InfoModal = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" component="h2" sx = {{fontWeight: "bold"}}>
+          <Typography id="modal-modal-title" component="h2" sx = {{fontWeight: "bold", mb: 2}}>
             Your Shirt Design:
           </Typography>
           <Typography
             id="modal-modal-description"
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, lineHeight: 1.6 }}
             variant="overline"
           >
             <Box>Fabric type: {item["fabric"].fabricName}</Box>

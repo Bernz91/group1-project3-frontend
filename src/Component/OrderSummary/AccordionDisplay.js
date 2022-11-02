@@ -67,7 +67,7 @@ const AccordionDisplay = (props) => {
       <Accordion
         expanded={expanded === "panel1"}
         onChange={handleChange("panel1")}
-        sx={{ mt: 6 }}
+        sx={{ mt: 2 }}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -79,12 +79,12 @@ const AccordionDisplay = (props) => {
             }
           }
         >
-          <Box sx={{ p: 1 }}>
+          <Box sx={{ p: 0 }}>
             <Grid>
               <Grid item xs={2}>
                 <Typography
                   variant="overline"
-                  sx={{ width: "100%", flexShrink: 0 }}
+                  sx={{ width: "100%", flexShrink: 0, fontWeight: "bold" }}
                 >
                   Order Id: 000{order.id}
                 </Typography>
@@ -92,7 +92,7 @@ const AccordionDisplay = (props) => {
               <Grid item xs={2}>
                 <Typography
                   variant="overline"
-                  sx={{ width: "100%", flexShrink: 0 }}
+                  sx={{ width: "100%", flexShrink: 0}}
                 >
                   Order Date: {orderDate}
                 </Typography>
@@ -100,7 +100,7 @@ const AccordionDisplay = (props) => {
               <Grid item xs={4}>
                 <Typography
                   variant="overline"
-                  sx={{ width: "100%", flexShrink: 0 }}
+                  sx={{ width: "100%", flexShrink: 0, spacing: 0 }}
                 >
                   Status: {order.status}
                 </Typography>
@@ -108,7 +108,7 @@ const AccordionDisplay = (props) => {
             </Grid>
             <Typography
               variant="overline"
-              sx={{ width: "100%", flexShrink: 0 }}
+              sx={{ width: "100%", flexShrink: 0, lineHeight: 1            }}
             >
               Deliver to: {order.shippingAddress}
             </Typography>

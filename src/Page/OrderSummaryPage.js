@@ -57,7 +57,7 @@ const OrderSummaryPage = () => {
 
   return (
     <Container>
-      <Typography variant="h5" align="left" sx={{ mt: 2 }}>
+      <Typography variant="h5" align="left" sx={{ mt: 3, ml: 3, fontWeight: "bold" }}>
         My orders
       </Typography>
 

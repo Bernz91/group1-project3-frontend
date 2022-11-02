@@ -59,7 +59,7 @@ const CartTable = (props) => {
           />
         </TableCell>
         <TableCell variant="body" component="th" scope="row">
-          <Typography sx = {{ml :1,fontWeight: "bold" }}>Price: ${item["fabric"].cost}</Typography>
+          <Typography sx = {{ml :0,fontWeight: "bold" }}>Price: ${item["fabric"].cost}</Typography>
           <Box>
             {/* <MeasurementModal
               measurementOptions={props.measurementOptions}
@@ -75,7 +75,7 @@ const CartTable = (props) => {
           <Box sx = {{m:0}}>
             <InfoModal item={item} />
           </Box>
-          <ButtonGroup sx = {{ml :1, mt:1}}>
+          <ButtonGroup sx = {{ml :0, mt: 0.5}}>
             <Button
               style={{
                 backgroundColor: "#F2F1F0",

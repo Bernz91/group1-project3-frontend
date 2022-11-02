@@ -20,6 +20,7 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import InfoModal from "./InfoModal";
 import MeasurementModal from "./MeasurementModel";
+import { Typography } from "@mui/material";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -40,21 +41,27 @@ const OrderTable = (props) => {
           <Grid>
             <CardMedia
               component="img"
-              sx={{ height: "20%", width: "20%" }}
+              sx={{ height: "25vh", width: "25vw" }}
               image={item["fabric"].imageOne}
               alt={item["fabric"].description}
             />
-            <InfoModal item={item} />
-            <MeasurementModal measurements={measurements} />
+        
+            {/* <MeasurementModal measurements={measurements} /> */}
           </Grid>
         </TableCell>
-        <TableCell component="th" scope="row" align="center">
-          <Box>{item.quantity}</Box>
+        <TableCell component="th" scope="row" align="left">
+          <InfoModal item={item} sx = {{p:-1}} />
+          <Box sx ={{m: 0}}>
+          <Typography variant = "overline" sx= {{lineHeight:0, fontFamily: 'Monospace'}} >Quantity: {item.quantity}</Typography>
+          </Box>
+          <Box>
+          <Typography variant = "overline" sx= {{lineHeight:0, fontFamily: 'Monospace'}} >Single Price: ${item.singleprice}</Typography>
+          </Box>
+          <Box>
+          <Typography variant = "overline" sx= {{lineHeight:0, fontFamily: 'Monospace' }} >Total Price: ${item.totalprice}</Typography>
+          </Box>
         </TableCell>
-        <TableCell align="center">
-          <Box>{item.singleprice}</Box>
-        </TableCell>
-        <TableCell align="center">{item.totalprice}</TableCell>
+    
       </TableRow>
     </>
   );
