@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import "../CSS/User.css";
+import { useUserContext } from "../Context/UserContextProvider";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -17,6 +18,8 @@ const UserProfileForm = ({ userDetails }) => {
   } = useForm({ mode: "onTouched" });
 
   const [email, setEmail] = useState();
+  const { userProfile } = useUserContext();
+  const [userProfileDetails, setUserDetails] = userProfile;
 
   const { getAccessTokenSilently } = useAuth0();
 
@@ -29,6 +32,7 @@ const UserProfileForm = ({ userDetails }) => {
         setValue("shippingAddress", userDetails.shippingAddress);
       userDetails.email && setEmail(userDetails.email);
     }
+    setUserDetails(userDetails);
   }, [userDetails]);
 
   const onSubmit = async (data) => {

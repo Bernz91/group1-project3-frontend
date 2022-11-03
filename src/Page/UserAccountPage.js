@@ -92,7 +92,12 @@ const UserAccountPage = () => {
               </Button>
             </Grid2>
             <Grid2 xs={6} className="orderHistoryButtonGrid">
-              <Button variant="contained">Order History </Button>
+              <Button
+                variant="contained"
+                onClick={() => navigate("/OrderSummary")}
+              >
+                Order History{" "}
+              </Button>
             </Grid2>
           </Grid2>
           <br />
