@@ -85,6 +85,7 @@ const Header = () => {
         </Grid2>
         <Grid2 xs={1} className="userDiv">
           <PersonOutlineOutlinedIcon
+            id="basic-icon"
             aria-controls={open ? "basic-menu" : undefined}
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
@@ -96,7 +97,7 @@ const Header = () => {
             open={open}
             onClose={handleClose}
             MenuListProps={{
-              "aria-labelledby": "basic-button",
+              "aria-labelledby": "basic-icon",
             }}
           >
             {user && (
