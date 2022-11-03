@@ -87,6 +87,43 @@ const Header = () => {
             aria-expanded={open ? "true" : undefined}
             onClick={handleClick}
           />
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem
+              onClick={() => {
+                navigate("/userProfile");
+                handleClose();
+              }}
+            >
+              My account
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                navigate("/sizeProfile");
+                handleClose();
+              }}
+            >
+              Size Profile
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                navigate("/OrderSummary");
+                handleClose();
+              }}
+            >
+              Order History
+            </MenuItem>
+            <MenuItem>
+              <Logout />
+            </MenuItem>
+          </Menu>
         </Grid2>
         <Grid2 xs={1}>
           <Badge
@@ -95,44 +132,6 @@ const Header = () => {
             onClick={() => navigate("/ShoppingCart")}
           >
             <ShoppingBagOutlinedIcon />
-
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem
-                onClick={() => {
-                  navigate("/userProfile");
-                  handleClose();
-                }}
-              >
-                My account
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  navigate("/sizeProfile");
-                  handleClose();
-                }}
-              >
-                Size Profile
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  navigate("/orderHistory");
-                  handleClose();
-                }}
-              >
-                Order History
-              </MenuItem>
-              <MenuItem>
-                <Logout />
-              </MenuItem>
-            </Menu>
           </Badge>
         </Grid2>
         <Grid2 xs={0.5}></Grid2>
