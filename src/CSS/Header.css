@@ -9,6 +9,14 @@
 }
 
 .headerLogo {
-  align-content: center;
   text-align: center;
+  align-self: center;
+}
+
+.userDiv {
+  text-align: center;
+}
+
+.shoppingCartDiv {
+  text-align: right;
 }

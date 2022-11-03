@@ -6,8 +6,10 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router";
 
 const RedirectLogin = () => {
+  //   let navigate = useNavigate();
   const { loginWithRedirect } = useAuth0();
   return (
     <Container display="center" align="center" sx={{ m: 1 }}>
