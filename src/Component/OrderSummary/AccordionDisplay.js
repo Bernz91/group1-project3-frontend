@@ -73,11 +73,6 @@ const AccordionDisplay = (props) => {
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1"
           id="panel1"
-          sx={
-            {
-              // bgcolor: `${backgrdColor}`,
-            }
-          }
         >
           <Box sx={{ p: 0 }}>
             <Grid>

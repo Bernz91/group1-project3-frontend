@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import Grid2 from "@mui/material/Unstable_Grid2"; // Grid version 2
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-import { useUserContext } from "../Context/UserContext";
+import { useUserContext } from "../Context/UserContextProvider";
 
 const RegisterPage = () => {
   const {
@@ -14,14 +14,14 @@ const RegisterPage = () => {
     watch,
   } = useForm({ mode: "onTouched" });
 
-  const { setUser } = useUserContext();
+  // const { setUser } = useUserContext();
 
   const password = useRef({});
   password.current = watch("password", "");
 
   const onSubmit = (data) => {
     // to put the authO here
-    setUser(data);
+    // setUser(data);
   };
 
   return (

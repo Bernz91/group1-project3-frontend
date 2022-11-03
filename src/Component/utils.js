@@ -51,19 +51,6 @@ export const getMeasurementId = async (userId) => {
   }
 };
 
-// const getMeasurementId = async (userId) => {
-//   try {
-//     await axios.get(`${BACKEND_URL}/users/${userId}/measurements`)
-//     .then ((res) => res.data)
-//     .then ((res) => {
-//       console.log(res[0].id)
-//       return res[0].id
-//     })
-//   } catch (err) {
-//     return null
-//   }
-// }
-
 export const postOrderDetails = (accessToken, orderId, orders) => {
   orders.map((order) => {
     axios.post(
@@ -102,15 +89,7 @@ export const deleteAllWishlists = (accessToken, userId) => {
   });
 };
 
-// export const updateCartlength = (userId) => {
-//   axios
-//     .get(`${BACKEND_URL}/users/${userId}/wishlists/`)
-//     .then((res) => res.data)
-//     .then((res) => {
-//       console.log("length", res.length);
-//       return res.length;
-//     });
-// };
+
 
 export const concatStr = (array = []) => {
   let str = "";

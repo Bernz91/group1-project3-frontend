@@ -24,6 +24,7 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 import { useAuth0 } from "@auth0/auth0-react";
 import CircularIndeterminate from "../Component/ShoppingCart/CheckOutComponent/CircularProgress";
 import RedirectLogin from "../Component/RedirectLogin";
+import { useUserContext } from "../Context/UserContextProvider";
 
 const ShoppingCartPage = () => {
   let navigate = useNavigate();
@@ -31,16 +32,16 @@ const ShoppingCartPage = () => {
   const [cart, setCart] = useState([]);
   const [totalCost, setTotalCost] = useState();
   const [totalQuantity, setTotalQuantity] = useState();
-  // const [isLoading, setLoading] = useState(true);
   const [change, setChange] = useState(true);
   const [measurementOptions, setMeasurementOptions] = useState([]);
   const [measurementId, setMeasurementId] = useState(null);
 
+  const { shop } = useUserContext();
+  const [shoppingCart, setShoppingCart] = shop;
+
   //auth0
   const { user, getAccessTokenSilently, isAuthenticated, isLoading } =
     useAuth0();
-  // const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
-  // const USERID = user.sub;
 
   useEffect(() => {
     const getWishlists = async () => {
@@ -83,6 +84,7 @@ const ShoppingCartPage = () => {
               });
               console.log("newItems", newItems);
               setCart(newItems);
+              setShoppingCart(newItems.length);
               // setLoading(false);
             });
           setChange(false);
@@ -96,18 +98,6 @@ const ShoppingCartPage = () => {
       getWishlists();
     }
   }, [user, change]);
-
-  // get all the measurements from measurement profile
-  // useEffect(() => {
-  //   axios
-  //     .get(`${BACKEND_URL}/users/${USERID}/measurements`)
-  //     .then((res) => res.data)
-  //     .then((res) => {
-  //       setMeasurementOptions(res);
-  //     });
-  // }, []);
-
-  // console.log(measurementOptions);
 
   useEffect(() => {
     const handleCalculateTotalCost = (cart) => {
@@ -173,23 +163,6 @@ const ShoppingCartPage = () => {
     setChange(true);
   };
 
-  // const handleIdChange = (e) => {
-  //   console.log(e.target.value);
-  //   setMeasurementId(e.target.value);
-  //   console.log("something changed");
-  // };
-
-  // console.log("measurement id", measurementId);
-
-  // const handleSetMeasurementId = (e) => {
-  //   e.preventDefault();
-  //   console.log(e);
-  //   const currWishlistId = e.target.id;
-  //   const newCartCopy = [...cart];
-  //   newCartCopy[currWishlistId].measurementId = measurementId;
-  //   setCart(newCartCopy);
-  // };
-  // console.log(change);
   if (isLoading) {
     return <CircularIndeterminate />;
   }

@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 
 const AddressForm = (props) => {
   const details = props.shipmentDetails;
+
   return (
     <Box
       component="form"
@@ -62,18 +63,6 @@ const AddressForm = (props) => {
               onChange={props.handleShipmentChange}
             />
           </Grid>
-          {/* <Grid item xs={12}>
-            <TextField
-              id="address2"
-              name="address2"
-              label="Address line 2"
-              fullWidth
-              autoComplete="shipping address-line2"
-              variant="standard"
-              defaultValue={details.address2}
-              onChange={props.handleShipmentChange}
-            />
-          </Grid> */}
           <Grid item xs={12} sm={6}>
             <TextField
               required

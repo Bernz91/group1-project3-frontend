@@ -16,7 +16,7 @@ const AlertMessageDialog = (props) => {
     <div>
       <Dialog
         id={props.id}
-        fullScreen={fullScreen}
+        // fullScreen={fullScreen}
         open={props.open}
         onClose={props.handleClose}
         aria-labelledby="responsive-dialog-title"
@@ -31,7 +31,14 @@ const AlertMessageDialog = (props) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={()=> {props.handleRemoveCartId();props.handleClose()}} color = "error">
+          <Button
+            autoFocus
+            onClick={() => {
+              props.handleRemoveCartId();
+              props.handleClose();
+            }}
+            color="error"
+          >
             Delete
           </Button>
           <Button onClick={props.handleClose} autoFocus>
