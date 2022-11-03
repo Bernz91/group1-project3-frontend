@@ -22,42 +22,57 @@ import {
   deleteWishlist,
 } from "../Component/utils";
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const OrderSummaryPage = () => {
   const [orders, setOrders] = useState([]);
   const [orderDetails, setOrderDetails] = useState([]);
-
-  //   const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
-  //   useAuth0();
-
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
   const [change, setChange] = useState(true);
+  const { user, getAccessTokenSilently } = useAuth0();
+  // const USERID = user.sub
 
   useEffect(() => {
-    axios
-      .get(`${BACKEND_URL}/orders/${USERID}/`)
-      .then((res) => res.data)
-      .then((res) => {
-        console.log(res);
-        const allOrders = extractArr(res, [
-          "id",
-          "shippingAddress",
-          "status",
-          "createdAt",
-          "quantity",
-          "order_details",
-        ]);
-
-        setOrders(allOrders);
-        // console.log(orders);
-      });
+    const getAllOrders = async () => {
+      try {
+        const accessToken = await getAccessTokenSilently({
+          audience: "https://group1-project3/api",
+          scope: "read:current_user",
+        });
+        await axios
+          .get(`${BACKEND_URL}/orders/${USERID}/`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+          .then((res) => res.data)
+          .then((res) => {
+            console.log(res);
+            const allOrders = extractArr(res, [
+              "id",
+              "shippingAddress",
+              "status",
+              "createdAt",
+              "quantity",
+              "order_details",
+            ]);
+            setOrders(allOrders);
+            // console.log(orders);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getAllOrders();
   }, []);
-
-  console.log(orders);
 
   return (
     <Container>
-      <Typography variant="h5" align="left" sx={{ mt: 3, ml: 3, fontWeight: "bold" }}>
+      <Typography
+        variant="h5"
+        align="left"
+        sx={{ mt: 3, ml: 3, fontWeight: "bold" }}
+      >
         My orders
       </Typography>
 

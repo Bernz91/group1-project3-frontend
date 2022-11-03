@@ -45,23 +45,35 @@ const OrderTable = (props) => {
               image={item["fabric"].imageOne}
               alt={item["fabric"].description}
             />
-        
-            {/* <MeasurementModal measurements={measurements} /> */}
           </Grid>
         </TableCell>
         <TableCell component="th" scope="row" align="left">
-          <InfoModal item={item}  />
-          <Box sx ={{m: 0}}>
-          <Typography variant = "overline" sx= {{lineHeight:0, fontFamily: 'Monospace'}} >Quantity: {item.quantity}</Typography>
+          <InfoModal item={item} />
+          <Box sx={{ m: 0 }}>
+            <Typography
+              variant="overline"
+              sx={{ lineHeight: 0, fontFamily: "Monospace" }}
+            >
+              Quantity: {item.quantity}
+            </Typography>
           </Box>
           <Box>
-          <Typography variant = "overline" sx= {{lineHeight:0, fontFamily: 'Monospace'}} >Single Price: ${item.singleprice}</Typography>
+            <Typography
+              variant="overline"
+              sx={{ lineHeight: 0, fontFamily: "Monospace" }}
+            >
+              Single Price: ${item.singleprice}
+            </Typography>
           </Box>
           <Box>
-          <Typography variant = "overline" sx= {{lineHeight:0, fontFamily: 'Monospace' }} >Total Price: ${item.totalprice}</Typography>
+            <Typography
+              variant="overline"
+              sx={{ lineHeight: 0, fontFamily: "Monospace" }}
+            >
+              Total Price: ${item.totalprice}
+            </Typography>
           </Box>
         </TableCell>
-    
       </TableRow>
     </>
   );

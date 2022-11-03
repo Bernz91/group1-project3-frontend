@@ -18,10 +18,9 @@ import Link from "@mui/material/Link";
 import InfoModal from "../OrderSummary/InfoModal";
 import MeasurementModal from "./MeasurementModal";
 import { AddBoxOutlined } from "@mui/icons-material";
-import Grid from '@mui/material/Grid';
-import Grid2 from '@mui/material/Unstable_Grid2';
+import Grid from "@mui/material/Grid";
+import Grid2 from "@mui/material/Unstable_Grid2";
 import { Typography } from "@mui/material";
-
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -59,7 +58,9 @@ const CartTable = (props) => {
           />
         </TableCell>
         <TableCell variant="body" component="th" scope="row">
-          <Typography sx = {{ml :0,fontWeight: "bold" }}>Price: ${item["fabric"].cost}</Typography>
+          <Typography sx={{ ml: 0, fontWeight: "bold" }}>
+            Price: ${item.price}
+          </Typography>
           <Box>
             {/* <MeasurementModal
               measurementOptions={props.measurementOptions}
@@ -72,10 +73,10 @@ const CartTable = (props) => {
           {/* <Box>
             <Link href="#">Edit shirt design</Link>
           </Box> */}
-          <Box sx = {{m:0}}>
+          <Box sx={{ m: 0 }}>
             <InfoModal item={item} />
           </Box>
-          <ButtonGroup sx = {{ml :0, mt: 0.5}}>
+          <ButtonGroup sx={{ ml: 0, mt: 0.5 }}>
             <Button
               style={{
                 backgroundColor: "#F2F1F0",
@@ -100,7 +101,7 @@ const CartTable = (props) => {
               style={{
                 backgroundColor: "#F2F1F0",
               }}
-              variant = "contained"
+              variant="contained"
               sx={{
                 color: "black",
                 borderRadius: 0,
@@ -119,10 +120,10 @@ const CartTable = (props) => {
         </TableCell>
         <TableCell align="right">
           <Grid>
-          <IconButton aria-label="delete" size="small">
-            <DeleteIcon onClick={() => handleClickOpen()} />
-          </IconButton>
-          <Box>${item.subtotal}</Box>
+            <IconButton aria-label="delete" size="small">
+              <DeleteIcon onClick={() => handleClickOpen()} />
+            </IconButton>
+            <Box>${item.subtotal}</Box>
           </Grid>
         </TableCell>
         {/* <TableCell align="right">${item.subtotal}</TableCell> */}

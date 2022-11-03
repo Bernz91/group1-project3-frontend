@@ -55,6 +55,14 @@ img {
   color: black;
   cursor: pointer;
 }
+.measurementCard {
+  width: 150px;
+  height: 200px;
+  margin-left: -15px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-family: "Roboto";
+}
 
 /* .likebtn {
   position: sticky;

@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import "../CSS/Fabrics.css";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from "react-router";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -20,16 +21,21 @@ const Customisation = () => {
     front: "",
     pocket: "",
     back: "",
+    measurement: "",
   });
+
+  let navigate = useNavigate();
 
   //auth0
   const { user, getAccessTokenSilently } = useAuth0();
-  console.log(user);
+  // console.log(user.sub);
+
+  // const USER = "3bab595a-78a4-48f6-b093-eea8726a796e";
 
   //handleSendToWishList will contain the axios post
-  const handleSendToWishList = () => {
-    const getAccessToken = getAccessTokenSilently();
-    axios({
+  const handleSendToWishList = async () => {
+    const getAccessToken = await getAccessTokenSilently();
+    await axios({
       method: "post",
       url: `${BACKEND_URL}/wishlists`,
       headers: {
@@ -43,6 +49,7 @@ const Customisation = () => {
         frontId: sendToWishlist.front.id,
         pocketId: sendToWishlist.pocket.id,
         backId: sendToWishlist.back.id,
+        measurementId: sendToWishlist.measurement.id,
       },
     });
   };
@@ -55,6 +62,30 @@ const Customisation = () => {
   //       setFabrics(res);
   //     });
   // };
+
+  //measurement
+  const [measurement, setMeasurement] = useState([]);
+  useEffect(() => {
+    const getMeasurements = async () => {
+      const getAccessToken = await getAccessTokenSilently();
+      try {
+        await axios
+          .get(`${BACKEND_URL}/users/${user.sub}/measurements`, {
+            headers: {
+              Authorization: `Bearer ${getAccessToken}`,
+            },
+          })
+          .then((res) => res.data)
+          .then((res) => {
+            console.log(res);
+            setMeasurement(res);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getMeasurements();
+  }, []);
 
   //fabrics
   const [fabrics, setFabrics] = useState([]);
@@ -161,7 +192,8 @@ const Customisation = () => {
           We are sending to wishlist {sendToWishlist?.fabric.fabricName},{" "}
           {sendToWishlist?.collar.collarName},{sendToWishlist?.cuff.cuffName},
           {sendToWishlist?.front.frontName},{sendToWishlist?.pocket.pocketName},
-          {sendToWishlist?.back.backName}.
+          {sendToWishlist?.back.backName},
+          {sendToWishlist?.measurement.categoryByUser}.
         </div>
 
         <Button
@@ -441,6 +473,94 @@ const Customisation = () => {
           );
         })}
       </div>
+      <div>
+        <Typography variant="Overline" color="black">
+          Step Seven: Choose your size profile
+        </Typography>
+      </div>
+      {measurement !== "" ? (
+        <div className="container">
+          {measurement.map((measurement, index) => {
+            return (
+              <Card key={index} sx={{ maxWidth: 250 }}>
+                <div>
+                  <CardActions>
+                    <ul className="measurementCard">
+                      <CardContent
+                        sx={{ m: -3, width: "150px", height: "200px" }}
+                        onClick={(event) => {
+                          setSendToWishlist({
+                            ...sendToWishlist,
+                            measurement: measurement,
+                          });
+                          console.log(measurement);
+                        }}
+                      >
+                        <Typography
+                          variant="overline"
+                          fontWeight="regular"
+                          component="div"
+                          lineHeight="2"
+                        >
+                          Category: {measurement.categoryByUser}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Collar: {measurement.collar}
+                          {measurement.measurementType}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Shoulders: {measurement.shoulders}
+                          {measurement.measurementType}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Chest: {measurement.chest}
+                          {measurement.measurementType}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Waist: {measurement.waist}
+                          {measurement.measurementType}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Sleeves Length: {measurement.sleevesLength}
+                          {measurement.measurementType}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Sleeves Width: {measurement.sleevesWidth}
+                          {measurement.measurementType}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Elbow: {measurement.elbow}
+                          {measurement.measurementType}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Left cuff: {measurement.leftCuff}
+                          {measurement.measurementType}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Right cuff: {measurement.rightCuff}
+                          {measurement.measurementType}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Shirt Length: {measurement.shirtLength}
+                          {measurement.measurementType}
+                        </Typography>
+                      </CardContent>
+                    </ul>
+                  </CardActions>
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+      ) : (
+        <Button
+          variant="contained"
+          onClick={() => navigate("/sizeprofile")}
+          sx={{ m: 2 }}
+        >
+          Set up your size profile here
+        </Button>
+      )}
     </div>
   );
 };
