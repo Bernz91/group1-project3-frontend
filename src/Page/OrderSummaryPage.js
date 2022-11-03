@@ -21,16 +21,19 @@ import {
   calcQuantity,
   deleteWishlist,
 } from "../Component/utils";
+import CircularIndeterminate from "../Component/ShoppingCart/CheckOutComponent/CircularProgress";
+import RedirectLogin from "../Component/RedirectLogin";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const OrderSummaryPage = () => {
   const [orders, setOrders] = useState([]);
   const [orderDetails, setOrderDetails] = useState([]);
-  const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
+  // const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
   const [change, setChange] = useState(true);
-  const { user, getAccessTokenSilently } = useAuth0();
-  // const USERID = user.sub
+  const { user, getAccessTokenSilently, isAuthenticated, isLoading } =
+    useAuth0();
+  // const USERID = user.sub;
 
   useEffect(() => {
     const getAllOrders = async () => {
@@ -40,7 +43,7 @@ const OrderSummaryPage = () => {
           scope: "read:current_user",
         });
         await axios
-          .get(`${BACKEND_URL}/orders/${USERID}/`, {
+          .get(`${BACKEND_URL}/orders/${user.sub}/`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
@@ -66,32 +69,44 @@ const OrderSummaryPage = () => {
     getAllOrders();
   }, []);
 
-  return (
-    <Container>
-      <Typography
-        variant="h5"
-        align="left"
-        sx={{ mt: 3, ml: 3, fontWeight: "bold" }}
-      >
-        My orders
-      </Typography>
+  if (isLoading) {
+    return <CircularIndeterminate />;
+  }
 
-      {orders.length !== 0 ? (
-        <Container>
-          {orders.map((order, i) => {
-            return (
-              <AccordionDisplay
-                order={order}
-                orderDetails={orderDetails}
-                key={i}
-              />
-            );
-          })}
-        </Container>
+  return (
+    <>
+      {!isAuthenticated ? (
+        <>
+          <RedirectLogin />
+        </>
       ) : (
-        <EmptyOrder />
+        <Container>
+          <Typography
+            variant="h5"
+            align="left"
+            sx={{ mt: 3, ml: 3, fontWeight: "bold" }}
+          >
+            My orders
+          </Typography>
+
+          {orders.length !== 0 ? (
+            <Container>
+              {orders.map((order, i) => {
+                return (
+                  <AccordionDisplay
+                    order={order}
+                    orderDetails={orderDetails}
+                    key={i}
+                  />
+                );
+              })}
+            </Container>
+          ) : (
+            <EmptyOrder />
+          )}
+        </Container>
       )}
-    </Container>
+    </>
   );
 };
 
