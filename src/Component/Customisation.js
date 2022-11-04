@@ -54,8 +54,12 @@ const Customisation = () => {
         },
       });
       //if successful, action here
+      alert("Successfully added to wishlist!");
     } catch (error) {
       //if fail, will go to here
+      alert(
+        "Please ensure all the selections have been made before adding to wishlist."
+      );
     }
   };
 
