@@ -15,23 +15,32 @@ import MenuItem from "@mui/material/MenuItem";
 import "../CSS/Header.css";
 import Logout from "./Logout";
 import Login from "./Login";
-import { useAdminContext } from "../Context/AdminContex";
+import { useAdminContext } from "../Context/AdminContext";
+import { useUserContext } from "../Context/UserContext";
+import { useShoppingCartContext } from "../Context/ShoppingCartContext";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 // const USERID = "834fc3ef-6ccc-4ba4-a54e-1a75387da94f";
 
 const Header = () => {
   let navigate = useNavigate();
-  const [cartlength, setCartLength] = useState();
-  const [isRegistering, setRegistering] = useState(false);
+
+  // user
   const { user, getAccessTokenSilently } = useAuth0();
+  const [isRegistering, setRegistering] = useState(false);
   const { setAdmin } = useAdminContext();
+  const { userDetails, setUserDetails } = useUserContext();
+
+  //shopping cart
+  const { setShoppingCart } = useShoppingCartContext();
+  const [cartlength, setCartLength] = useState();
 
   useEffect(() => {
-    const getCartLength = async () => {
+    const getShoppingCart = async () => {
       // to be activated once the userAutho is ready (Zi Hao side)
       // samuel, this needs to be activated when user add item into cart also. maybe use useContext for this one. when user log in, axios.get shopping cart --> then pass the .length here.
       if (user) {
+        //admin role
         if (user.sub === process.env.REACT_APP_ADMIN_ID_ONE) {
           setAdmin(true);
         }
@@ -52,6 +61,7 @@ const Header = () => {
             })
             .then((res) => res.data)
             .then((res) => {
+              setShoppingCart(res);
               setCartLength(res.length);
             });
 
@@ -86,6 +96,7 @@ const Header = () => {
                   console.log(e);
                 }
               } else {
+                setUserDetails(res);
                 setRegistering(false);
               }
             });
@@ -94,8 +105,8 @@ const Header = () => {
         }
       }
     };
-    getCartLength();
-  }, [user, isRegistering]);
+    getShoppingCart();
+  }, [user, isRegistering, userDetails]);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -169,7 +180,7 @@ const Header = () => {
             {user && (
               <MenuItem
                 onClick={() => {
-                  navigate("/orderHistory");
+                  navigate("/OrderSummary");
                   handleClose();
                 }}
               >

@@ -3,7 +3,7 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import "../CSS/homePage.css";
 import { useNavigate } from "react-router";
 import { Button } from "@mui/material";
-import { useAdminContext } from "../Context/AdminContex";
+import { useAdminContext } from "../Context/AdminContext";
 
 const Home = () => {
   let navigate = useNavigate();

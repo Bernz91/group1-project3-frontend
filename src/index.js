@@ -5,7 +5,8 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { UserContextProvider } from "./Context/UserContext";
-import { AdminContextProvider } from "./Context/AdminContex";
+import { AdminContextProvider } from "./Context/AdminContext";
+import { ShoppingCartContextProvider } from "./Context/ShoppingCartContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -18,9 +19,11 @@ root.render(
   >
     <BrowserRouter>
       <AdminContextProvider>
-        <UserContextProvider>
-          <App />
-        </UserContextProvider>
+        <ShoppingCartContextProvider>
+          <UserContextProvider>
+            <App />
+          </UserContextProvider>
+        </ShoppingCartContextProvider>
       </AdminContextProvider>
     </BrowserRouter>
   </Auth0Provider>

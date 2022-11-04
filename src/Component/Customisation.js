@@ -28,7 +28,6 @@ const Customisation = () => {
 
   //auth0
   const { user, getAccessTokenSilently } = useAuth0();
-  // console.log(user.sub);
 
   // const USER = "3bab595a-78a4-48f6-b093-eea8726a796e";
 
@@ -86,6 +85,8 @@ const Customisation = () => {
     };
     getMeasurements();
   }, []);
+
+  console.log(measurement);
 
   //fabrics
   const [fabrics, setFabrics] = useState([]);
@@ -478,7 +479,7 @@ const Customisation = () => {
           Step Seven: Choose your size profile
         </Typography>
       </div>
-      {measurement !== "" ? (
+      {measurement.length !== 0 ? (
         <div className="container">
           {measurement.map((measurement, index) => {
             return (

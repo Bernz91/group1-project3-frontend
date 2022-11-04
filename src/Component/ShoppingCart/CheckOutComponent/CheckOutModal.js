@@ -28,17 +28,11 @@ import {
 } from "../../utils";
 import { useNavigate } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useUserContext } from "../../../Context/UserContext";
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const CheckOutModal = (props) => {
-  // console.log(props.orders);
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
   const { user, getAccessTokenSilently } = useAuth0();
-  // const USERID = user.sub
-
-  // const USERID = "3b898f23-1f1a-492f-8481-860c9982ef3b";
-  const USERID = "3bab595a-78a4-48f6-b093-eea8726a796e";
-  const navigate = useNavigate();
-
   const orders = props.orders;
   console.log(orders);
   const totalCost = props.totalCost;
@@ -65,8 +59,9 @@ const CheckOutModal = (props) => {
     cardNumber: "",
     expDate: "",
     cvv: "",
-    saveCard: "",
   });
+  const { userProfile } = useUserContext();
+  // const [userDetails, setUserDetails] = userProfile;
   const [shipmentDetails, setShipmentDetails] = useState({
     firstName: "",
     lastName: "",
@@ -75,7 +70,6 @@ const CheckOutModal = (props) => {
     state: "",
     zip: "",
     country: "",
-    saveAddress: "",
   });
   const [orderId, setOrderId] = useState();
 
@@ -181,7 +175,7 @@ const CheckOutModal = (props) => {
           `${BACKEND_URL}/orders/`,
           {
             paymentId: 1,
-            userId: USERID,
+            userId: user.sub,
             quantity: totalQuantity,
             subtotal: totalCost,
             shippingFee: 0,
@@ -203,7 +197,7 @@ const CheckOutModal = (props) => {
           // console.log("passed");
         })
         .then(async (res) => {
-          await deleteAllWishlists(accessToken, USERID);
+          await deleteAllWishlists(accessToken, user.sub);
           handleNext();
         })
         .catch((error) => {
