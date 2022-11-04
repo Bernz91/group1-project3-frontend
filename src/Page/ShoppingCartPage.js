@@ -16,6 +16,7 @@ import {
   calcTotalCost,
   calcQuantity,
   deleteWishlist,
+  getUserDetails,
 } from "../Component/utils";
 import { useNavigate } from "react-router";
 import { Typography } from "@mui/material";
@@ -35,7 +36,15 @@ const ShoppingCartPage = () => {
   const [change, setChange] = useState(true);
   const [measurementOptions, setMeasurementOptions] = useState([]);
   const [measurementId, setMeasurementId] = useState(null);
-
+  const [shipmentDetails, setShipmentDetails] = useState({
+    firstName: "",
+    lastName: "",
+    address1: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: "",
+  });
   const { shoppingCart, setShoppingCart } = useShoppingCartContext();
 
   //auth0
@@ -81,12 +90,23 @@ const ShoppingCartPage = () => {
                   subtotal: calcTotalCost(item),
                 };
               });
-              console.log("newItems", newItems);
+              // console.log("newItems", newItems);
               setCart(newItems);
               setShoppingCart(res);
               // setLoading(false);
             });
           setChange(false);
+          await axios
+            .get(`${BACKEND_URL}/users/${user.sub}`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            })
+            .then((res) => res.data)
+            .then((res) => {
+              setShipmentDetails ()
+              console.log(res);
+            });
         } catch (e) {
           console.log(e);
         }
@@ -187,40 +207,6 @@ const ShoppingCartPage = () => {
             ) : (
               <Box>
                 <Table aria-label="simple table">
-                  {/* <TableHead> */}
-                  {/* <TableRow>
-            <TableCell variant="head">Product Name</TableCell>
-            <TableCell></TableCell>
-            <TableCell
-              variant="head"
-              // align="right"
-              sx={{ textAlign: "center" }}
-            >
-              Price
-            </TableCell>
-            <TableCell
-              variant="head"
-              // align="right"
-              sx={{ textAlign: "center" }}
-            >
-              Quantity
-            </TableCell>
-            <TableCell
-              variant="head"
-              // align="right"
-              sx={{ textAlign: "center" }}
-            ></TableCell>
-            <TableCell
-              variant="head"
-              // align="right"
-              sx={{ textAlign: "center" }}
-            >
-              Total
-            </TableCell>
-          </TableRow> */}
-                  {/* </TableHead> */}
-
-                  {/* <TableBody> */}
                   {cart.map((item, index) => {
                     // console.log(item);
                     return (
@@ -240,13 +226,10 @@ const ShoppingCartPage = () => {
                           handleCalculateSubtotal={() =>
                             handleCalculateSubtotal(cart, index)
                           }
-                          // handleSetMeasurementId={(e) => handleSetMeasurementId(e)}
-                          // handleIdChange={(e) => handleIdChange(e)}
                         />
                       </>
                     );
                   })}
-                  {/* </TableBody> */}
                 </Table>
                 <Divider />
                 <CheckOutComponent totalCost={totalCost} />

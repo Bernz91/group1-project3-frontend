@@ -6,11 +6,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import Button from "@mui/material/Button";
 import NewSizeForm from "../Component/NewSizeForm";
 import "../CSS/SizeProfilePage.css";
+import RedirectLogin from "../Component/RedirectLogin";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const SizeProfilePage = () => {
-  const { user, getAccessTokenSilently } = useAuth0();
+  const { user, getAccessTokenSilently, isAuthenticated } = useAuth0();
   const [sizeProfiles, setSizeProfiles] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [isAdd, setAdd] = useState(false);
@@ -84,13 +85,14 @@ const SizeProfilePage = () => {
     } else setAdd((prevState) => !prevState);
   };
 
-  if (isLoading) {
-    return <div>Loading</div>;
+  if (!isAuthenticated && isLoading) {
+    return <RedirectLogin />;
+  } else if (isLoading) {
+    return <div>Loading....</div>;
   }
 
   return (
     <div>
-      <br />
       <div align="middle">
         <Grid2 container columnSpacing={2} rowSpacing={2}>
           <Grid2 xs={12}>
@@ -125,7 +127,9 @@ const SizeProfilePage = () => {
               >
                 {/* Size Profile Card */}
                 <Grid2 xs={10.5}>
-                  <label className="sizeProfileCategoryName">Category: {size.categoryByUser}</label>
+                  <label className="sizeProfileCategoryName">
+                    Category: {size.categoryByUser}
+                  </label>
                 </Grid2>
                 <Grid2 xs={1.5}>
                   <CloseIcon

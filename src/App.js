@@ -36,7 +36,11 @@ const App = () => {
             element={"to add page for individual fabric"}
           />
           <Route path="ShoppingCart" element={<ShoppingCartPage />} />
-          <Route path="EditShirtDesign" element={<EditShirtDesignPage />} />
+          {/* <Route path="EditShirtDesign" element={<EditShirtDesignPage />} /> */}
+          <Route
+            path="EditShirtDesign/:wishlistId"
+            element={<EditShirtDesignPage />}
+          />
           <Route path="OrderSummary" element={<OrderSummaryPage />} />
           <Route path="*" element={"Nothing here!"} />
         </Route>
