@@ -3,9 +3,11 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import "../CSS/homePage.css";
 import { useNavigate } from "react-router";
 import { Button } from "@mui/material";
+import { useAdminContext } from "../Context/AdminContex";
 
 const Home = () => {
   let navigate = useNavigate();
+  const { admin } = useAdminContext();
 
   return (
     <div className="howItWorksMainDiv">
@@ -16,9 +18,16 @@ const Home = () => {
           </div>
           <br />
           <div className="mainPageButton" align="middle">
-            <Button variant="contained" onClick={() => navigate("/howItWorks")}>
-              How it works
-            </Button>
+            {admin ? (
+              <div>Admin Page</div>
+            ) : (
+              <Button
+                variant="contained"
+                onClick={() => navigate("/howItWorks")}
+              >
+                How it works
+              </Button>
+            )}
           </div>
         </Grid2>
       </Grid2>

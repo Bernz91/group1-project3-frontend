@@ -78,7 +78,7 @@ const UserProfileForm = ({ userDetails }) => {
               {...register("firstName", {
                 required: "⚠ Required",
                 pattern: {
-                  value: /^[-a-zA-Z@.+_]+$/i,
+                  value: /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/,
                   message: "⚠ Please enter a valid first name",
                 },
               })}

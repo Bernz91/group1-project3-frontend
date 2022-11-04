@@ -15,6 +15,7 @@ import MenuItem from "@mui/material/MenuItem";
 import "../CSS/Header.css";
 import Logout from "./Logout";
 import Login from "./Login";
+import { useAdminContext } from "../Context/AdminContex";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 // const USERID = "834fc3ef-6ccc-4ba4-a54e-1a75387da94f";
@@ -22,18 +23,27 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const Header = () => {
   let navigate = useNavigate();
   const [cartlength, setCartLength] = useState();
+  const [isRegistering, setRegistering] = useState(false);
   const { user, getAccessTokenSilently } = useAuth0();
+  const { setAdmin } = useAdminContext();
 
   useEffect(() => {
     const getCartLength = async () => {
       // to be activated once the userAutho is ready (Zi Hao side)
       // samuel, this needs to be activated when user add item into cart also. maybe use useContext for this one. when user log in, axios.get shopping cart --> then pass the .length here.
       if (user) {
+        if (user.sub === process.env.REACT_APP_ADMIN_ID_ONE) {
+          setAdmin(true);
+        }
+        if (user.sub !== process.env.REACT_APP_ADMIN_ID_ONE) {
+          setAdmin(false);
+        }
         try {
           const accessToken = await getAccessTokenSilently({
             audience: "https://group1-project3/api",
             scope: "read:current_user",
           });
+
           await axios
             .get(`${BACKEND_URL}/users/${user.sub}/wishlists/`, {
               headers: {
@@ -44,13 +54,48 @@ const Header = () => {
             .then((res) => {
               setCartLength(res.length);
             });
+
+          await axios
+            .get(`${BACKEND_URL}/users/${user.sub}`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            })
+            .then((res) => res.data)
+            .then((res) => {
+              if (!res) {
+                try {
+                  axios
+                    .post(
+                      `${BACKEND_URL}/users`,
+                      {
+                        id: user.sub,
+                        email: user.email,
+                      },
+                      {
+                        headers: {
+                          Authorization: `Bearer ${accessToken}`,
+                        },
+                      }
+                    )
+                    .then((response) => {
+                      console.log(response);
+                      setRegistering(true);
+                    });
+                } catch (e) {
+                  console.log(e);
+                }
+              } else {
+                setRegistering(false);
+              }
+            });
         } catch (e) {
           console.log(e);
         }
       }
     };
     getCartLength();
-  }, [user]);
+  }, [user, isRegistering]);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -66,7 +111,7 @@ const Header = () => {
       <Grid2 container columnSpacing={0} rowSpacing={0} className="header">
         <Grid2 xs={0.3}></Grid2>
         <Grid2 xs={3.2}>
-          <NavBar />
+          <NavBar user={user} />
         </Grid2>
         <Grid2 xs={5} className="headerLogo" onClick={() => navigate("/")}>
           Sew Sew Tailor

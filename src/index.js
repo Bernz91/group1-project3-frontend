@@ -5,6 +5,7 @@ import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { UserContextProvider } from "./Context/UserContext";
+import { AdminContextProvider } from "./Context/AdminContex";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -16,9 +17,11 @@ root.render(
     scope="read:current_user update:current_user_metadata"
   >
     <BrowserRouter>
-      <UserContextProvider>
-        <App />
-      </UserContextProvider>
+      <AdminContextProvider>
+        <UserContextProvider>
+          <App />
+        </UserContextProvider>
+      </AdminContextProvider>
     </BrowserRouter>
   </Auth0Provider>
 );

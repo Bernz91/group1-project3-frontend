@@ -3,16 +3,15 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Home from "./Page/HomePage";
 // import Fabrics from "./Component/DNUFabrics";
-import LoginPage from "./Page/LoginPage";
-import RegisterPage from "./Page/Register";
 import ShoppingCartPage from "./Page/ShoppingCartPage";
 import Header from "./Component/Header";
 import UserAccountPage from "./Page/UserAccountPage";
 import SizeProfilePage from "./Page/SizeProfilePage";
 import Customisation from "./Component/Customisation";
 import HowItWorksPage from "./Page/HowItWorksPage";
-import OrderSummaryPage from "./Page/OrderSummaryPage"
-import EditShirtDesignPage from "./Page/EditShirtDesignPage"
+import OrderSummaryPage from "./Page/OrderSummaryPage";
+import EditShirtDesignPage from "./Page/EditShirtDesignPage";
+import CustomerOrdersPage from "./Page/AdminPage/CustomerOrders";
 
 const App = () => {
   return (
@@ -25,6 +24,7 @@ const App = () => {
           <Route path="UserProfile" element={<UserAccountPage />} />
           <Route path="SizeProfile" element={<SizeProfilePage />} />
           <Route path="Customisation" element={<Customisation />} />
+          <Route path="CustomerOrders" element={<CustomerOrdersPage />} />
           {/* <Route path="Fabrics" element={<Fabrics />} /> */}
           <Route
             path="Fabrics/:index"
