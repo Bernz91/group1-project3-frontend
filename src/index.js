@@ -4,7 +4,9 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import "./index.css";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
-import { UserContextProvider } from "./Context/UserContextProvider";
+import { UserContextProvider } from "./Context/UserContext";
+import { AdminContextProvider } from "./Context/AdminContext";
+import { ShoppingCartContextProvider } from "./Context/ShoppingCartContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -16,9 +18,13 @@ root.render(
     scope="read:current_user update:current_user_metadata"
   >
     <BrowserRouter>
-      <UserContextProvider>
-        <App />
-      </UserContextProvider>
+      <AdminContextProvider>
+        <ShoppingCartContextProvider>
+          <UserContextProvider>
+            <App />
+          </UserContextProvider>
+        </ShoppingCartContextProvider>
+      </AdminContextProvider>
     </BrowserRouter>
   </Auth0Provider>
 );

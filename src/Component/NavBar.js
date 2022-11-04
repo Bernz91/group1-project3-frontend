@@ -11,18 +11,30 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import Logout from "./Logout";
 import Login from "./Login";
+import { useAdminContext } from "../Context/AdminContext";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const NavBar = () => {
   const [state, setState] = useState(false);
-
+  const { admin } = useAdminContext();
   const { user } = useAuth0();
 
   const toggleDrawer = () => {
     state ? setState(false) : setState(true);
   };
 
-  const navigateAddress = ["Home", "AboutUs", "HowItWorks", "Customisation", "ShoppingCart", "OrderSummary"];
+  const navigateAddressUser = [
+    "Home",
+    "AboutUs",
+    "HowItWorks",
+    "Customisation",
+  ];
+  const navigateAddressAdmin = [
+    "Home",
+    "CustomerOrders",
+    "AddFabrics",
+    "CustomDesign",
+  ];
 
   return (
     <div>
@@ -34,19 +46,36 @@ const NavBar = () => {
             onClick={toggleDrawer}
             onKeyDown={toggleDrawer}
           >
-            <List>
-              {["Home", "About Us", "How it works", "Shop", "My Cart", "My Orders"].map(
-                (text, index) => (
-                  <ListItem key={text} disablePadding>
-                    <ListItemButton>
-                      <Link to={`/${navigateAddress[index]}`}>
-                        <ListItemText primary={text} />
-                      </Link>
-                    </ListItemButton>
-                  </ListItem>
-                )
-              )}
-            </List>
+            {admin ? (
+              <List>
+                {["Home", "Customer Orders", "Add Fabrics", "Add Designs"].map(
+                  (text, index) => (
+                    <ListItem key={text} disablePadding>
+                      <ListItemButton>
+                        <Link to={`/${navigateAddressAdmin[index]}`}>
+                          <ListItemText primary={text} />
+                        </Link>
+                      </ListItemButton>
+                    </ListItem>
+                  )
+                )}
+              </List>
+            ) : (
+              <List>
+                {["Home", "About Us", "How it works", "Shop"].map(
+                  (text, index) => (
+                    <ListItem key={text} disablePadding>
+                      <ListItemButton>
+                        <Link to={`/${navigateAddressUser[index]}`}>
+                          <ListItemText primary={text} />
+                        </Link>
+                      </ListItemButton>
+                    </ListItem>
+                  )
+                )}
+              </List>
+            )}
+
             <Divider />
             <List>
               <ListItem>{user ? <Logout /> : <Login />}</ListItem>

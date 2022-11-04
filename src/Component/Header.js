@@ -15,46 +15,98 @@ import MenuItem from "@mui/material/MenuItem";
 import "../CSS/Header.css";
 import Logout from "./Logout";
 import Login from "./Login";
-import { useUserContext } from "../Context/UserContextProvider";
+import { useAdminContext } from "../Context/AdminContext";
+import { useUserContext } from "../Context/UserContext";
+import { useShoppingCartContext } from "../Context/ShoppingCartContext";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 // const USERID = "834fc3ef-6ccc-4ba4-a54e-1a75387da94f";
 
 const Header = () => {
   let navigate = useNavigate();
-  const [cartlength, setCartLength] = useState();
+
+  // user
   const { user, getAccessTokenSilently } = useAuth0();
-  const { shop } = useUserContext();
-  const [shoppingCart, setShoppingCart] = shop;
+  const [isRegistering, setRegistering] = useState(false);
+  const { setAdmin } = useAdminContext();
+  const { userDetails, setUserDetails } = useUserContext();
+
+  //shopping cart
+  const { setShoppingCart } = useShoppingCartContext();
+  const [cartlength, setCartLength] = useState();
 
   useEffect(() => {
-    setCartLength(shoppingCart);
-    // const getCartLength = async () => {
-    //   // to be activated once the userAutho is ready (Zi Hao side)
-    //   // samuel, this needs to be activated when user add item into cart also. maybe use useContext for this one. when user log in, axios.get shopping cart --> then pass the .length here.
-    //   if (user) {
-    //     try {
-    //       const accessToken = await getAccessTokenSilently({
-    //         audience: "https://group1-project3/api",
-    //         scope: "read:current_user",
-    //       });
-    //       await axios
-    //         .get(`${BACKEND_URL}/users/${user.sub}/wishlists/`, {
-    //           headers: {
-    //             Authorization: `Bearer ${accessToken}`,
-    //           },
-    //         })
-    //         .then((res) => res.data)
-    //         .then((res) => {
-    //           setCartLength(res.length);
-    //         });
-    //     } catch (e) {
-    //       console.log(e);
-    //     }
-    //   }
-    // };
-    // getCartLength();
-  }, [shoppingCart]);
+    const getShoppingCart = async () => {
+      // to be activated once the userAutho is ready (Zi Hao side)
+      // samuel, this needs to be activated when user add item into cart also. maybe use useContext for this one. when user log in, axios.get shopping cart --> then pass the .length here.
+      if (user) {
+        //admin role
+        if (user.sub === process.env.REACT_APP_ADMIN_ID_ONE) {
+          setAdmin(true);
+        }
+        if (user.sub !== process.env.REACT_APP_ADMIN_ID_ONE) {
+          setAdmin(false);
+        }
+        try {
+          const accessToken = await getAccessTokenSilently({
+            audience: "https://group1-project3/api",
+            scope: "read:current_user",
+          });
+
+          await axios
+            .get(`${BACKEND_URL}/users/${user.sub}/wishlists/`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            })
+            .then((res) => res.data)
+            .then((res) => {
+              setShoppingCart(res);
+              setCartLength(res.length);
+            });
+
+          await axios
+            .get(`${BACKEND_URL}/users/${user.sub}`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            })
+            .then((res) => res.data)
+            .then((res) => {
+              if (!res) {
+                try {
+                  axios
+                    .post(
+                      `${BACKEND_URL}/users`,
+                      {
+                        id: user.sub,
+                        email: user.email,
+                      },
+                      {
+                        headers: {
+                          Authorization: `Bearer ${accessToken}`,
+                        },
+                      }
+                    )
+                    .then((response) => {
+                      console.log(response);
+                      setRegistering(true);
+                    });
+                } catch (e) {
+                  console.log(e);
+                }
+              } else {
+                setUserDetails(res);
+                setRegistering(false);
+              }
+            });
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    };
+    getShoppingCart();
+  }, [user, isRegistering, userDetails]);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -70,7 +122,7 @@ const Header = () => {
       <Grid2 container columnSpacing={0} rowSpacing={0} className="header">
         <Grid2 xs={0.3}></Grid2>
         <Grid2 xs={3.2}>
-          <NavBar />
+          <NavBar user={user} />
         </Grid2>
         <Grid2 xs={5} className="headerLogo" onClick={() => navigate("/")}>
           Sew Sew Tailor

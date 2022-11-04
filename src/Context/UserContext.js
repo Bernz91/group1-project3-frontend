@@ -5,12 +5,8 @@ const UserContext = React.createContext();
 
 // provide context
 function UserContextProvider({ children }) {
-  const [shoppingCart, setShoppingCart] = useState();
   const [userDetails, setUserDetails] = useState();
-  const value = {
-    shop: [shoppingCart, setShoppingCart],
-    userProfile: [userDetails, setUserDetails],
-  };
+  const value = { userDetails, setUserDetails };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 }

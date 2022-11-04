@@ -24,7 +24,7 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 import { useAuth0 } from "@auth0/auth0-react";
 import CircularIndeterminate from "../Component/ShoppingCart/CheckOutComponent/CircularProgress";
 import RedirectLogin from "../Component/RedirectLogin";
-import { useUserContext } from "../Context/UserContextProvider";
+import { useUserContext } from "../Context/UserContext";
 
 const ShoppingCartPage = () => {
   let navigate = useNavigate();

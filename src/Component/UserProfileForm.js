@@ -5,11 +5,11 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import "../CSS/User.css";
-import { useUserContext } from "../Context/UserContextProvider";
+import { useUserContext } from "../Context/UserContext";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
-const UserProfileForm = ({ userDetails }) => {
+const UserProfileForm = () => {
   const {
     register,
     handleSubmit,
@@ -18,8 +18,7 @@ const UserProfileForm = ({ userDetails }) => {
   } = useForm({ mode: "onTouched" });
 
   const [email, setEmail] = useState();
-  const { userProfile } = useUserContext();
-  const [userProfileDetails, setUserDetails] = userProfile;
+  const { userDetails, setUserDetails } = useUserContext();
 
   const { getAccessTokenSilently } = useAuth0();
 
@@ -32,7 +31,6 @@ const UserProfileForm = ({ userDetails }) => {
         setValue("shippingAddress", userDetails.shippingAddress);
       userDetails.email && setEmail(userDetails.email);
     }
-    setUserDetails(userDetails);
   }, [userDetails]);
 
   const onSubmit = async (data) => {
@@ -82,7 +80,7 @@ const UserProfileForm = ({ userDetails }) => {
               {...register("firstName", {
                 required: "⚠ Required",
                 pattern: {
-                  value: /^[-a-zA-Z@.+_]+$/i,
+                  value: /^[a-zA-Z-,]+(\s{0,1}[a-zA-Z-, ])*$/,
                   message: "⚠ Please enter a valid first name",
                 },
               })}

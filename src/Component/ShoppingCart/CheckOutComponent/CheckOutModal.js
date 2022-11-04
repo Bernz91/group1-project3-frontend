@@ -28,7 +28,7 @@ import {
 } from "../../utils";
 import { useNavigate } from "react-router";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useUserContext } from "../../../Context/UserContextProvider";
+import { useUserContext } from "../../../Context/UserContext";
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const CheckOutModal = (props) => {
