@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import "../CSS/Fabrics.css";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router";
+import { Box } from "@mui/material";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -33,24 +34,33 @@ const Customisation = () => {
 
   //handleSendToWishList will contain the axios post
   const handleSendToWishList = async () => {
-    const getAccessToken = await getAccessTokenSilently();
-    await axios({
-      method: "post",
-      url: `${BACKEND_URL}/wishlists`,
-      headers: {
-        Authorization: `Bearer ${getAccessToken}`,
-      },
-      data: {
-        userId: user.sub,
-        fabricId: sendToWishlist.fabric.id,
-        collarId: sendToWishlist.collar.id,
-        cuffId: sendToWishlist.cuff.id,
-        frontId: sendToWishlist.front.id,
-        pocketId: sendToWishlist.pocket.id,
-        backId: sendToWishlist.back.id,
-        measurementId: sendToWishlist.measurement.id,
-      },
-    });
+    try {
+      const getAccessToken = await getAccessTokenSilently();
+      await axios({
+        method: "post",
+        url: `${BACKEND_URL}/wishlists`,
+        headers: {
+          Authorization: `Bearer ${getAccessToken}`,
+        },
+        data: {
+          userId: user.sub,
+          fabricId: sendToWishlist.fabric.id,
+          collarId: sendToWishlist.collar.id,
+          cuffId: sendToWishlist.cuff.id,
+          frontId: sendToWishlist.front.id,
+          pocketId: sendToWishlist.pocket.id,
+          backId: sendToWishlist.back.id,
+          measurementId: sendToWishlist.measurement.id,
+        },
+      });
+      //if successful, action here
+      alert("Successfully added to wishlist!");
+    } catch (error) {
+      //if fail, will go to here
+      alert(
+        "Please ensure all the selections have been made before adding to wishlist."
+      );
+    }
   };
 
   //   axios
@@ -90,9 +100,6 @@ const Customisation = () => {
 
   //fabrics
   const [fabrics, setFabrics] = useState([]);
-  // const [chosenFabric, setChosenFabric] = useState([]);
-
-  //fabrics useEffect
   useEffect(() => {
     axios
       .get(`${BACKEND_URL}/fabrics`)
@@ -105,9 +112,6 @@ const Customisation = () => {
 
   //collars
   const [collars, setCollars] = useState([]);
-  // const [chosenCollar, setChosenCollar] = useState([]);
-
-  //collars useEffect
   useEffect(() => {
     axios
       .get(`${BACKEND_URL}/collars`)
@@ -120,9 +124,6 @@ const Customisation = () => {
 
   //cuffs
   const [cuffs, setCuffs] = useState([]);
-  // const [chosenCuff, setChosenCuff] = useState([]);
-
-  //cuffs useEffect
   useEffect(() => {
     axios
       .get(`${BACKEND_URL}/cuffs`)
@@ -135,9 +136,6 @@ const Customisation = () => {
 
   //fronts
   const [fronts, setFronts] = useState([]);
-  // const [chosenFront, setChosenFront] = useState([]);
-
-  //fronts useEffect
   useEffect(() => {
     axios
       .get(`${BACKEND_URL}/fronts`)
@@ -150,10 +148,6 @@ const Customisation = () => {
 
   //pockets
   const [pockets, setPockets] = useState([]);
-  // const [chosenPocket, setChosenPocket] = useState([]);
-
-  //pockets useEffect
-
   useEffect(() => {
     axios
       .get(`${BACKEND_URL}/pockets`)
@@ -166,9 +160,6 @@ const Customisation = () => {
 
   //backs
   const [backs, setBacks] = useState([]);
-  // const [chosenBack, setChosenBack] = useState([]);
-
-  //backs useEffect
   useEffect(() => {
     axios
       .get(`${BACKEND_URL}/backs`)
@@ -189,13 +180,13 @@ const Customisation = () => {
         <div>Customise your shirt</div>
       </Typography>
       <Typography variant="caption">
-        <div>
+        {/* <div>
           We are sending to wishlist {sendToWishlist?.fabric.fabricName},{" "}
           {sendToWishlist?.collar.collarName},{sendToWishlist?.cuff.cuffName},
           {sendToWishlist?.front.frontName},{sendToWishlist?.pocket.pocketName},
           {sendToWishlist?.back.backName},
           {sendToWishlist?.measurement.categoryByUser}.
-        </div>
+        </div> */}
 
         <Button
           variant="contained"
@@ -211,59 +202,188 @@ const Customisation = () => {
         </Button>
       </Typography>
       <div>
+        <Typography variant="Overline" color="white">
+          Step One: Choose your size profile.
+        </Typography>
+      </div>
+      {measurement.length !== 0 ? (
+        <div className="container">
+          {measurement.map((measurement, index) => {
+            return (
+              <Card key={index} sx={{ maxWidth: 250 }}>
+                <Box
+                  bgcolor={
+                    sendToWishlist.measurement.categoryByUser ===
+                    measurement.categoryByUser
+                      ? "blue"
+                      : "transparent"
+                  }
+                >
+                  <div>
+                    <CardActions>
+                      <ul className="measurementCard">
+                        <CardContent
+                          sx={{
+                            m: -1,
+                            // width: "150px",
+                            // height: "180px",
+                          }}
+                          onClick={(event) => {
+                            setSendToWishlist({
+                              ...sendToWishlist,
+                              measurement: measurement,
+                            });
+                            console.log(measurement);
+                          }}
+                        >
+                          <Typography
+                            variant="overline"
+                            fontWeight="regular"
+                            component="div"
+                            lineHeight="2"
+                          >
+                            Category: {measurement.categoryByUser}
+                          </Typography>
+                          <Typography variant="caption" component="div">
+                            Collar: {measurement.collar}
+                            {measurement.measurementType}
+                          </Typography>
+                          <Typography variant="caption" component="div">
+                            Shoulders: {measurement.shoulders}
+                            {measurement.measurementType}
+                          </Typography>
+                          <Typography variant="caption" component="div">
+                            Chest: {measurement.chest}
+                            {measurement.measurementType}
+                          </Typography>
+                          <Typography variant="caption" component="div">
+                            Waist: {measurement.waist}
+                            {measurement.measurementType}
+                          </Typography>
+                          <Typography variant="caption" component="div">
+                            Sleeves Length: {measurement.sleevesLength}
+                            {measurement.measurementType}
+                          </Typography>
+                          <Typography variant="caption" component="div">
+                            Sleeves Width: {measurement.sleevesWidth}
+                            {measurement.measurementType}
+                          </Typography>
+                          <Typography variant="caption" component="div">
+                            Elbow: {measurement.elbow}
+                            {measurement.measurementType}
+                          </Typography>
+                          <Typography variant="caption" component="div">
+                            Left cuff: {measurement.leftCuff}
+                            {measurement.measurementType}
+                          </Typography>
+                          <Typography variant="caption" component="div">
+                            Right cuff: {measurement.rightCuff}
+                            {measurement.measurementType}
+                          </Typography>
+                          <Typography variant="caption" component="div">
+                            Shirt Length: {measurement.shirtLength}
+                            {measurement.measurementType}
+                          </Typography>
+                        </CardContent>
+                      </ul>
+                    </CardActions>
+                  </div>
+                </Box>
+              </Card>
+            );
+          })}
+        </div>
+      ) : (
+        <Button
+          variant="contained"
+          onClick={() => navigate("/sizeprofile")}
+          sx={{ m: 2 }}
+        >
+          Set up your size profile here
+        </Button>
+      )}
+      <div>
         <Typography variant="Overline" color="black">
-          Step One: Choose your fabric
+          Step Two: Choose your fabric
         </Typography>
       </div>
       <div className="container">
         {fabrics.map((fabric, index) => {
           return (
-            <Card key={index} sx={{ maxWidth: 250 }}>
-              <div>
-                <CardActions>
-                  <ul className="InstaCard">
-                    <CardMedia
-                      component="img"
-                      alt="shirt"
-                      width="250"
-                      image={fabric.imageOne}
-                      onClick={(event) => {
-                        setSendToWishlist({
-                          ...sendToWishlist,
-                          fabric: fabric,
-                        });
-                      }}
-                    />
-                    <CardContent>
-                      <Typography
-                        variant="overline"
-                        fontWeight="regular"
-                        component="div"
-                        lineHeight="1"
-                      >
-                        {fabric.fabricName}
-                      </Typography>
-                      <Typography variant="caption" component="div">
-                        Price: ${fabric.cost}
-                      </Typography>
-                    </CardContent>
-                  </ul>
-                </CardActions>
-              </div>
+            <Card
+              key={index}
+              sx={{ maxWidth: 250 }}
+              style={{
+                backgroundColor: "transparent",
+                boxShadow: "none",
+              }}
+            >
+              <Box
+                bgcolor={
+                  sendToWishlist.fabric.id === fabric.id
+                    ? "blue"
+                    : "transparent"
+                }
+              >
+                <div>
+                  <CardActions>
+                    <ul className="InstaCard">
+                      <CardMedia
+                        component="img"
+                        alt="shirt"
+                        width="250"
+                        image={fabric.imageOne}
+                        onClick={(event) => {
+                          setSendToWishlist({
+                            ...sendToWishlist,
+                            fabric: fabric,
+                          });
+                        }}
+                      />
+                      <CardContent>
+                        <Typography
+                          variant="overline"
+                          fontWeight="regular"
+                          component="div"
+                          lineHeight="1"
+                        >
+                          {fabric.fabricName}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Price: ${fabric.cost}
+                        </Typography>
+                      </CardContent>
+                    </ul>
+                  </CardActions>
+                </div>
+              </Box>
             </Card>
           );
         })}
       </div>
       <div>
         <Typography variant="Overline" color="black">
-          Step Two: Choose your collar
+          Step Three: Choose your collar
         </Typography>
       </div>
       <div className="container">
         {collars.map((collar, index) => {
           return (
-            <Card key={index} sx={{ maxWidth: 250 }}>
-              <div>
+            <Card
+              key={index}
+              sx={{ maxWidth: 250 }}
+              style={{
+                backgroundColor: "transparent",
+                boxShadow: "none",
+              }}
+            >
+              <Box
+                bgcolor={
+                  sendToWishlist.collar.id === collar.id
+                    ? "blue"
+                    : "transparent"
+                }
+              >
                 <CardActions>
                   <ul className="InstaCardOther">
                     <CardMedia
@@ -293,275 +413,241 @@ const Customisation = () => {
                     </CardContent>
                   </ul>
                 </CardActions>
-              </div>
+              </Box>
             </Card>
           );
         })}
       </div>
       <div>
         <Typography variant="Overline" color="black">
-          Step Three: Choose your cuff
+          Step Four: Choose your cuff
         </Typography>
       </div>
       <div className="container">
         {cuffs.map((cuff, index) => {
           return (
-            <Card key={index} sx={{ maxWidth: 250 }}>
-              <div>
-                <CardActions>
-                  <ul className="InstaCardOther">
-                    <CardMedia
-                      component="img"
-                      alt="cuff"
-                      width="250"
-                      image={cuff.imageOne}
-                      onClick={() => {
-                        setSendToWishlist({
-                          ...sendToWishlist,
-                          cuff: cuff,
-                        });
-                      }}
-                    />
-                    <CardContent>
-                      <Typography
-                        variant="overline"
-                        fontWeight="regular"
-                        component="div"
-                        lineHeight="1"
-                      >
-                        {cuff.cuffName}
-                      </Typography>
-                      <Typography variant="caption" component="div">
-                        Price: ${cuff.cost}
-                      </Typography>
-                    </CardContent>
-                  </ul>
-                </CardActions>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
-      <div>
-        <Typography variant="Overline" color="black">
-          Step Four: Choose your fronts
-        </Typography>
-      </div>
-      <div className="container">
-        {fronts.map((front, index) => {
-          return (
-            <Card key={index} sx={{ maxWidth: 250 }}>
-              <div>
-                <CardActions>
-                  <ul className="InstaCardOther">
-                    <CardMedia
-                      component="img"
-                      alt="fronts"
-                      width="250"
-                      image={front.imageOne}
-                      onClick={(event) => {
-                        setSendToWishlist({
-                          ...sendToWishlist,
-                          front: front,
-                        });
-                      }}
-                    />
-                    <CardContent>
-                      <Typography
-                        variant="overline"
-                        fontWeight="regular"
-                        component="div"
-                        lineHeight="1"
-                      >
-                        {front.frontName}
-                      </Typography>
-                      <Typography variant="caption" component="div">
-                        Price: ${front.cost}
-                      </Typography>
-                    </CardContent>
-                  </ul>
-                </CardActions>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
-      <div>
-        <Typography variant="Overline" color="black">
-          Step Five: Choose your pockets
-        </Typography>
-      </div>
-      <div className="container">
-        {pockets.map((pocket, index) => {
-          return (
-            <Card key={index} sx={{ maxWidth: 250 }}>
-              <div>
-                <CardActions>
-                  <ul className="InstaCardOther">
-                    <CardMedia
-                      component="img"
-                      alt="pockets"
-                      width="250"
-                      image={pocket.imageOne}
-                      onClick={(event) => {
-                        setSendToWishlist({
-                          ...sendToWishlist,
-                          pocket: pocket,
-                        });
-                      }}
-                    />
-                    <CardContent>
-                      <Typography
-                        variant="overline"
-                        fontWeight="regular"
-                        component="div"
-                        lineHeight="1"
-                      >
-                        {pocket.pocketName}
-                      </Typography>
-                      <Typography variant="caption" component="div">
-                        Price: ${pocket.cost}
-                      </Typography>
-                    </CardContent>
-                  </ul>
-                </CardActions>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
-      <div>
-        <Typography variant="Overline" color="black">
-          Step Six: Choose your back
-        </Typography>
-      </div>
-      <div className="container">
-        {backs.map((back, index) => {
-          return (
-            <Card key={index} sx={{ maxWidth: 250 }}>
-              <div>
-                <CardActions>
-                  <ul className="InstaCardOther">
-                    <CardMedia
-                      component="img"
-                      alt="back"
-                      width="250"
-                      image={back.imageOne}
-                      onClick={(event) => {
-                        setSendToWishlist({
-                          ...sendToWishlist,
-                          back: back,
-                        });
-                      }}
-                    />
-                    <CardContent>
-                      <Typography
-                        variant="overline"
-                        fontWeight="regular"
-                        component="div"
-                        lineHeight="1"
-                      >
-                        {back.backName}
-                      </Typography>
-                      <Typography variant="caption" component="div">
-                        Price: ${back.cost}
-                      </Typography>
-                    </CardContent>
-                  </ul>
-                </CardActions>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
-      <div>
-        <Typography variant="Overline" color="black">
-          Step Seven: Choose your size profile
-        </Typography>
-      </div>
-      {measurement.length !== 0 ? (
-        <div className="container">
-          {measurement.map((measurement, index) => {
-            return (
-              <Card key={index} sx={{ maxWidth: 250 }}>
+            <Card
+              key={index}
+              sx={{ maxWidth: 250 }}
+              style={{
+                backgroundColor: "transparent",
+                boxShadow: "none",
+              }}
+            >
+              <Box
+                bgcolor={
+                  sendToWishlist.cuff.id === cuff.id ? "blue" : "transparent"
+                }
+              >
                 <div>
                   <CardActions>
-                    <ul className="measurementCard">
-                      <CardContent
-                        sx={{ m: -3, width: "150px", height: "200px" }}
-                        onClick={(event) => {
+                    <ul className="InstaCardOther">
+                      <CardMedia
+                        component="img"
+                        alt="cuff"
+                        width="250"
+                        image={cuff.imageOne}
+                        onClick={() => {
                           setSendToWishlist({
                             ...sendToWishlist,
-                            measurement: measurement,
+                            cuff: cuff,
                           });
-                          console.log(measurement);
                         }}
-                      >
+                      />
+                      <CardContent>
                         <Typography
                           variant="overline"
                           fontWeight="regular"
                           component="div"
-                          lineHeight="2"
+                          lineHeight="1"
                         >
-                          Category: {measurement.categoryByUser}
+                          {cuff.cuffName}
                         </Typography>
                         <Typography variant="caption" component="div">
-                          Collar: {measurement.collar}
-                          {measurement.measurementType}
-                        </Typography>
-                        <Typography variant="caption" component="div">
-                          Shoulders: {measurement.shoulders}
-                          {measurement.measurementType}
-                        </Typography>
-                        <Typography variant="caption" component="div">
-                          Chest: {measurement.chest}
-                          {measurement.measurementType}
-                        </Typography>
-                        <Typography variant="caption" component="div">
-                          Waist: {measurement.waist}
-                          {measurement.measurementType}
-                        </Typography>
-                        <Typography variant="caption" component="div">
-                          Sleeves Length: {measurement.sleevesLength}
-                          {measurement.measurementType}
-                        </Typography>
-                        <Typography variant="caption" component="div">
-                          Sleeves Width: {measurement.sleevesWidth}
-                          {measurement.measurementType}
-                        </Typography>
-                        <Typography variant="caption" component="div">
-                          Elbow: {measurement.elbow}
-                          {measurement.measurementType}
-                        </Typography>
-                        <Typography variant="caption" component="div">
-                          Left cuff: {measurement.leftCuff}
-                          {measurement.measurementType}
-                        </Typography>
-                        <Typography variant="caption" component="div">
-                          Right cuff: {measurement.rightCuff}
-                          {measurement.measurementType}
-                        </Typography>
-                        <Typography variant="caption" component="div">
-                          Shirt Length: {measurement.shirtLength}
-                          {measurement.measurementType}
+                          Price: ${cuff.cost}
                         </Typography>
                       </CardContent>
                     </ul>
                   </CardActions>
                 </div>
-              </Card>
-            );
-          })}
-        </div>
-      ) : (
-        <Button
-          variant="contained"
-          onClick={() => navigate("/sizeprofile")}
-          sx={{ m: 2 }}
-        >
-          Set up your size profile here
-        </Button>
-      )}
+              </Box>
+            </Card>
+          );
+        })}
+      </div>
+      <div>
+        <Typography variant="Overline" color="black">
+          Step Five: Choose your fronts
+        </Typography>
+      </div>
+      <div className="container">
+        {fronts.map((front, index) => {
+          return (
+            <Card
+              key={index}
+              sx={{ maxWidth: 250 }}
+              style={{
+                backgroundColor: "transparent",
+                boxShadow: "none",
+              }}
+            >
+              <Box
+                bgcolor={
+                  sendToWishlist.front.id === front.id ? "blue" : "transparent"
+                }
+              >
+                <div>
+                  <CardActions>
+                    <ul className="InstaCardOther">
+                      <CardMedia
+                        component="img"
+                        alt="fronts"
+                        width="250"
+                        image={front.imageOne}
+                        onClick={(event) => {
+                          setSendToWishlist({
+                            ...sendToWishlist,
+                            front: front,
+                          });
+                        }}
+                      />
+                      <CardContent>
+                        <Typography
+                          variant="overline"
+                          fontWeight="regular"
+                          component="div"
+                          lineHeight="1"
+                        >
+                          {front.frontName}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Price: ${front.cost}
+                        </Typography>
+                      </CardContent>
+                    </ul>
+                  </CardActions>
+                </div>
+              </Box>
+            </Card>
+          );
+        })}
+      </div>
+      <div>
+        <Typography variant="Overline" color="black">
+          Step Six: Choose your pockets
+        </Typography>
+      </div>
+      <div className="container">
+        {pockets.map((pocket, index) => {
+          return (
+            <Card
+              key={index}
+              sx={{ maxWidth: 250 }}
+              style={{
+                backgroundColor: "transparent",
+                boxShadow: "none",
+              }}
+            >
+              <Box
+                bgcolor={
+                  sendToWishlist.pocket.id === pocket.id
+                    ? "blue"
+                    : "transparent"
+                }
+              >
+                <div>
+                  <CardActions>
+                    <ul className="InstaCardOther">
+                      <CardMedia
+                        component="img"
+                        alt="pockets"
+                        width="250"
+                        image={pocket.imageOne}
+                        onClick={(event) => {
+                          setSendToWishlist({
+                            ...sendToWishlist,
+                            pocket: pocket,
+                          });
+                        }}
+                      />
+                      <CardContent>
+                        <Typography
+                          variant="overline"
+                          fontWeight="regular"
+                          component="div"
+                          lineHeight="1"
+                        >
+                          {pocket.pocketName}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Price: ${pocket.cost}
+                        </Typography>
+                      </CardContent>
+                    </ul>
+                  </CardActions>
+                </div>
+              </Box>
+            </Card>
+          );
+        })}
+      </div>
+      <div>
+        <Typography variant="Overline" color="black">
+          Step Seven: Choose your back
+        </Typography>
+      </div>
+      <div className="container">
+        {backs.map((back, index) => {
+          return (
+            <Card
+              key={index}
+              sx={{ maxWidth: 250 }}
+              style={{
+                backgroundColor: "transparent",
+                boxShadow: "none",
+              }}
+            >
+              <Box
+                bgcolor={
+                  sendToWishlist.back.id === back.id ? "blue" : "transparent"
+                }
+              >
+                <div>
+                  <CardActions>
+                    <ul className="InstaCardOther">
+                      <CardMedia
+                        component="img"
+                        alt="back"
+                        width="250"
+                        image={back.imageOne}
+                        onClick={(event) => {
+                          setSendToWishlist({
+                            ...sendToWishlist,
+                            back: back,
+                          });
+                        }}
+                      />
+                      <CardContent>
+                        <Typography
+                          variant="overline"
+                          fontWeight="regular"
+                          component="div"
+                          lineHeight="1"
+                        >
+                          {back.backName}
+                        </Typography>
+                        <Typography variant="caption" component="div">
+                          Price: ${back.cost}
+                        </Typography>
+                      </CardContent>
+                    </ul>
+                  </CardActions>
+                </div>
+              </Box>
+            </Card>
+          );
+        })}
+      </div>
     </div>
   );
 };
