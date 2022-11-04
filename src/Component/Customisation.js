@@ -34,24 +34,29 @@ const Customisation = () => {
 
   //handleSendToWishList will contain the axios post
   const handleSendToWishList = async () => {
-    const getAccessToken = await getAccessTokenSilently();
-    await axios({
-      method: "post",
-      url: `${BACKEND_URL}/wishlists`,
-      headers: {
-        Authorization: `Bearer ${getAccessToken}`,
-      },
-      data: {
-        userId: user.sub,
-        fabricId: sendToWishlist.fabric.id,
-        collarId: sendToWishlist.collar.id,
-        cuffId: sendToWishlist.cuff.id,
-        frontId: sendToWishlist.front.id,
-        pocketId: sendToWishlist.pocket.id,
-        backId: sendToWishlist.back.id,
-        measurementId: sendToWishlist.measurement.id,
-      },
-    });
+    try {
+      const getAccessToken = await getAccessTokenSilently();
+      await axios({
+        method: "post",
+        url: `${BACKEND_URL}/wishlists`,
+        headers: {
+          Authorization: `Bearer ${getAccessToken}`,
+        },
+        data: {
+          userId: user.sub,
+          fabricId: sendToWishlist.fabric.id,
+          collarId: sendToWishlist.collar.id,
+          cuffId: sendToWishlist.cuff.id,
+          frontId: sendToWishlist.front.id,
+          pocketId: sendToWishlist.pocket.id,
+          backId: sendToWishlist.back.id,
+          measurementId: sendToWishlist.measurement.id,
+        },
+      });
+      //if successful, action here
+    } catch (error) {
+      //if fail, will go to here
+    }
   };
 
   //   axios
@@ -215,9 +220,9 @@ const Customisation = () => {
                       <ul className="measurementCard">
                         <CardContent
                           sx={{
-                            m: -3,
-                            width: "150px",
-                            height: "200px",
+                            m: -1,
+                            // width: "150px",
+                            // height: "180px",
                           }}
                           onClick={(event) => {
                             setSendToWishlist({
