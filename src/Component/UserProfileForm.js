@@ -18,7 +18,7 @@ const UserProfileForm = () => {
   } = useForm({ mode: "onTouched" });
 
   const [email, setEmail] = useState();
-  const { userDetails, setUserDetails } = useUserContext();
+  const { userDetails } = useUserContext();
 
   const { getAccessTokenSilently } = useAuth0();
 

@@ -12,6 +12,8 @@ import HowItWorksPage from "./Page/HowItWorksPage";
 import OrderSummaryPage from "./Page/OrderSummaryPage";
 import EditShirtDesignPage from "./Page/EditShirtDesignPage";
 import CustomerOrdersPage from "./Page/AdminPage/CustomerOrders";
+import AboutUs from "./Page/AboutUsPage";
+import FabricAdminPage from "./Page/AdminPage/FabricAdminPage";
 
 const App = () => {
   return (
@@ -20,11 +22,14 @@ const App = () => {
         <Route path="/" element={<Header />}>
           <Route path="" element={<Home />} />
           <Route path="Home" element={<Home />} />
+          <Route path="AboutUs" element={<AboutUs />} />
           <Route path="HowItWorks" element={<HowItWorksPage />} />
+
           <Route path="UserProfile" element={<UserAccountPage />} />
           <Route path="SizeProfile" element={<SizeProfilePage />} />
           <Route path="Customisation" element={<Customisation />} />
           <Route path="CustomerOrders" element={<CustomerOrdersPage />} />
+          <Route path="AddFabrics" element={<FabricAdminPage />} />
           {/* <Route path="Fabrics" element={<Fabrics />} /> */}
           <Route
             path="Fabrics/:index"
