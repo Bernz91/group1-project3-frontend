@@ -75,26 +75,28 @@ const Customisation = () => {
   //measurement
   const [measurement, setMeasurement] = useState([]);
   useEffect(() => {
-    const getMeasurements = async () => {
-      const getAccessToken = await getAccessTokenSilently();
-      try {
-        await axios
-          .get(`${BACKEND_URL}/users/${user.sub}/measurements`, {
-            headers: {
-              Authorization: `Bearer ${getAccessToken}`,
-            },
-          })
-          .then((res) => res.data)
-          .then((res) => {
-            console.log(res);
-            setMeasurement(res);
-          });
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getMeasurements();
-  }, []);
+    if (user) {
+      const getMeasurements = async () => {
+        const getAccessToken = await getAccessTokenSilently();
+        try {
+          await axios
+            .get(`${BACKEND_URL}/users/${user.sub}/measurements`, {
+              headers: {
+                Authorization: `Bearer ${getAccessToken}`,
+              },
+            })
+            .then((res) => res.data)
+            .then((res) => {
+              console.log(res);
+              setMeasurement(res);
+            });
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      getMeasurements();
+    }
+  }, [user]);
 
   console.log(measurement);
 
@@ -172,12 +174,14 @@ const Customisation = () => {
 
   return (
     <div
-      style={{
-        backgroundImage: `url("https://images.unsplash.com/photo-1603251579431-8041402bdeda?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")`,
-      }}
+    // style={{
+    //   backgroundImage: `url("https://images.unsplash.com/photo-1603251579431-8041402bdeda?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80")`,
+    // }}
     >
       <Typography variant="h6">
-        <div>Customise your shirt</div>
+        <div align="middle">
+          <div>Customise your shirt</div>
+        </div>
       </Typography>
       <Typography variant="caption">
         {/* <div>
@@ -187,23 +191,11 @@ const Customisation = () => {
           {sendToWishlist?.back.backName},
           {sendToWishlist?.measurement.categoryByUser}.
         </div> */}
-
-        <Button
-          variant="contained"
-          sx={{
-            width: 190,
-            fontSize: "10px",
-          }}
-          onClick={(event) => {
-            handleSendToWishList();
-          }}
-        >
-          Add choices to wishlist
-        </Button>
       </Typography>
-      <div>
-        <Typography variant="Overline" color="white">
-          Step One: Choose your size profile.
+      <br />
+      <div className="steps">
+        <Typography variant="Overline" color="black">
+          Step One: Choose your size profile
         </Typography>
       </div>
       {measurement.length !== 0 ? (
@@ -302,7 +294,8 @@ const Customisation = () => {
           Set up your size profile here
         </Button>
       )}
-      <div>
+      <br />
+      <div className="steps">
         <Typography variant="Overline" color="black">
           Step Two: Choose your fabric
         </Typography>
@@ -312,7 +305,7 @@ const Customisation = () => {
           return (
             <Card
               key={index}
-              sx={{ maxWidth: 250 }}
+              sx={{ maxWidth: 180 }}
               style={{
                 backgroundColor: "transparent",
                 boxShadow: "none",
@@ -346,10 +339,15 @@ const Customisation = () => {
                           fontWeight="regular"
                           component="div"
                           lineHeight="1"
+                          sx={{ fontSize: "7px" }}
                         >
                           {fabric.fabricName}
                         </Typography>
-                        <Typography variant="caption" component="div">
+                        <Typography
+                          variant="caption"
+                          component="div"
+                          sx={{ fontSize: "10px", textAlign: "center" }}
+                        >
                           Price: ${fabric.cost}
                         </Typography>
                       </CardContent>
@@ -361,7 +359,7 @@ const Customisation = () => {
           );
         })}
       </div>
-      <div>
+      <div className="steps">
         <Typography variant="Overline" color="black">
           Step Three: Choose your collar
         </Typography>
@@ -371,7 +369,7 @@ const Customisation = () => {
           return (
             <Card
               key={index}
-              sx={{ maxWidth: 250 }}
+              sx={{ maxWidth: "130px" }}
               style={{
                 backgroundColor: "transparent",
                 boxShadow: "none",
@@ -389,7 +387,6 @@ const Customisation = () => {
                     <CardMedia
                       component="img"
                       alt="collar"
-                      width="250"
                       image={collar.imageOne}
                       onClick={(event) => {
                         setSendToWishlist({
@@ -404,10 +401,15 @@ const Customisation = () => {
                         fontWeight="regular"
                         component="div"
                         lineHeight="1"
+                        sx={{ textAlign: "center" }}
                       >
                         {collar.collarName}
                       </Typography>
-                      <Typography variant="caption" component="div">
+                      <Typography
+                        variant="caption"
+                        component="div"
+                        sx={{ textAlign: "center" }}
+                      >
                         Price: ${collar.cost}
                       </Typography>
                     </CardContent>
@@ -418,7 +420,7 @@ const Customisation = () => {
           );
         })}
       </div>
-      <div>
+      <div className="steps">
         <Typography variant="Overline" color="black">
           Step Four: Choose your cuff
         </Typography>
@@ -428,7 +430,7 @@ const Customisation = () => {
           return (
             <Card
               key={index}
-              sx={{ maxWidth: 250 }}
+              sx={{ maxWidth: "130px" }}
               style={{
                 backgroundColor: "transparent",
                 boxShadow: "none",
@@ -460,10 +462,15 @@ const Customisation = () => {
                           fontWeight="regular"
                           component="div"
                           lineHeight="1"
+                          sx={{ textAlign: "center" }}
                         >
                           {cuff.cuffName}
                         </Typography>
-                        <Typography variant="caption" component="div">
+                        <Typography
+                          variant="caption"
+                          component="div"
+                          sx={{ textAlign: "center" }}
+                        >
                           Price: ${cuff.cost}
                         </Typography>
                       </CardContent>
@@ -475,7 +482,7 @@ const Customisation = () => {
           );
         })}
       </div>
-      <div>
+      <div className="steps">
         <Typography variant="Overline" color="black">
           Step Five: Choose your fronts
         </Typography>
@@ -485,7 +492,7 @@ const Customisation = () => {
           return (
             <Card
               key={index}
-              sx={{ maxWidth: 250 }}
+              sx={{ maxWidth: "130px" }}
               style={{
                 backgroundColor: "transparent",
                 boxShadow: "none",
@@ -517,10 +524,15 @@ const Customisation = () => {
                           fontWeight="regular"
                           component="div"
                           lineHeight="1"
+                          sx={{ textAlign: "center" }}
                         >
                           {front.frontName}
                         </Typography>
-                        <Typography variant="caption" component="div">
+                        <Typography
+                          variant="caption"
+                          component="div"
+                          sx={{ textAlign: "center" }}
+                        >
                           Price: ${front.cost}
                         </Typography>
                       </CardContent>
@@ -532,7 +544,7 @@ const Customisation = () => {
           );
         })}
       </div>
-      <div>
+      <div className="steps">
         <Typography variant="Overline" color="black">
           Step Six: Choose your pockets
         </Typography>
@@ -542,7 +554,7 @@ const Customisation = () => {
           return (
             <Card
               key={index}
-              sx={{ maxWidth: 250 }}
+              sx={{ maxWidth: "130px" }}
               style={{
                 backgroundColor: "transparent",
                 boxShadow: "none",
@@ -576,10 +588,15 @@ const Customisation = () => {
                           fontWeight="regular"
                           component="div"
                           lineHeight="1"
+                          sx={{ textAlign: "center", fontSize: "8px" }}
                         >
                           {pocket.pocketName}
                         </Typography>
-                        <Typography variant="caption" component="div">
+                        <Typography
+                          variant="caption"
+                          component="div"
+                          sx={{ textAlign: "center" }}
+                        >
                           Price: ${pocket.cost}
                         </Typography>
                       </CardContent>
@@ -591,7 +608,7 @@ const Customisation = () => {
           );
         })}
       </div>
-      <div>
+      <div className="steps">
         <Typography variant="Overline" color="black">
           Step Seven: Choose your back
         </Typography>
@@ -601,7 +618,7 @@ const Customisation = () => {
           return (
             <Card
               key={index}
-              sx={{ maxWidth: 250 }}
+              sx={{ maxWidth: "130px" }}
               style={{
                 backgroundColor: "transparent",
                 boxShadow: "none",
@@ -633,10 +650,15 @@ const Customisation = () => {
                           fontWeight="regular"
                           component="div"
                           lineHeight="1"
+                          sx={{ textAlign: "center" }}
                         >
                           {back.backName}
                         </Typography>
-                        <Typography variant="caption" component="div">
+                        <Typography
+                          variant="caption"
+                          component="div"
+                          sx={{ textAlign: "center" }}
+                        >
                           Price: ${back.cost}
                         </Typography>
                       </CardContent>
@@ -647,6 +669,20 @@ const Customisation = () => {
             </Card>
           );
         })}
+      </div>
+      <div align="middle">
+        <Button
+          variant="contained"
+          sx={{
+            width: 190,
+            fontSize: "10px",
+          }}
+          onClick={(event) => {
+            handleSendToWishList();
+          }}
+        >
+          Add to Cart
+        </Button>
       </div>
     </div>
   );
