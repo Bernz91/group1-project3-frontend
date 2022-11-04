@@ -7,7 +7,7 @@
   font-family: "Roboto";
 }
 img {
-  border-radius: 10%;
+  border-radius: 20%;
   height: 140px;
 }
 
@@ -19,7 +19,7 @@ img {
 .InstaCard {
   list-style: none;
   width: 190px;
-  height: 200px;
+  height: 210px;
   border-style: solid;
   border-color: grey;
   border-width: 1px;
@@ -55,13 +55,54 @@ img {
   color: black;
   cursor: pointer;
 }
-.measurementCard {
+
+.InstaCardOtherSelected {
+  list-style: none;
+  width: 180px;
+  height: 200px;
+  border-style: solid;
+  border-color: blue;
+  border-width: 20px;
+  background: white;
+  border-radius: 35px;
+  padding-inline-start: 1%;
+  padding-inline-end: 1%;
+  padding-top: 1%;
+  margin-left: 10px;
+  text-align: left;
+  font-family: "Roboto";
+  top: 70vh;
+  color: black;
+  cursor: pointer;
+}
+
+/* .measurementCard {
   width: 150px;
   height: 200px;
   margin-left: -15px;
   margin-bottom: 10px;
   cursor: pointer;
   font-family: "Roboto";
+} */
+
+.measurementCard {
+  list-style: none;
+  width: 180px;
+  height: 220px;
+  border-style: solid;
+  border-color: white;
+  border-width: 1px;
+  background: white;
+  border-radius: 35px;
+  padding-inline-start: 1%;
+  padding-inline-end: 1%;
+  padding-top: 1%;
+  margin-left: 10px;
+  text-align: left;
+  font-family: "Roboto";
+  top: 70vh;
+  color: black;
+  cursor: pointer;
 }
 
 /* .likebtn {
