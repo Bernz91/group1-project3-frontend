@@ -33,7 +33,6 @@ const OrderSummaryPage = () => {
   const [change, setChange] = useState(true);
   const { user, getAccessTokenSilently, isAuthenticated, isLoading } =
     useAuth0();
-  // const USERID = user.sub;
 
   useEffect(() => {
     const getAllOrders = async () => {

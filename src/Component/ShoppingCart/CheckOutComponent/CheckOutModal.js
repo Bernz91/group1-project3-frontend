@@ -71,6 +71,36 @@ const CheckOutModal = (props) => {
     zip: "",
     country: "",
   });
+
+  useEffect(() => {
+    const getUserDetails = async () => {
+      try {
+        const accessToken = await getAccessTokenSilently({
+          audience: "https://group1-project3/api",
+          scope: "read:current_user",
+        });
+        await axios
+          .get(`${BACKEND_URL}/users/${user.sub}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
+          .then((res) => res.data)
+          .then((res) => {
+            setShipmentDetails({
+              firstName: res.firstName,
+              lastName: res.lastName,
+              address1: res.shippingAddress,
+            });
+            console.log(res);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUserDetails();
+  }, []);
+
   const [orderId, setOrderId] = useState();
 
   const getStepContent = (step) => {
