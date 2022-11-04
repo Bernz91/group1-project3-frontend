@@ -32,7 +32,7 @@ const Header = () => {
   const { userDetails, setUserDetails } = useUserContext();
 
   //shopping cart
-  const { setShoppingCart } = useShoppingCartContext();
+  const { shoppingCart, setShoppingCart } = useShoppingCartContext();
   const [cartlength, setCartLength] = useState();
 
   useEffect(() => {
@@ -106,7 +106,12 @@ const Header = () => {
       }
     };
     getShoppingCart();
-  }, [user, isRegistering, userDetails]);
+  }, [user, isRegistering]);
+
+  useEffect(() => {
+    console.log("test");
+    shoppingCart && setCartLength(Object.keys(shoppingCart).length);
+  }, [shoppingCart]);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);

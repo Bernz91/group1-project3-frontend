@@ -24,7 +24,7 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 import { useAuth0 } from "@auth0/auth0-react";
 import CircularIndeterminate from "../Component/ShoppingCart/CheckOutComponent/CircularProgress";
 import RedirectLogin from "../Component/RedirectLogin";
-import { useUserContext } from "../Context/UserContext";
+import { useShoppingCartContext } from "../Context/ShoppingCartContext";
 
 const ShoppingCartPage = () => {
   let navigate = useNavigate();
@@ -36,8 +36,7 @@ const ShoppingCartPage = () => {
   const [measurementOptions, setMeasurementOptions] = useState([]);
   const [measurementId, setMeasurementId] = useState(null);
 
-  const { shop } = useUserContext();
-  const [shoppingCart, setShoppingCart] = shop;
+  const { shoppingCart, setShoppingCart } = useShoppingCartContext();
 
   //auth0
   const { user, getAccessTokenSilently, isAuthenticated, isLoading } =
@@ -84,7 +83,7 @@ const ShoppingCartPage = () => {
               });
               console.log("newItems", newItems);
               setCart(newItems);
-              setShoppingCart(newItems.length);
+              setShoppingCart(res);
               // setLoading(false);
             });
           setChange(false);
