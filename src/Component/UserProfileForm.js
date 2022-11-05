@@ -54,6 +54,7 @@ const UserProfileForm = () => {
           },
         }
       );
+      alert("Successfully added user details!");
       const updatedUserDetails = await axios.get(
         `${BACKEND_URL}/users/${userDetails.id}`,
         {
@@ -63,6 +64,7 @@ const UserProfileForm = () => {
         }
       );
       setUserDetails(updatedUserDetails.data);
+      alert("Successfully updated user details!");
     } catch (e) {
       console.log(e);
     }
