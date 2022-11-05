@@ -6,6 +6,8 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import "../CSS/User.css";
 import { useUserContext } from "../Context/UserContext";
+import { IconButton, Snackbar } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -19,6 +21,12 @@ const UserProfileForm = () => {
 
   const [email, setEmail] = useState();
   const { userDetails, setUserDetails } = useUserContext();
+  // const [open, setOpen] = useState(false);
+  // const [state, setState] = useState({
+  //   open: false,
+  //   vertical: "bottom",
+  //   horizontal: "left",
+  // });
 
   const { getAccessTokenSilently } = useAuth0();
 
@@ -63,10 +71,33 @@ const UserProfileForm = () => {
         }
       );
       setUserDetails(updatedUserDetails.data);
+      // setState({ ...state, open: true });
+      alert("User details has been saved");
     } catch (e) {
       console.log(e);
     }
   };
+
+  // const handleClose = (event, reason) => {
+  //   if (reason === "clickaway") {
+  //     return;
+  //   }
+
+  //   setState({ ...state, open: false });
+  // };
+
+  // const action = (
+  //   <React.Fragment>
+  //     <IconButton
+  //       size="small"
+  //       aria-label="close"
+  //       color="inherit"
+  //       onClick={handleClose}
+  //     >
+  //       <CloseIcon fontSize="small" />
+  //     </IconButton>
+  //   </React.Fragment>
+  // );
 
   return (
     <div align="middle">
@@ -144,6 +175,13 @@ const UserProfileForm = () => {
           </Grid2>
         </Grid2>
       </form>
+      {/* <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="User details saved"
+        action={action}
+      /> */}
     </div>
   );
 };
