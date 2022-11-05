@@ -54,11 +54,11 @@ const Customisation = () => {
         },
       });
       //if successful, action here
-      alert("Successfully added to wishlist!");
+      alert("Successfully added to cart!");
     } catch (error) {
       //if fail, will go to here
       alert(
-        "Please ensure all the selections have been made before adding to wishlist."
+        "Please ensure all the selections have been made before adding to cart."
       );
     }
   };
@@ -339,7 +339,11 @@ const Customisation = () => {
                           fontWeight="regular"
                           component="div"
                           lineHeight="1"
-                          sx={{ fontSize: "7px" }}
+                          sx={{
+                            fontSize: "11px",
+                            mt: -2,
+                            textAlign: "center",
+                          }}
                         >
                           {fabric.fabricName}
                         </Typography>
@@ -588,7 +592,7 @@ const Customisation = () => {
                           fontWeight="regular"
                           component="div"
                           lineHeight="1"
-                          sx={{ textAlign: "center", fontSize: "8px" }}
+                          sx={{ fontSize: "12px", mt: -2, textAlign: "center" }}
                         >
                           {pocket.pocketName}
                         </Typography>
