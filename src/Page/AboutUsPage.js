@@ -17,13 +17,13 @@ const AboutUs = () => {
         <div align="right">
           <Avatar
             src="https://ca.slack-edge.com/TNYFQH8G5-U03F83TDRPD-addd2142c984-512"
-            alt="Xue Wei"
+            alt="Xuewei"
             sx={{ width: 150, height: 150 }}
           />
         </div>
       </Grid2>
       <Grid2 xs={6} className="name">
-        Xue Wei
+        Xuewei
       </Grid2>
       <Grid2 xs={6} className="name">
         Zi Hao
