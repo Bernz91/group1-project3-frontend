@@ -18,7 +18,7 @@ const UserProfileForm = () => {
   } = useForm({ mode: "onTouched" });
 
   const [email, setEmail] = useState();
-  const { userDetails } = useUserContext();
+  const { userDetails, setUserDetails } = useUserContext();
 
   const { getAccessTokenSilently } = useAuth0();
 
@@ -40,24 +40,29 @@ const UserProfileForm = () => {
         audience: "https://group1-project3/api",
         scope: "read:current_user",
       });
-      await axios
-        .put(
-          `${BACKEND_URL}/users/${userDetails.id}`,
-          {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            phone: data.phone,
-            shippingAddress: data.shippingAddress,
+      await axios.put(
+        `${BACKEND_URL}/users/${userDetails.id}`,
+        {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          phone: data.phone,
+          shippingAddress: data.shippingAddress,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        )
-        .then(function (response) {
-          console.log(response);
-        });
+        }
+      );
+      const updatedUserDetails = await axios.get(
+        `${BACKEND_URL}/users/${userDetails.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      setUserDetails(updatedUserDetails.data);
     } catch (e) {
       console.log(e);
     }
